@@ -1,8 +1,8 @@
 # NegiPlayer
 
-macOS 本地音乐播放器与歌词工作室，开发预览 0.2.0。默认使用 Miku 青绿与少量粉色，macOS 27 使用原生 SwiftUI Liquid Glass；减少透明度时使用实色背景。最低部署目标 macOS 14，当前验证架构为 Apple Silicon / arm64。
+macOS 本地音乐播放器与歌词工作室，开发预览 0.3.0。默认使用 Miku 青绿与少量粉色，macOS 27 使用原生 SwiftUI Liquid Glass；减少透明度时使用实色背景。最低部署目标 macOS 14，当前验证架构为 Apple Silicon / arm64。
 
-本轮交付本地 PCM 播放、曲库浏览、歌词编辑闭环及聆听设置。它仍是开发预览，完整 DSD、标签管理与正式发布验收见 [ROADMAP.md](ROADMAP.md)。
+本轮增加真实专辑封面、正在播放页面和自动 LRC 显示，延续本地 PCM 播放、曲库浏览、歌词编辑与聆听设置。它仍是开发预览，完整 DSD、标签管理与正式发布验收见 [ROADMAP.md](ROADMAP.md)。
 
 ## 音乐目录只读
 
@@ -16,9 +16,10 @@ macOS 本地音乐播放器与歌词工作室，开发预览 0.2.0。默认使�
 
 1. 解压应用包，打开 `NegiPlayer.app`，选择「导入文件夹」并引用本地或外置盘目录。
 2. 在专辑、艺人或所有曲目页搜索并播放；格式、采样率和可用状态可以组合筛选，曲目可按标题、艺人、专辑、碟号／曲号、采样率、时长或路径排序。右键可安排下一首、加入队列、跳转专辑／艺人；队列支持移动、移除和清空待播。
-3. 从「歌词与时间轴」粘贴 TXT 或导入 TXT、LRC、Enhanced LRC、SRT、Negi 工程。选择逐句／逐字／逐词，播放时按 T 或拖过文字打点，暂停后精修；输入框拥有焦点时 T 正常输入文字。
-4. 撤销／重做、行标记拖动、波形跳转、整体 offset 与纳秒时间输入均保存到本机草稿。重新载入曲目恢复未完成草稿。
-5. 导出完整工程可保留未打点、显式结束时间和原始 Negi 工程字段；LRC 不包含结束时间和编辑历史。导出位置须在音乐目录外。
+3. 点击底栏封面／曲名或「正在播放」（⌘⇧P）：没有对应 LRC 时居中显示封面与控制；有对应 LRC 时左侧封面与控制、右侧随播放时间滚动高亮歌词。点击歌词定位，手动滚动暂停跟随，点击「恢复跟随」继续。
+4. 从「歌词与时间轴」粘贴 TXT 或导入 TXT、LRC、Enhanced LRC、SRT、Negi 工程。选择逐句／逐字／逐词，播放时按 T 或拖过文字打点，暂停后精修；输入框拥有焦点时 T 正常输入文字。
+5. 撤销／重做、行标记拖动、波形跳转、整体 offset 与纳秒时间输入均保存到本机草稿。重新载入曲目恢复未完成草稿。
+6. 导出完整工程可保留未打点、显式结束时间和原始 Negi 工程字段；LRC 不包含结束时间和编辑历史。导出位置须在音乐目录外。
 
 应用使用 ad-hoc 开发签名，尚未 Developer ID 签名或公证。预览包不默认启用 App Sandbox；书签与应用写入策略仍遵循上述只读规则。`LMP_SANDBOX=1` 可构建带沙盒 entitlement 的版本，但该配置尚未完成全流程验收。
 
@@ -30,6 +31,9 @@ macOS 本地音乐播放器与歌词工作室，开发预览 0.2.0。默认使�
 | M4A | 分别识别 AAC 与 ALAC；均实际解码 |
 | AIFF | 扩展格式实际解码，识别整数 PCM；不代表所有 AIFF 变体已验收 |
 | DSF / DFF | 识别 DSD 参数，区分 raw DSD 与 DST；原始 DSD 解码、DoP 设备输出尚未接通 |
+| 封面 | FLAC PICTURE、ID3 APIC/PIC（MP3／WAV／DSF）、M4A covr；缺失时读取同目录图片，缓存仅写本机应用数据 |
+| 正在播放 | 居中封面或封面／歌词双栏；同目录 LRC 只读匹配、offset、高亮滚动与点击定位 |
+| ISO 专区 | 单独收录、识别 SACD 主目录／ISO 9660／无效头；不进入音频队列，镜像播放未接通 |
 | 输出与 EQ | 按 UID 记住设备，10 段 PCM EQ、前级和 4 个预设；关闭 EQ 时绕过 EQ 节点 |
 | 聆听设置 | 逐曲／专辑 ReplayGain、数字余量、标签峰值保护、音量上限、静音；设置本机保存 |
 | 系统控制 | MediaPlayer Now Playing、媒体控制命令、原生播放菜单；系统控件交互仍待验收 |
@@ -40,7 +44,15 @@ macOS 本地音乐播放器与歌词工作室，开发预览 0.2.0。默认使�
 
 没有完成独占、PCM bit-perfect 或 USB DAC 接收端验收。DoP 封装器只有纯数据测试，未连接输出设备。DSD 文件会明确提示未接通，禁止冒用直通状态。
 
-AVFoundation 的标签读取覆盖随容器而异，当前不是完整 mp3tag 替代品。封面加载、原生多值字段全覆盖、批量标签编辑、播放列表、自动监听、无缝播放、库切换与恢复向导仍待完成。
+AVFoundation 的标签读取覆盖随容器而异，当前不是完整 mp3tag 替代品。原生多值字段全覆盖、批量标签编辑、播放列表、自动监听、无缝播放、库切换与恢复向导仍待完成。
+
+## 封面与 LRC 匹配
+
+封面优先读取音频标签内的正面封面（如 Mp3tag 写入的 APIC／PICTURE），再尝试同一发行分组内其他曲目的内嵌图；缺失时读取 `Cover`、`Folder`、`Front`、`Album` 等同目录 JPG／JPEG／PNG／WebP。`CD1`、`Disc 1` 等碟片目录可回退到其父目录，但不会越过已授权根目录或读取指向根目录外的符号链接。图片保持比例；768 像素缩略图缓存和尺寸／修改时间失效检查均在本机应用数据完成，不会把封面写入 WAV 或其他音频。单个标签／图片限制 24 MiB；超限、损坏或未知变体回退为占位图。
+
+LRC 先匹配音频文件同名（扩展名忽略大小写），其次匹配同目录唯一的歌曲标题同名文件，不随机选取其他歌词。支持 UTF-8、带 BOM 的 UTF-16、Enhanced LRC 的行时间和正负 offset；播放页目前高亮整行。找不到、损坏或编码不支持时保持居中布局；播放页菜单可刷新封面与歌词。自动显示不修改歌词工作室草稿，也不写回侧文件。
+
+ISO 仅做头部识别。有效 `SACDMTOC` 只能证明存在 SACD 主目录，不能证明全部轨道可解码；ISO 9660 是数据镜像，不等同于 CD-DA。SACD 曲目解析、DST／DSD 解码与 BIN／CUE 播放列入后续工作。
 
 ## 构建
 
@@ -60,13 +72,14 @@ open dist/NegiPlayer.app
 ```sh
 # FFmpeg 仅用于生成原创、低电平测试音，不是播放器依赖。
 python3 scripts/generate-fixtures.py /tmp/NegiPlayer-fixtures
+python3 scripts/generate-presentation-fixtures.py /tmp/NegiPlayer-fixtures /tmp/NegiPlayer-presentation
 NEGI_FIXTURES=/tmp/NegiPlayer-fixtures zsh scripts/swift.sh test
 
 # 原生应用解码报告，使用上述同一批样本。
 open -n dist/NegiPlayer.app --args --verify-fixtures /tmp/NegiPlayer-fixtures --report /tmp/NegiPlayer-native-codecs.json
 ```
 
-受限命令执行环境可能无法使用系统压缩音频解码服务。本次将真实原生应用的解码结果单独记录在 [validation/modern-native-codecs.json](validation/modern-native-codecs.json)，核心测试通过 `NEGI_NATIVE_REPORT` 校验对应文件的音频载荷摘要、格式与解码帧数。报告不能代替 DAC 实测。
+受限命令执行环境可能无法使用系统压缩音频解码服务。本次将真实原生应用的解码结果单独记录在 [validation/presentation-native-codecs.json](validation/presentation-native-codecs.json)，核心测试通过 `NEGI_NATIVE_REPORT` 校验对应文件的音频载荷摘要、格式与解码帧数。报告不能代替 DAC 实测。`SelectedLibraryTests` 是可选的本机集成测试，未设置 `NEGI_PRESENTATION_REAL_INPUT` 时明确跳过；JSON 中的路径仅由用户本机提供，测试目录外不保存音乐或封面。
 
 ```sh
 NEGI_FIXTURES=/tmp/NegiPlayer-fixtures \
@@ -74,7 +87,7 @@ NEGI_NATIVE_REPORT=/tmp/NegiPlayer-native-codecs.json \
 NEGI_NATIVE_DSP_REPORT=/tmp/NegiPlayer-native-codecs.dsp.json zsh scripts/swift.sh test
 ```
 
-原生验证命令还会生成同名 `.dsp.json`，记录原创 PCM 经真实增益节点的离线渲染结果。实际命令、24 项核心测试、外置盘测试和界面检查见 [VALIDATION.md](VALIDATION.md)。WAV 标签验证器只对生成样本的新副本写入 ASCII RIFF INFO，保留未知 chunk 并验证载荷不变；未接入应用，也不会对用户音乐调用。
+原生验证命令还会生成同名 `.dsp.json`，记录原创 PCM 经真实增益节点的离线渲染结果。实际命令、33 项核心测试（含本机选择的只读集成样本）、外置盘测试和界面检查见 [VALIDATION.md](VALIDATION.md)。WAV 标签验证器只对生成样本的新副本写入 ASCII RIFF INFO，保留未知 chunk 并验证载荷不变；未接入应用，也不会对用户音乐调用。
 
 现代 Hi-Fi 功能与已实现／后续范围见 [MODERN_HIFI.md](MODERN_HIFI.md)。
 
@@ -83,7 +96,7 @@ NEGI_NATIVE_DSP_REPORT=/tmp/NegiPlayer-native-codecs.dsp.json zsh scripts/swift.
 ## 模块与工具来源
 
 - `LibraryDomain`：曲目、目录、只读引用策略；`LibraryStore`：系统 SQLite。
-- `MediaIO`：只读扫描、格式探测、载荷摘要、独立 PCM 波形分析。
+- `MediaIO`：只读扫描、格式探测、载荷摘要、独立 PCM 波形分析、只读封面／侧文件歌词与 ISO 头部识别。
 - `AudioCore`：一个 AVAudioEngine 播放会话、Core Audio 设备、EQ、时钟与独立 DoP 数据封装器。
 - `LyricCore`：文档、解析、Unicode、时间、Negi 适配；`FileOperations`：生成 WAV 副本验证工具。
 - `NegiPlayer`：SwiftUI / AppKit 界面、MediaPlayer 系统控制与文件选择授权。

@@ -37,6 +37,7 @@ public struct MediaFile: Identifiable, Codable, Equatable, Sendable {
     public var artistDisplay: String { artists.isEmpty ? "未知艺人" : artists.joined(separator: " · ") }
     public var albumDisplay: String { album.isEmpty ? "未标记专辑" : album }
     public var isDSD: Bool { codec.hasPrefix("DSD") || codec == "DST" }
+    public var isDiscImage: Bool { (relativePath as NSString).pathExtension.lowercased() == "iso" }
 }
 
 public struct LibraryRoot: Identifiable, Codable, Sendable {

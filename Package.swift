@@ -11,7 +11,7 @@ let package = Package(
         .target(name: "LyricCore"),
         .target(name: "AudioCore", dependencies: ["LibraryDomain"]),
         .target(name: "LibraryStore", dependencies: ["CSQLite", "LibraryDomain", "LyricCore"]),
-        .target(name: "MediaIO", dependencies: ["LibraryDomain"]),
+        .target(name: "MediaIO", dependencies: ["LibraryDomain", "LyricCore"]),
         .target(name: "FileOperations", dependencies: ["LibraryDomain"]),
         .executableTarget(name: "NegiPlayer", dependencies: ["LibraryDomain", "LibraryStore", "MediaIO", "AudioCore", "LyricCore"]),
         .testTarget(name: "CoreTests", dependencies: ["LyricCore", "LibraryDomain", "LibraryStore", "MediaIO", "AudioCore", "FileOperations"])

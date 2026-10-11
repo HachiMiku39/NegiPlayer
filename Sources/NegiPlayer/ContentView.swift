@@ -17,10 +17,11 @@ struct ContentView: View {
             HStack(spacing: 0) {
                 sidebar.frame(width: 210)
                 VStack(spacing: 0) {
-                    header
-                    Divider()
+                    if model.page != "playing" { header; Divider() }
                     Group {
                         switch model.page {
+                        case "playing": NowPlayingView(model: model, playback: playback)
+                        case "images": discImagesView
                         case "lyrics": LyricsView(model: model, playback: playback)
                         case "output": outputView
                         case "roots": rootsView
@@ -33,7 +34,7 @@ struct ContentView: View {
                 }
                 if model.showQueue { Divider(); queueView.frame(width: 260) }
             }
-            playerBar
+            if model.page != "playing" { playerBar }
         }
         .background(NegiBackground())
         .tint(accent)
@@ -52,18 +53,20 @@ struct ContentView: View {
                 }
             }.padding(.vertical, 24).padding(.horizontal, 18)
             Text("音乐库").font(.caption).foregroundStyle(.secondary).padding(.horizontal, 20)
+            nav("playing", "正在播放", "play.square")
             nav("albums", "专辑", "square.grid.2x2")
             nav("artists", "艺人", "person.2")
             nav("tracks", "所有曲目", "music.note.list")
             nav("roots", "文件夹", "folder")
+            nav("images", "光盘镜像", "opticaldisc")
             Text("工作室").font(.caption).foregroundStyle(.secondary).padding(.horizontal, 20).padding(.top, 20)
             nav("lyrics", "歌词与时间轴", "text.alignleft")
             nav("output", "输出与均衡器", "slider.horizontal.3")
             nav("database", "曲库管理", "externaldrive")
             Spacer()
             VStack(alignment: .leading, spacing: 8) {
-                Text("\(model.files.count) 首曲目").font(.callout)
-                Text("本地优先 · 开发预览 0.2").font(.caption).foregroundStyle(.secondary)
+                Text("\(model.musicFileCount) 首曲目").font(.callout)
+                Text("本地优先 · 开发预览 0.3").font(.caption).foregroundStyle(.secondary)
             }.padding(20)
         }.negiGlass(22).padding(12)
     }
@@ -76,7 +79,7 @@ struct ContentView: View {
         }.buttonStyle(.plain).padding(.horizontal, 10)
     }
     var title: String {
-        ["albums": "专辑", "artists": "艺人", "tracks": "所有曲目", "roots": "音乐文件夹", "lyrics": "歌词工作室", "output": "输出与均衡器", "database": "曲库管理"][model.page] ?? "音乐库"
+        ["albums": "专辑", "artists": "艺人", "tracks": "所有曲目", "roots": "音乐文件夹", "images": "光盘镜像", "lyrics": "歌词工作室", "output": "输出与均衡器", "database": "曲库管理"][model.page] ?? "音乐库"
     }
     var header: some View {
         VStack(alignment: .leading, spacing: 8) {
@@ -136,7 +139,7 @@ struct ContentView: View {
     }
     var albumsView: some View {
         Group {
-            if model.files.isEmpty { emptyLibrary }
+            if model.musicFileCount == 0 { emptyLibrary }
             else if let key = model.selectedAlbum {
                 VStack(alignment: .leading) {
                     Button { model.selectedAlbum = nil } label: { Label("返回专辑", systemImage: "chevron.left") }.padding([.top, .leading], 20)
@@ -150,10 +153,7 @@ struct ContentView: View {
                             if let first = group.first {
                                 Button { model.selectedAlbum = first.releaseKey } label: {
                                     VStack(alignment: .leading, spacing: 9) {
-                                        ZStack {
-                                            LinearGradient(colors: [.white.opacity(0.08), accent.opacity(0.09)], startPoint: .topLeading, endPoint: .bottomTrailing)
-                                            Image(systemName: "opticaldisc").font(.system(size: 58, weight: .ultraLight)).foregroundStyle(.white.opacity(0.35))
-                                        }.aspectRatio(1, contentMode: .fit).clipShape(RoundedRectangle(cornerRadius: 10))
+                                        ArtworkView(model: model, media: first, cornerRadius: 10)
                                         Text(first.albumDisplay).font(.headline).lineLimit(1)
                                         Text(first.albumArtist.isEmpty ? first.artistDisplay : first.albumArtist).font(.caption).foregroundStyle(.secondary).lineLimit(1)
                                         Text("\(group.count) 首 · \(Set(group.map(\.codec)).sorted().joined(separator: " / "))").font(.caption2).foregroundStyle(accent.opacity(0.8)).lineLimit(1)
@@ -168,7 +168,7 @@ struct ContentView: View {
     }
     var artistsView: some View {
         Group {
-            if model.files.isEmpty { emptyLibrary }
+            if model.musicFileCount == 0 { emptyLibrary }
             else if let artist = model.selectedArtist {
                 VStack(alignment: .leading) {
                     Button { model.selectedArtist = nil } label: { Label("返回艺人", systemImage: "chevron.left") }.padding([.top, .leading], 20)
@@ -195,7 +195,7 @@ struct ContentView: View {
     }
     func tracksView(_ files: [MediaFile]) -> some View {
         Group {
-            if model.files.isEmpty { emptyLibrary }
+            if model.musicFileCount == 0 { emptyLibrary }
             else {
                 ScrollView {
                     LazyVStack(spacing: 0) {
@@ -252,6 +252,30 @@ struct ContentView: View {
                 }
                 Button("重新扫描全部目录") { model.rescan() }.disabled(model.scanning || model.roots.isEmpty)
                 Text("歌词导出和数据库备份需选择音乐目录以外的位置。").font(.caption).foregroundStyle(.secondary)
+            }.padding(28)
+        }
+    }
+    var discImagesView: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 20) {
+                Text("只读识别 SACD／ISO 9660 头部，镜像独立收录。SACD 曲目解析与 DST／DSD 解码尚未接通，当前不能播放镜像。CD-DA 通常需要 BIN／CUE 轨道信息。").foregroundStyle(.secondary)
+                if model.discImages.isEmpty {
+                    ContentUnavailableView("尚无光盘镜像", systemImage: "opticaldisc", description: Text("重新扫描已引用目录即可收录 ISO 文件"))
+                }
+                ForEach(model.discImages) { image in
+                    HStack(spacing: 18) {
+                        Image(systemName: "opticaldisc").font(.system(size: 36, weight: .ultraLight)).foregroundStyle(accent)
+                        VStack(alignment: .leading, spacing: 6) {
+                            Text(image.title).font(.headline)
+                            Text("\(image.codec) · \(ByteCountFormatter.string(fromByteCount: image.size, countStyle: .file))").font(.caption).foregroundStyle(accent)
+                            Text(image.issue ?? "镜像播放尚未接通").font(.caption).foregroundStyle(.secondary)
+                            if !image.available { Text("磁盘离线或需要重新授权").font(.caption).foregroundStyle(.orange) }
+                        }
+                        Spacer()
+                        Button("在 Finder 中显示") { model.reveal(image) }.disabled(!image.available)
+                    }.padding(18).background(.white.opacity(0.04), in: RoundedRectangle(cornerRadius: 12))
+                }
+                Button("重新扫描目录") { model.rescan() }.disabled(model.scanning || model.roots.isEmpty)
             }.padding(28)
         }
     }
@@ -352,10 +376,10 @@ struct ContentView: View {
     var playerBar: some View {
         VStack(spacing: 8) {
             HStack(spacing: 24) {
-                HStack(spacing: 12) {
-                    Image(systemName: "opticaldisc").font(.system(size: 30, weight: .ultraLight)).foregroundStyle(accent)
+                Button { model.page = "playing" } label: { HStack(spacing: 12) {
+                    ArtworkView(model: model, media: playback.current, cornerRadius: 6).frame(width: 44, height: 44)
                     VStack(alignment: .leading, spacing: 4) { Text(playback.current?.title ?? "未选择曲目").font(.headline).lineLimit(1); Text(playback.current?.artistDisplay ?? "你的音乐，留在本机").font(.caption).foregroundStyle(.secondary).lineLimit(1) }
-                }.frame(width: 250, alignment: .leading)
+                }.frame(width: 250, alignment: .leading) }.buttonStyle(.plain).accessibilityLabel("展开正在播放")
                 Button { playback.shuffle.toggle() } label: { Image(systemName: "shuffle").foregroundStyle(playback.shuffle ? accent : .secondary) }.buttonStyle(.plain)
                 Button { model.toggle() } label: { Image(systemName: playback.isPlaying ? "pause.circle.fill" : "play.circle.fill").font(.system(size: 36)).foregroundStyle(accent) }.buttonStyle(.plain).disabled(playback.current == nil)
                 Button { playback.advance() } label: { Image(systemName: "forward.end.fill") }.buttonStyle(.plain)

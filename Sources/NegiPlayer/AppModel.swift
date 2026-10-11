@@ -39,6 +39,15 @@ import UniformTypeIdentifiers
     @Published var timelineZoom = 1.0
     @Published var selectedAlbum: String?
     @Published var selectedArtist: String?
+    @Published var listeningLyrics: LyricDocument?
+    @Published var listeningLyricStatus = ""
+    @Published var artworkRevision = 0
+    let artworkRepository: ArtworkRepository
+    private var listeningTask: Task<Void,Never>?
+    private var releaseMembers: [String:[MediaFile]] = [:]
+    var discImages: [MediaFile] { files.filter(\.isDiscImage).sorted { $0.relativePath.localizedStandardCompare($1.relativePath) == .orderedAscending } }
+    var musicFileCount: Int { files.reduce(0) { $0+($1.isDiscImage ? 0 : 1) } }
+    var displayLyrics: LyricDocument? { listeningLyrics }
     let playback: PlaybackSession
     private var systemMediaControls: SystemMediaControls?
     let database: LibraryDatabase?
@@ -63,9 +72,11 @@ import UniformTypeIdentifiers
     }
     private func rebuildBrowseIndex() {
         guard !changingBrowse else { return }
-        browseFiles = browseQuery.apply(to: files)
-        codecChoices = Array(Set(files.map(\.codec))).sorted()
-        availableFileCount = files.reduce(0) { $0 + ($1.available ? 1 : 0) }
+        let music = files.filter { !$0.isDiscImage }
+        releaseMembers = Dictionary(grouping:music,by:\.releaseKey)
+        browseFiles = browseQuery.apply(to: music)
+        codecChoices = Array(Set(music.map(\.codec))).sorted()
+        availableFileCount = music.reduce(0) { $0 + ($1.available ? 1 : 0) }
         albumGroups = Dictionary(grouping: browseFiles, by: \.releaseKey).values.sorted { ($0.first?.albumDisplay ?? "") < ($1.first?.albumDisplay ?? "") }
         artistCounts = [:]
         for file in browseFiles { for artist in Set(file.artists) { artistCounts[artist,default: 0] += 1 } }
@@ -87,6 +98,7 @@ import UniformTypeIdentifiers
         if let p = ProcessInfo.processInfo.environment["LMP_DATA_DIR"] ?? NativeVerification.developmentRequest?.dataDirectory { folder = URL(fileURLWithPath: p) }
         else { folder = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0].appendingPathComponent("NegiPlayer") }
         databaseURL = folder.appendingPathComponent("Library.sqlite")
+        artworkRepository = ArtworkRepository(cacheDirectory:folder.appendingPathComponent("Caches/Artwork"))
         let settingsStore = PlaybackPreferencesStore(url: folder.appendingPathComponent("PlaybackSettings.json"))
         let settings: PlaybackPreferences
         var canSaveSettings = true
@@ -103,7 +115,7 @@ import UniformTypeIdentifiers
             }
         }
         systemMediaControls = SystemMediaControls(playback: playback)
-        playback.onTrackChanged = { [weak self] media in self?.loadDraft(media) }
+        playback.onTrackChanged = { [weak self] media in self?.loadDraft(media); self?.loadListeningLyrics(media) }
         playback.onNext = { [weak self] media in self?.play(media, replaceQueue: false) }
         keyboardMonitor = NSEvent.addLocalMonitorForEvents(matching: .keyDown) { [weak self] event in
             guard let self, self.page == "lyrics", !event.isARepeat,
@@ -187,7 +199,8 @@ import UniformTypeIdentifiers
             scanTask = task
             let result = try await task.value
             try await database.commitScan(rootID: root.id, files: result)
-            files = try await database.files(); notice = "已扫描 \(result.count) 个音乐文件"
+            files = try await database.files(); artworkRevision += 1
+            notice = "已扫描 \(result.filter { !$0.isDiscImage }.count) 个音乐文件、\(result.filter(\.isDiscImage).count) 个镜像"
             var updated = root; updated.status = "在线"; try await database.save(root: updated); roots = try await database.roots()
         } catch is CancellationError { notice = "扫描已取消，已有曲库保留" }
         catch {
@@ -204,6 +217,38 @@ import UniformTypeIdentifiers
     func url(for media: MediaFile) throws -> URL {
         guard let root = access[media.rootID]?.0 else { throw NSError(domain: "Access", code: 2, userInfo: [NSLocalizedDescriptionKey: "请重新授权曲目所在目录"]) }
         return root.appendingPathComponent(media.relativePath)
+    }
+    func artworkKey(for media: MediaFile) -> String {
+        let group = releaseMembers[media.releaseKey] ?? [media]
+        return media.id+"|\(artworkRevision)|"+(access[media.rootID]?.0.path ?? "")+group.map { $0.id+"|\($0.modified)" }.joined(separator:"|")
+    }
+    func artwork(for media: MediaFile) async -> ArtworkResult? {
+        guard let root = access[media.rootID]?.0 else { return nil }
+        let group = releaseMembers[media.releaseKey] ?? [media]
+        let members = [media]+group.filter { $0.id != media.id && $0.rootID == media.rootID }
+        let urls = members.compactMap { try? url(for:$0) }
+        return await artworkRepository.artwork(sources:urls,root:root)
+    }
+    func refreshListeningAssets() {
+        Task {
+            await artworkRepository.invalidate(musicRoots:access.values.map(\.0))
+            artworkRevision += 1
+            if let media = playback.current { loadListeningLyrics(media) }
+        }
+    }
+    private func loadListeningLyrics(_ media: MediaFile) {
+        listeningTask?.cancel(); listeningLyrics = nil; listeningLyricStatus = "正在查找对应 LRC…"
+        guard let source = try? url(for:media), let root = access[media.rootID]?.0 else { listeningLyricStatus = "音乐目录未授权"; return }
+        listeningTask = Task {
+            do {
+                let work = Task.detached(priority:.utility) { try SidecarLyrics.load(for:source,title:media.title,root:root) }
+                let result = try await withTaskCancellationHandler { try await work.value } onCancel: { work.cancel() }
+                try Task.checkCancellation(); guard playback.current?.id == media.id else { return }
+                listeningLyrics = result?.document
+                listeningLyricStatus = result.map { "对应 LRC · "+$0.filename } ?? "未找到对应 LRC"
+            } catch is CancellationError { }
+            catch { if playback.current?.id == media.id { listeningLyricStatus = "LRC 未载入：\(error.localizedDescription)" } }
+        }
     }
     func play(_ media: MediaFile, replaceQueue: Bool = true) {
         do {

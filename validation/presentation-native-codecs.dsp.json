@@ -1,0 +1,9 @@
+{
+  "bypassMean" : 0.25,
+  "channels" : 2,
+  "gainDB" : -6,
+  "inputAmplitude" : 0.25,
+  "processedMean" : 0.1253019,
+  "sampleRate" : 48000,
+  "source" : "AVAudioEngine offline render of original synthetic PCM"
+}

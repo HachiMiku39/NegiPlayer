@@ -1,0 +1,42 @@
+{
+  "version": "0.3.0",
+  "date": "2026-10-11",
+  "method": "Native UI on generated original signals/artwork/LRC with isolated development database; observed accessibility and screenshots",
+  "artwork": {
+    "FLAC": "embedded",
+    "MP3": "embedded",
+    "ALAC": "embedded",
+    "WAV": "adjacent Cover.png",
+    "cacheRestoredAfterRestart": true
+  },
+  "nowPlaying": {
+    "withoutLRC": "centered cover and controls",
+    "withLRC": "left artwork and controls; right highlighted lyric scroll",
+    "lyricClickTimestamp": 12,
+    "lrcOffsetMilliseconds": 200,
+    "confirmedSeekSeconds": 12.2,
+    "highlightedLineCentered": true,
+    "manualScrollPausesFollow": true,
+    "resumeFollowRestoresPosition": true,
+    "trackWithoutLRCClearsLyricColumn": true
+  },
+  "isoArea": [
+    "SACD ISO header",
+    "ISO 9660 data header",
+    "unrecognized ISO"
+  ],
+  "isoPlayback": "not connected",
+  "realIntegration": "Selected local FLAC/MP3 art, adjacent LRC and SACD header; source stat unchanged; private paths omitted",
+  "limitations": [
+    "No complete SACD/CD image playback",
+    "Not all tag/artwork/character-encoding variants verified",
+    "No word-level lyric highlight or translation layout verified"
+  ],
+  "readOnlyStatAudit": {
+    "files": 16341,
+    "added": 0,
+    "removed": 0,
+    "changedSizeMtimeOrInode": 0,
+    "fullPayloadHash": false
+  }
+}

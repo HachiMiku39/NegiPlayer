@@ -13,3 +13,6 @@ validation/*
 !validation/public-core-tests.log
 !validation/public-build.log
 !validation/listening-ui.json
+!validation/presentation-native-codecs.json
+!validation/presentation-native-codecs.dsp.json
+!validation/presentation-ui.json

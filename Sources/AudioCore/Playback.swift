@@ -120,6 +120,7 @@ import LibraryDomain
     }
     public func load(_ media: MediaFile, url: URL, autoplay: Bool) throws {
         guard media.available else { throw NSError(domain: "Playback", code: 1, userInfo: [NSLocalizedDescriptionKey: "文件暂不可用，请重新扫描或授权目录"]) }
+        guard !media.isDiscImage else { throw NSError(domain: "Playback", code: 5, userInfo: [NSLocalizedDescriptionKey: media.issue ?? "镜像播放尚未接通"]) }
         guard !media.isDSD else { throw NSError(domain: "Playback", code: 2, userInfo: [NSLocalizedDescriptionKey: "\(media.codec) 已识别；原始 DSD 解码与 DoP 输出尚未接通，未转为 PCM 播放"]) }
         let audio = try AVAudioFile(forReading: url)
         generation += 1; player.stop(); engine.stop(); freeze(at: 0)

@@ -1,21 +1,18 @@
 Building for production...
-[Pre-planning 1 / 212]
-[Planning deferred tasks]
-[12 / 31] LyricCore
-[15 / 33] LibraryDomain
-[23 / 41] FileOperations
-[26 / 44] LyricCore
-[30 / 48] LibraryStore
-[32 / 49] FileOperations
-[33 / 48] LibraryStore
-[36 / 49] AudioCore
-[38 / 48] MediaIO
-[45 / 49] NegiPlayer-product
-[48 / 53]
-[49 / 53]
-[50 / 53] NegiPlayer-product
-[53 / 54] NegiPlayer-product
-Build complete! (10.87 sec)
-<build-work>/app-stage/NegiPlayer.app: replacing existing signature
+[2 / 24] AudioCore
+[7 / 24] LyricCore
+[10 / 26] LibraryDomain
+[16 / 31] FileOperations
+[18 / 33] LyricCore
+[23 / 38] LibraryStore
+[26 / 40] FileOperations
+[27 / 39] LibraryStore
+[30 / 40] AudioCore
+[31 / 39] MediaIO
+[38 / 41] NegiPlayer-product
+[40 / 42] NegiPlayer-product
+[43 / 43] NegiPlayer-product
+Build complete! (14.45 sec)
+<build-cache>/app-stage/NegiPlayer.app: replacing existing signature
 Built: <project>/dist/NegiPlayer.app
-Verified staging bundle: <build-work>/app-stage/NegiPlayer.app
+Verified staging bundle: <build-cache>/app-stage/NegiPlayer.app

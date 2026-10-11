@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "product": "NegiPlayer",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "deploymentTarget": "macOS 14.0",
   "validatedArchitecture": "arm64",
   "validatedHost": "macOS 27.2 (26B5101f)",
@@ -13,16 +13,47 @@
   },
   "swiftPackageDependencies": [],
   "systemDependencies": {
-    "sqlite": {"link": "/usr/lib/libsqlite3.dylib", "hostCLIReportedVersion": "3.54.0", "source": "https://sqlite.org/", "license": "public domain"},
-    "appleFrameworks": ["SwiftUI", "AppKit", "Foundation", "AVFoundation", "AVFAudio", "CoreAudio", "AudioToolbox", "CryptoKit", "Combine", "UniformTypeIdentifiers", "MediaPlayer"]
+    "sqlite": {
+      "link": "/usr/lib/libsqlite3.dylib",
+      "hostCLIReportedVersion": "3.54.0",
+      "source": "https://sqlite.org/",
+      "license": "public domain"
+    },
+    "appleFrameworks": [
+      "SwiftUI",
+      "AppKit",
+      "Foundation",
+      "AVFoundation",
+      "AVFAudio",
+      "CoreAudio",
+      "AudioToolbox",
+      "CryptoKit",
+      "Combine",
+      "UniformTypeIdentifiers",
+      "MediaPlayer",
+      "ImageIO",
+      "CoreGraphics"
+    ]
   },
   "lyricReference": {
     "repository": "https://github.com/HachiMiku39/NegiFlick",
     "commit": "cf64f04900bf2429ee9a207b1bf7213feba6c2f9",
-    "files": ["docs/core.mjs", "docs/timing.mjs", "Tests/LyricTimingTests.mjs", "README.md"],
+    "files": [
+      "docs/core.mjs",
+      "docs/timing.mjs",
+      "Tests/LyricTimingTests.mjs",
+      "README.md"
+    ],
     "applicationLicense": "not selected by upstream; no unrestricted license assumed"
   },
-  "testOnlyTools": {"ffmpeg": "9.0.1 Homebrew, GPL-enabled local build; not linked or distributed"},
-  "unintegratedCandidates": ["SFBAudioEngine", "TagLib", "GRDB", "FFmpeg raw DSD / DST library"],
+  "testOnlyTools": {
+    "ffmpeg": "9.0.1 Homebrew, GPL-enabled local build; not linked or distributed"
+  },
+  "unintegratedCandidates": [
+    "SFBAudioEngine",
+    "TagLib",
+    "GRDB",
+    "FFmpeg raw DSD / DST library"
+  ],
   "notes": "System framework versions follow the host OS. This records the tested toolchain and exact reference source, not a vendored Apple SDK lock."
 }

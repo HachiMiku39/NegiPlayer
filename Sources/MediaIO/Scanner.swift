@@ -5,8 +5,9 @@ import CryptoKit
 import LibraryDomain
 
 public enum MediaProbe {
-    public static let extensions: Set<String> = ["mp3", "wav", "flac", "m4a", "dsf", "dff", "aif", "aiff", "aac"]
+    public static let extensions: Set<String> = ["mp3", "wav", "flac", "m4a", "dsf", "dff", "aif", "aiff", "aac", "iso"]
     public static func detect(_ url: URL) throws -> (codec: String, rate: Double, channels: Int, duration: Double) {
+        if url.pathExtension.lowercased() == "iso" { return (try DiscImageProbe.inspect(url).kind,0,0,0) }
         let handle = try FileHandle(forReadingFrom: url); defer { try? handle.close() }
         let header = try handle.read(upToCount: 128) ?? Data()
         if header.starts(with: Data("DSD ".utf8)) {
@@ -109,7 +110,7 @@ public enum LibraryScanner {
                 f.metadataVersion = metadataVersion
                 do {
                     let p = try MediaProbe.detect(file); f.codec = p.codec; f.sampleRate = p.rate; f.channels = p.channels; f.duration = p.duration
-                    f.tags = await MediaProbe.metadata(file)
+                    f.tags = f.isDiscImage ? [:] : await MediaProbe.metadata(file)
                     f.title = f.tags["title"]?.first ?? f.title
                     f.artists = f.tags["artist"] ?? []
                     f.album = f.tags["albumName"]?.first ?? ""
@@ -119,6 +120,7 @@ public enum LibraryScanner {
                     // Import is a metadata scan. Full payload hashes are computed only for a selected
                     // lyric binding, so a large reference library is never copied or read end-to-end.
                     if f.isDSD { f.issue = f.codec == "DST" ? "DST 原始 DSD 解码尚未接通" : "DSD／DoP 输出尚未接通" }
+                    if f.isDiscImage { f.issue = try DiscImageProbe.inspect(file).detail }
                 } catch { f.codec = "未识别"; f.issue = error.localizedDescription }
                 // Folder and root separate editions conservatively; do not merge solely by title/artist.
                 let identity = root.id + "|" + file.deletingLastPathComponent().path + "|" + f.album + "|" + f.albumArtist
