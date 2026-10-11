@@ -2,9 +2,14 @@ import Foundation
 import AVFoundation
 import MediaIO
 import AudioCore
+import LANHost
+import LANCore
+import LibraryDomain
 
 /// Explicit development command. Reads only the given generated corpus; never runs on launch by default.
 enum NativeVerification {
+    @MainActor private static var ranOnLaunch=false
+    @MainActor static func runOnceIfRequested() async { guard !ranOnLaunch else { return }; ranOnLaunch=true; _ = await runIfRequested() }
     struct Request: Codable {
         var fixtures: String; var report: String; var dataDirectory: String
         var realSamples: String?; var realReport: String?
@@ -33,6 +38,8 @@ enum NativeVerification {
             let dsp = try PCMPreGainVerification.measure()
             let encoder = JSONEncoder(); encoder.outputFormatting = [.prettyPrinted,.sortedKeys]
             try encoder.encode(dsp).write(to:reportURL.deletingPathExtension().appendingPathExtension("dsp.json"),options:.atomic)
+            let mobile=try PCMLevelControlVerification.measure()
+            try encoder.encode(mobile).write(to:reportURL.deletingPathExtension().appendingPathExtension("mobile-dsp.json"),options:.atomic)
         } catch { return "原生 DSP 验证失败："+error.localizedDescription }
         if let request = developmentRequest, let samples = request.realSamples, let report = request.realReport,
            let data = try? Data(contentsOf: URL(fileURLWithPath: samples)), let paths = try? JSONDecoder().decode([String].self, from: data) {
@@ -57,6 +64,16 @@ enum NativeVerification {
                     let buffer = AVAudioPCMBuffer(pcmFormat: file.processingFormat, frameCapacity: 4096)!
                     try file.read(into: buffer); row["decodedFrames"] = Int(buffer.frameLength)
                     row["decodeStatus"] = "passed"
+                    let media=MediaFile(rootID:"verification",relativePath:url.lastPathComponent,title:"Verification",codec:p.codec,sampleRate:p.rate,channels:p.channels)
+                    let source=try PCMSource(entry:CatalogEntry(media:media,root:url.deletingLastPathComponent(),source:url))
+                    let data=try source.read(start:0,count:Int(buffer.frameLength)*Int(source.info.bytesPerFrame))
+                    let decoded=try PCMTransport.decode(data,channels:p.channels)
+                    guard let channels=buffer.floatChannelData else { throw LANError.message("没有 PCM 通道数据") }
+                    for c in 0..<p.channels {
+                        guard decoded[c]==Array(UnsafeBufferPointer(start:channels[c],count:Int(buffer.frameLength))) else { throw LANError.message("LAN PCM 与源解码不一致") }
+                    }
+                    row["lanPCMStatus"]="passed"; row["lanPCMBytes"]=data.count
+                    row["lanSampleRate"]=source.info.sampleRate; row["lanChannels"]=source.info.channels
                 } else { row["decodeStatus"] = "not-connected" }
                 let after = try url.resourceValues(forKeys: [.fileSizeKey, .contentModificationDateKey])
                 row["sourceStatUnchanged"] = before.fileSize == after.fileSize && before.contentModificationDate == after.contentModificationDate

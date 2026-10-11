@@ -1,0 +1,1542 @@
+{
+  "主题": {
+    "en": "Theme",
+    "ja": "テーマ"
+  },
+  "日间": {
+    "en": "Day",
+    "ja": "デイ"
+  },
+  "夜间": {
+    "en": "Night",
+    "ja": "ナイト"
+  },
+  "语言": {
+    "en": "Language",
+    "ja": "言語"
+  },
+  "外观与语言": {
+    "en": "Appearance & Language",
+    "ja": "外観と言語"
+  },
+  "外观与语言…": {
+    "en": "Appearance & Language…",
+    "ja": "外観と言語…"
+  },
+  "音乐库": {
+    "en": "Library",
+    "ja": "ライブラリ"
+  },
+  "正在播放": {
+    "en": "Now Playing",
+    "ja": "再生中"
+  },
+  "专辑": {
+    "en": "Albums",
+    "ja": "アルバム"
+  },
+  "艺人": {
+    "en": "Artists",
+    "ja": "アーティスト"
+  },
+  "所有曲目": {
+    "en": "All Tracks",
+    "ja": "すべての曲"
+  },
+  "文件夹": {
+    "en": "Folders",
+    "ja": "フォルダ"
+  },
+  "音乐文件夹": {
+    "en": "Music Folders",
+    "ja": "音楽フォルダ"
+  },
+  "光盘镜像": {
+    "en": "Disc Images",
+    "ja": "ディスクイメージ"
+  },
+  "iOS 连接": {
+    "en": "iOS Connections",
+    "ja": "iOS 接続"
+  },
+  "iOS 播放终端": {
+    "en": "iOS Playback Endpoints",
+    "ja": "iOS 再生デバイス"
+  },
+  "工作室": {
+    "en": "Studio",
+    "ja": "スタジオ"
+  },
+  "歌词与时间轴": {
+    "en": "Lyrics & Timeline",
+    "ja": "歌詞とタイムライン"
+  },
+  "输出与均衡器": {
+    "en": "Output & EQ",
+    "ja": "出力と EQ"
+  },
+  "曲库管理": {
+    "en": "Library Management",
+    "ja": "ライブラリ管理"
+  },
+  "音乐 · 收藏 · 创作": {
+    "en": "Music · Collection · Create",
+    "ja": "音楽 · コレクション · 制作"
+  },
+  "本地优先 · 开发预览 0.4": {
+    "en": "Local first · Preview 0.4",
+    "ja": "ローカル優先 · プレビュー 0.4"
+  },
+  "导入文件夹": {
+    "en": "Import Folder",
+    "ja": "フォルダを追加"
+  },
+  "导入音乐文件夹…": {
+    "en": "Import Music Folder…",
+    "ja": "音楽フォルダを追加…"
+  },
+  "搜索音乐库": {
+    "en": "Search Library",
+    "ja": "ライブラリを検索"
+  },
+  "全部格式": {
+    "en": "All Formats",
+    "ja": "すべての形式"
+  },
+  "全部采样率": {
+    "en": "All Sample Rates",
+    "ja": "すべてのサンプルレート"
+  },
+  "全部状态": {
+    "en": "All Statuses",
+    "ja": "すべての状態"
+  },
+  "格式": {
+    "en": "Format",
+    "ja": "形式"
+  },
+  "采样率": {
+    "en": "Sample Rate",
+    "ja": "サンプルレート"
+  },
+  "状态": {
+    "en": "Status",
+    "ja": "状態"
+  },
+  "排序": {
+    "en": "Sort",
+    "ja": "並べ替え"
+  },
+  "文件路径": {
+    "en": "File Path",
+    "ja": "ファイルパス"
+  },
+  "标题": {
+    "en": "Title",
+    "ja": "タイトル"
+  },
+  "轨道顺序": {
+    "en": "Track Order",
+    "ja": "トラック順"
+  },
+  "升序 ↑": {
+    "en": "Ascending ↑",
+    "ja": "昇順 ↑"
+  },
+  "降序 ↓": {
+    "en": "Descending ↓",
+    "ja": "降順 ↓"
+  },
+  "重置": {
+    "en": "Reset",
+    "ja": "リセット"
+  },
+  "让收藏成为音乐库": {
+    "en": "Make your collection a library",
+    "ja": "コレクションをライブラリに"
+  },
+  "选择音乐文件夹…": {
+    "en": "Choose Music Folder…",
+    "ja": "音楽フォルダを選択…"
+  },
+  "选择本地或已挂载的音乐文件夹。\n音乐仍留在原处，曲库与歌词草稿保存在本机。": {
+    "en": "Choose a local or mounted music folder.\nMusic stays in place; the index and lyric drafts stay on this Mac.",
+    "ja": "ローカルまたはマウント済みの音楽フォルダを選択。\n音楽は元の場所に、索引と歌詞の下書きはこの Mac に保存します。"
+  },
+  "MP3 · WAV · FLAC · AAC / ALAC\nDSF / DFF 可识别，DSD 播放正在开发": {
+    "en": "MP3 · WAV · FLAC · AAC / ALAC\nDSF / DFF detection; DSD playback is in development",
+    "ja": "MP3 · WAV · FLAC · AAC / ALAC\nDSF / DFF は認識可能。DSD 再生は開発中"
+  },
+  "曲目 / 艺人": {
+    "en": "Track / Artist",
+    "ja": "曲 / アーティスト"
+  },
+  "时长": {
+    "en": "Duration",
+    "ja": "再生時間"
+  },
+  "没有符合条件的曲目": {
+    "en": "No matching tracks",
+    "ja": "一致する曲がありません"
+  },
+  "返回专辑": {
+    "en": "Back to Albums",
+    "ja": "アルバムに戻る"
+  },
+  "返回艺人": {
+    "en": "Back to Artists",
+    "ja": "アーティストに戻る"
+  },
+  "查看所属专辑": {
+    "en": "Show Album",
+    "ja": "アルバムを表示"
+  },
+  "查看艺人": {
+    "en": "Show Artist",
+    "ja": "アーティストを表示"
+  },
+  "加入队列": {
+    "en": "Add to Queue",
+    "ja": "キューに追加"
+  },
+  "下一首播放": {
+    "en": "Play Next",
+    "ja": "次に再生"
+  },
+  "播放队列": {
+    "en": "Queue",
+    "ja": "再生キュー"
+  },
+  "清除待播曲目": {
+    "en": "Clear Upcoming",
+    "ja": "次の曲を消去"
+  },
+  "移除": {
+    "en": "Remove",
+    "ja": "削除"
+  },
+  "播放": {
+    "en": "Play",
+    "ja": "再生"
+  },
+  "暂停": {
+    "en": "Pause",
+    "ja": "一時停止"
+  },
+  "上一首": {
+    "en": "Previous",
+    "ja": "前の曲"
+  },
+  "下一首": {
+    "en": "Next",
+    "ja": "次の曲"
+  },
+  "随机播放": {
+    "en": "Shuffle",
+    "ja": "シャッフル"
+  },
+  "循环队列": {
+    "en": "Repeat Queue",
+    "ja": "キューをリピート"
+  },
+  "静音": {
+    "en": "Mute",
+    "ja": "ミュート"
+  },
+  "取消静音": {
+    "en": "Unmute",
+    "ja": "ミュート解除"
+  },
+  "静音／取消静音": {
+    "en": "Mute / Unmute",
+    "ja": "ミュート切替"
+  },
+  "播放／暂停": {
+    "en": "Play / Pause",
+    "ja": "再生 / 一時停止"
+  },
+  "软件音量": {
+    "en": "Software Volume",
+    "ja": "ソフトウェア音量"
+  },
+  "未选择曲目": {
+    "en": "No Track Selected",
+    "ja": "曲が未選択"
+  },
+  "你的音乐，留在本机": {
+    "en": "Your music stays on your Mac",
+    "ja": "音楽は Mac にそのまま"
+  },
+  "展开正在播放": {
+    "en": "Open Now Playing",
+    "ja": "再生中を開く"
+  },
+  "播放页选项": {
+    "en": "Player Options",
+    "ja": "再生オプション"
+  },
+  "刷新封面与歌词": {
+    "en": "Refresh Artwork & Lyrics",
+    "ja": "アートワークと歌詞を更新"
+  },
+  "打开歌词工作室": {
+    "en": "Open Lyric Studio",
+    "ja": "歌詞スタジオを開く"
+  },
+  "歌词": {
+    "en": "Lyrics",
+    "ja": "歌詞"
+  },
+  "自动跟随": {
+    "en": "Auto Follow",
+    "ja": "自動追従"
+  },
+  "恢复跟随": {
+    "en": "Resume Following",
+    "ja": "自動追従を再開"
+  },
+  "专辑封面": {
+    "en": "Album artwork",
+    "ja": "アルバムジャケット"
+  },
+  "封面占位图": {
+    "en": "Artwork placeholder",
+    "ja": "ジャケットの代替表示"
+  },
+  "没有可用封面": {
+    "en": "No artwork available",
+    "ja": "ジャケットがありません"
+  },
+  "本机封面缓存": {
+    "en": "Local artwork cache",
+    "ja": "ローカルのジャケットキャッシュ"
+  },
+  "音频内嵌封面": {
+    "en": "Embedded Artwork",
+    "ja": "埋め込みアートワーク"
+  },
+  "从音乐库选择曲目开始播放": {
+    "en": "Select a track from the library",
+    "ja": "ライブラリから曲を選択"
+  },
+  "尚未选择音乐": {
+    "en": "No Music Selected",
+    "ja": "音楽が未選択"
+  },
+  "音乐目录未授权": {
+    "en": "Music folder access is not authorized",
+    "ja": "音楽フォルダへのアクセスが未許可"
+  },
+  "未找到对应 LRC": {
+    "en": "No matching LRC",
+    "ja": "対応する LRC がありません"
+  },
+  "对应 LRC · ": {
+    "en": "Matching LRC · ",
+    "ja": "対応 LRC · "
+  },
+  "正在查找对应 LRC…": {
+    "en": "Looking for matching LRC…",
+    "ja": "対応する LRC を検索中…"
+  },
+  "输出与聆听设置": {
+    "en": "Output & Listening Settings",
+    "ja": "出力とリスニング設定"
+  },
+  "聆听设置…": {
+    "en": "Listening Settings…",
+    "ja": "リスニング設定…"
+  },
+  "聆听偏好": {
+    "en": "Listening Preferences",
+    "ja": "リスニング環境設定"
+  },
+  "实际播放链路": {
+    "en": "Signal Path",
+    "ja": "信号経路"
+  },
+  "输出设备": {
+    "en": "Output Device",
+    "ja": "出力デバイス"
+  },
+  "刷新": {
+    "en": "Refresh",
+    "ja": "更新"
+  },
+  "软件音量上限": {
+    "en": "Software Volume Limit",
+    "ja": "ソフトウェア音量上限"
+  },
+  "响度与数字余量": {
+    "en": "Loudness & Headroom",
+    "ja": "音量統一とヘッドルーム"
+  },
+  "响度统一": {
+    "en": "Loudness Normalization",
+    "ja": "音量統一"
+  },
+  "关闭": {
+    "en": "Off",
+    "ja": "オフ"
+  },
+  "逐曲响度": {
+    "en": "Track Gain",
+    "ja": "トラックゲイン"
+  },
+  "专辑响度": {
+    "en": "Album Gain",
+    "ja": "アルバムゲイン"
+  },
+  "响度前级": {
+    "en": "Loudness Preamp",
+    "ja": "音量統一のプリアンプ"
+  },
+  "数字余量": {
+    "en": "Headroom",
+    "ja": "ヘッドルーム"
+  },
+  "按 ReplayGain 峰值标签限制增益": {
+    "en": "Limit Gain Using ReplayGain Peak Tags",
+    "ja": "ReplayGain ピークタグでゲインを制限"
+  },
+  "实际预增益": {
+    "en": "Applied Pregain",
+    "ja": "適用プリアンプゲイン"
+  },
+  "10 段均衡器": {
+    "en": "10-Band Equalizer",
+    "ja": "10 バンドイコライザー"
+  },
+  "启用 EQ": {
+    "en": "Enable EQ",
+    "ja": "EQ を有効化"
+  },
+  "前级增益": {
+    "en": "Preamp",
+    "ja": "プリアンプ"
+  },
+  "平直": {
+    "en": "Flat",
+    "ja": "フラット"
+  },
+  "人声轻调": {
+    "en": "Vocal",
+    "ja": "ボーカル"
+  },
+  "低频轻调": {
+    "en": "Gentle Bass",
+    "ja": "穏やかな低音"
+  },
+  "柔和高频": {
+    "en": "Soft Treble",
+    "ja": "柔らかい高音"
+  },
+  "自定义": {
+    "en": "Custom",
+    "ja": "カスタム"
+  },
+  "应用": {
+    "en": "Apply",
+    "ja": "適用"
+  },
+  "手动调整后标记为自定义": {
+    "en": "Manual edits become Custom",
+    "ja": "手動調整はカスタムとして保存"
+  },
+  "设备回读": {
+    "en": "Device Readback",
+    "ja": "デバイスから読み取った値"
+  },
+  "macOS 正在播放与媒体键": {
+    "en": "macOS Now Playing & Media Keys",
+    "ja": "macOS 再生中情報とメディアキー"
+  },
+  "音量上限、响度、EQ 和所选设备保存在本机。恢复设备按 UID 匹配；设备离线时暂停，等待重新选择。": {
+    "en": "Volume limit, loudness, EQ and device choice stay on this Mac. Devices restore by UID; offline devices pause playback.",
+    "ja": "音量上限、音量統一、EQ、デバイス選択をこの Mac に保存。UID で復元し、オフライン時は再生を一時停止します。"
+  },
+  "读取已有 ReplayGain 标签，不修改音乐。专辑标签缺失时使用逐曲标签；没有有效标签时保留原响度。峰值标签不等于实时 true-peak 测量。": {
+    "en": "Uses existing ReplayGain tags without editing music. Falls back to track gain when album tags are absent. Peak tags are not live true-peak measurements.",
+    "ja": "音楽を変更せず既存 ReplayGain タグを使用。アルバムタグがなければトラックゲインを使用。ピークタグはリアルタイム true-peak 測定ではありません。"
+  },
+  "预设是轻度音色调整，不是耳机测量校正。EQ 可旁路比较；实时削波计量和 DAC 硬件音量后续接入。": {
+    "en": "Presets make gentle tonal adjustments, not measured headphone correction. EQ can be bypassed; clipping meters and DAC hardware volume are planned.",
+    "ja": "プリセットは穏やかな音色調整で、測定によるヘッドホン補正ではありません。EQ はバイパス可能。クリップ計測と DAC ハードウェア音量は今後対応予定。"
+  },
+  "EQ 仅处理 PCM；关闭时绕过 EQ 节点。软件音量仍属于兼容播放链路。": {
+    "en": "EQ processes PCM only and is bypassed when off. Software volume remains in the playback chain.",
+    "ja": "EQ は PCM のみ処理し、オフ時はバイパス。ソフトウェア音量は再生経路に残ります。"
+  },
+  "PCM 兼容模式使用系统音频图与软件音量。尚未完成独占／逐比特验证，DSD DoP 不会发送到任何设备。": {
+    "en": "PCM mode uses the system audio graph and software volume. Exclusive / bit-perfect output is unverified; DSD DoP is not sent to devices.",
+    "ja": "PCM モードはシステム音声グラフとソフトウェア音量を使用。排他 / bit-perfect は未検証。DSD DoP は出力しません。"
+  },
+  "引用文件夹": {
+    "en": "Referenced Folders",
+    "ja": "参照フォルダ"
+  },
+  "引用音乐文件夹": {
+    "en": "Reference Music Folder",
+    "ja": "音楽フォルダを参照"
+  },
+  "重新授权": {
+    "en": "Reauthorize",
+    "ja": "再許可"
+  },
+  "重新授权…": {
+    "en": "Reauthorize…",
+    "ja": "再許可…"
+  },
+  "重新扫描": {
+    "en": "Rescan",
+    "ja": "再スキャン"
+  },
+  "重新扫描全部目录": {
+    "en": "Rescan All Folders",
+    "ja": "すべてのフォルダを再スキャン"
+  },
+  "重新扫描目录": {
+    "en": "Rescan Folders",
+    "ja": "フォルダを再スキャン"
+  },
+  "在线": {
+    "en": "Online",
+    "ja": "オンライン"
+  },
+  "磁盘离线": {
+    "en": "Disk Offline",
+    "ja": "ディスクがオフライン"
+  },
+  "需要重新授权": {
+    "en": "Access Required",
+    "ja": "アクセス許可が必要"
+  },
+  "不可用": {
+    "en": "Unavailable",
+    "ja": "利用不可"
+  },
+  "文件离线或需要重新授权": {
+    "en": "File offline or access required",
+    "ja": "ファイルがオフラインまたはアクセス許可が必要"
+  },
+  "只读引用原目录，不复制音乐、不写回标签。索引与歌词草稿保存在本机；授权失效或磁盘离线时仍保留。": {
+    "en": "Read-only references to original folders; no music copying or tag writes. Index and drafts remain on this Mac even when access expires or disks go offline.",
+    "ja": "元のフォルダを読み取り専用で参照。音楽のコピーやタグ書き込みは行いません。許可の失効やディスクのオフライン時も索引と下書きを保持します。"
+  },
+  "只读引用：音乐保留原位，不复制、不改写。索引与歌词草稿保存在本机。": {
+    "en": "Read-only reference: music stays in place without copying or editing. Index and lyric drafts stay on this Mac.",
+    "ja": "読み取り専用参照：音楽をコピー・変更せず元の場所に保持。索引と歌詞の下書きはこの Mac に保存。"
+  },
+  "文件没有可读取的艺人标签。可在曲目页查看并播放。": {
+    "en": "No readable artist tags. Browse and play from All Tracks.",
+    "ja": "読み取れるアーティストタグがありません。すべての曲から再生できます。"
+  },
+  "尚无光盘镜像": {
+    "en": "No Disc Images",
+    "ja": "ディスクイメージがありません"
+  },
+  "重新扫描已引用目录即可收录 ISO 文件": {
+    "en": "Rescan referenced folders to index ISO files",
+    "ja": "参照フォルダを再スキャンすると ISO を登録します"
+  },
+  "镜像播放尚未接通": {
+    "en": "Image playback is not available yet",
+    "ja": "イメージ再生は未対応"
+  },
+  "只读识别 SACD／ISO 9660 头部，镜像独立收录。SACD 曲目解析与 DST／DSD 解码尚未接通，当前不能播放镜像。CD-DA 通常需要 BIN／CUE 轨道信息。": {
+    "en": "Reads SACD / ISO 9660 headers and lists images separately. SACD track parsing and DST / DSD decoding are not connected, so images cannot play yet. CD-DA usually needs BIN / CUE track data.",
+    "ja": "SACD / ISO 9660 ヘッダーを読み取り、別一覧に登録。SACD 曲解析と DST / DSD デコードは未対応のため再生できません。CD-DA は通常 BIN / CUE 情報が必要です。"
+  },
+  "在 Finder 中显示": {
+    "en": "Show in Finder",
+    "ja": "Finder に表示"
+  },
+  "本机 SQLite 曲库": {
+    "en": "Local SQLite Library",
+    "ja": "ローカル SQLite ライブラリ"
+  },
+  "检查完整性": {
+    "en": "Check Integrity",
+    "ja": "整合性を確認"
+  },
+  "导出一致备份…": {
+    "en": "Export Consistent Backup…",
+    "ja": "整合性のあるバックアップを書き出す…"
+  },
+  "采用 SQLite Online Backup API，备份覆盖 WAL 中已提交的数据。数据库备份不包含音乐文件。\n\n独立库切换、恢复向导、播放列表与标签写回正在开发。": {
+    "en": "Uses SQLite Online Backup, including committed WAL data. Database backups contain no music files.\n\nLibrary switching, restore wizard, playlists and tag writing are in development.",
+    "ja": "SQLite Online Backup を使用し、コミット済み WAL を含めます。音楽ファイルは含みません。\n\nライブラリ切替、復元、プレイリスト、タグ書き込みは開発中。"
+  },
+  "一致数据库备份已保存；不包含音乐文件": {
+    "en": "Consistent database backup saved; no music files included",
+    "ja": "整合性のあるデータベースバックアップを保存。音楽ファイルは含みません"
+  },
+  "数据库完整性：": {
+    "en": "Database integrity: ",
+    "ja": "データベース整合性: "
+  },
+  "操作未完成": {
+    "en": "Action Incomplete",
+    "ja": "操作が未完了"
+  },
+  "知道了": {
+    "en": "OK",
+    "ja": "OK"
+  },
+  "取消": {
+    "en": "Cancel",
+    "ja": "キャンセル"
+  },
+  "清除": {
+    "en": "Clear",
+    "ja": "消去"
+  },
+  "歌词工作室": {
+    "en": "Lyric Studio",
+    "ja": "歌詞スタジオ"
+  },
+  "跟随音乐，记下每一个字": {
+    "en": "Follow the music, time every word",
+    "ja": "音楽に合わせて一文字ずつ記録"
+  },
+  "先从音乐库载入曲目。歌词草稿会绑定到具体音频文件版本，\n并共享播放器时钟。": {
+    "en": "Load a track first. Lyric drafts bind to that audio version\nand share its playback clock.",
+    "ja": "先に曲を読み込んでください。歌詞はその音声バージョンに紐付き、\n再生時計を共有します。"
+  },
+  "建立打轴草稿": {
+    "en": "Create Timing Draft",
+    "ja": "タイミングの下書きを作成"
+  },
+  "尚无歌词草稿": {
+    "en": "No Lyric Draft",
+    "ja": "歌詞の下書きがありません"
+  },
+  "粘贴歌词正文，或导入 TXT / LRC / Enhanced LRC / SRT / Negi 工程": {
+    "en": "Paste lyrics or import TXT / LRC / Enhanced LRC / SRT / Negi projects",
+    "ja": "歌詞を貼り付け、または TXT / LRC / Enhanced LRC / SRT / Negi を読み込み"
+  },
+  "导入…": {
+    "en": "Import…",
+    "ja": "読み込む…"
+  },
+  "导出": {
+    "en": "Export",
+    "ja": "書き出す"
+  },
+  "纯文本 TXT…": {
+    "en": "Plain Text TXT…",
+    "ja": "プレーンテキスト TXT…"
+  },
+  "完整歌词工程…": {
+    "en": "Full Lyric Project…",
+    "ja": "歌詞プロジェクト全体…"
+  },
+  "保存草稿…": {
+    "en": "Save Draft…",
+    "ja": "下書きを保存…"
+  },
+  "回导 Negi 草稿…": {
+    "en": "Reimport Negi Draft…",
+    "ja": "Negi 下書きを再読み込み…"
+  },
+  "打轴方式": {
+    "en": "Timing Mode",
+    "ja": "タイミング方式"
+  },
+  "逐句": {
+    "en": "Line",
+    "ja": "行"
+  },
+  "逐字": {
+    "en": "Character",
+    "ja": "文字"
+  },
+  "逐词": {
+    "en": "Word",
+    "ja": "単語"
+  },
+  "歌词时间轴": {
+    "en": "Lyric Timeline",
+    "ja": "歌詞タイムライン"
+  },
+  "T 打点": {
+    "en": "T to Stamp",
+    "ja": "T でタイミング記録"
+  },
+  "下一处未打点": {
+    "en": "Next Untimed",
+    "ja": "次の未設定箇所"
+  },
+  "全局偏移 ms": {
+    "en": "Global Offset ms",
+    "ja": "全体オフセット ms"
+  },
+  "应用偏移": {
+    "en": "Apply Offset",
+    "ja": "オフセットを適用"
+  },
+  "选中时间（基础秒）": {
+    "en": "Selected Time (Base Seconds)",
+    "ja": "選択時刻（基準秒）"
+  },
+  "选择并暂停": {
+    "en": "Select & Pause",
+    "ja": "選択して一時停止"
+  },
+  "上移": {
+    "en": "Move Up",
+    "ja": "上へ"
+  },
+  "下移": {
+    "en": "Move Down",
+    "ja": "下へ"
+  },
+  "缩放": {
+    "en": "Zoom",
+    "ja": "ズーム"
+  },
+  "未打点": {
+    "en": "Untimed",
+    "ja": "未設定"
+  },
+  "独立 PCM 分析 · 不修改音频": {
+    "en": "Independent PCM analysis · No audio edits",
+    "ja": "独立 PCM 解析 · 音声は変更しません"
+  },
+  "没有 PCM 波形": {
+    "en": "No PCM Waveform",
+    "ja": "PCM 波形がありません"
+  },
+  "正在分析 PCM 波形…": {
+    "en": "Analyzing PCM waveform…",
+    "ja": "PCM 波形を解析中…"
+  },
+  "播放时按 T 或拖过单元打点；暂停后选择并精修。拖歌词标记只改歌词，点击波形改变播放位置。": {
+    "en": "Press T or drag over cells while playing to stamp timing. Pause to refine. Dragging lyric markers changes lyrics only; clicking the waveform seeks audio.",
+    "ja": "再生中に T またはセルをドラッグしてタイミングを記録。一時停止して微調整。歌詞マーカーの移動は歌詞のみ変更し、波形のクリックは再生位置を変更します。"
+  },
+  "撤销歌词修改": {
+    "en": "Undo Lyric Edit",
+    "ja": "歌詞の編集を取り消す"
+  },
+  "重做歌词修改": {
+    "en": "Redo Lyric Edit",
+    "ja": "歌詞の編集をやり直す"
+  },
+  "确认重新关联当前音频": {
+    "en": "Confirm Rebind to Current Audio",
+    "ja": "現在の音声への再紐付けを確認"
+  },
+  "仅校验当前曲目；音乐文件保持只读。": {
+    "en": "Verifies the selected track only; music stays read-only.",
+    "ja": "選択した曲のみ検証。音楽は読み取り専用。"
+  },
+  "音频载荷已改变；请核对母带、长度和前导静音后，确认重新关联。": {
+    "en": "Audio payload changed. Check master, duration and leading silence before rebinding.",
+    "ja": "音声データが変更されています。マスター、長さ、冒頭の無音を確認して再紐付けしてください。"
+  },
+  "音频载荷与歌词原绑定不同，请核对后确认重新关联": {
+    "en": "Audio differs from the lyric binding; review before rebinding",
+    "ja": "音声が歌詞の紐付けと異なります。確認して再紐付けしてください"
+  },
+  "当前歌词已全部打点": {
+    "en": "All lyrics have timing",
+    "ja": "すべての歌詞にタイミング設定済み"
+  },
+  "草稿已保存到音乐库": {
+    "en": "Draft saved to the library",
+    "ja": "下書きをライブラリに保存"
+  },
+  "已恢复歌词草稿": {
+    "en": "Lyric draft restored",
+    "ja": "歌詞の下書きを復元"
+  },
+  "草稿保存失败，修改仍在编辑器中": {
+    "en": "Draft save failed; edits remain in the editor",
+    "ja": "下書き保存失敗。編集内容はエディタに残っています"
+  },
+  "正在校验当前音频版本…": {
+    "en": "Verifying current audio version…",
+    "ja": "現在の音声バージョンを検証中…"
+  },
+  "LRC 已合并 offset；不包含编辑历史、未打点数据和显式结束时间。完整工程保留这些字段。": {
+    "en": "LRC includes the offset but omits edit history, untimed entries and explicit end times. The full project preserves them.",
+    "ja": "LRC はオフセットを含みますが、編集履歴、未設定項目、明示的終了時刻は含みません。プロジェクト全体では保持します。"
+  },
+  "；LRC 不包含结束时间和编辑历史": {
+    "en": "; LRC omits end times and edit history",
+    "ja": "。LRC は終了時刻と編集履歴を含みません"
+  },
+  "歌词导出和数据库备份需选择音乐目录以外的位置。": {
+    "en": "Choose a location outside music folders for lyric exports and database backups.",
+    "ja": "歌詞の書き出しとデータベースバックアップには音楽フォルダ以外を選択してください。"
+  },
+  "开发验证": {
+    "en": "Development Checks",
+    "ja": "開発検証"
+  },
+  "运行原生编解码与 DSP 验证": {
+    "en": "Run Native Codec & DSP Checks",
+    "ja": "ネイティブコーデックと DSP を検証"
+  },
+  "正在运行原生验证…": {
+    "en": "Running native checks…",
+    "ja": "ネイティブ検証を実行中…"
+  },
+  "未配置原生验证请求": {
+    "en": "No native verification request configured",
+    "ja": "ネイティブ検証リクエストが未設定"
+  },
+  "原生编解码与 DSP 报告已保存": {
+    "en": "Native codec and DSP reports saved",
+    "ja": "ネイティブコーデックと DSP レポートを保存"
+  },
+  "原生 DSP 验证失败：": {
+    "en": "Native DSP verification failed: ",
+    "ja": "ネイティブ DSP 検証失敗: "
+  },
+  "验证报告保存失败：": {
+    "en": "Could not save verification report: ",
+    "ja": "検証レポートの保存失敗: "
+  },
+  "开启局域网服务": {
+    "en": "Start LAN Service",
+    "ja": "LAN サービスを開始"
+  },
+  "关闭服务": {
+    "en": "Stop Service",
+    "ja": "サービスを停止"
+  },
+  "连接与配对": {
+    "en": "Connection & Pairing",
+    "ja": "接続とペアリング"
+  },
+  "证书 SHA-256 指纹": {
+    "en": "Certificate SHA-256 Fingerprint",
+    "ja": "証明書 SHA-256 フィンガープリント"
+  },
+  "未开放新设备配对": {
+    "en": "New-device pairing is closed",
+    "ja": "新規デバイスのペアリングは停止中"
+  },
+  "生成 5 分钟配对码": {
+    "en": "Generate 5-Minute Pairing Code",
+    "ja": "5 分間有効のペアリングコードを生成"
+  },
+  "已配对设备": {
+    "en": "Paired Devices",
+    "ja": "ペアリング済みデバイス"
+  },
+  "尚无配对设备": {
+    "en": "No Paired Devices",
+    "ja": "ペアリング済みデバイスなし"
+  },
+  "最近连接：": {
+    "en": "Last connected: ",
+    "ja": "最終接続："
+  },
+  "撤销配对": {
+    "en": "Revoke Pairing",
+    "ja": "ペアリングを解除"
+  },
+  "Mac 管理文件和索引，只提供音频流、封面、LRC 与同名本地 MV。iOS 只读浏览曲库，在本机处理 EQ 与音频输出。Mac 的音量、EQ 和输出设备不会作用于 iOS 音频流。": {
+    "en": "Mac manages files and the index, serving audio streams, artwork, LRC and matching local MVs. iOS browses read-only and applies EQ and output processing. Mac volume, EQ and output selection do not affect the iOS stream.",
+    "ja": "Mac はファイルと索引を管理し、音声、アートワーク、LRC、同名のローカル MV を配信。iOS は読み取り専用で閲覧し、EQ と出力を処理。Mac の音量、EQ、出力選択は iOS の音声に影響しません。"
+  },
+  "在 iPhone／iPad 的 NegiPlayer 中选择这台 Mac，或输入以下地址。两端需处于同一局域网。": {
+    "en": "Select this Mac in NegiPlayer on iPhone / iPad, or enter the address below. Both devices must be on the same LAN.",
+    "ja": "iPhone / iPad の NegiPlayer でこの Mac を選択するか、下記のアドレスを入力。同じ LAN に接続してください。"
+  },
+  "首次连接请核对完整指纹。配对码成功使用一次即关闭，10 次失败后锁定；重新生成可恢复。服务不会自动开启。": {
+    "en": "Compare the full fingerprint on first connection. A code closes after one successful use, expires in 5 minutes, and locks after 10 failures. The service never starts automatically.",
+    "ja": "初回接続で完全な指紋を照合。コードは 1 回成功すると終了し、5 分で失効、10 回失敗でロック。サービスは自動開始しません。"
+  },
+  "HTTPS 仅接受本地／私有网络连接。Mac 休眠、退出、外置盘离线或关闭服务会中断传输；iOS 不保存音乐副本或可写数据库。": {
+    "en": "HTTPS accepts local / private networks only. Mac sleep, quit, offline disks or stopping the service interrupts streaming. iOS stores no music copies or writable database.",
+    "ja": "HTTPS はローカル / プライベートネットワークのみ受け付けます。Mac のスリープ、終了、ディスクのオフライン、サービス停止で配信が中断。iOS は音楽コピーや書き込み可能なデータベースを保存しません。"
+  },
+  "点击搜索同一局域网中的 Mac": {
+    "en": "Tap to find Macs on the same LAN",
+    "ja": "同じ LAN 内の Mac を検索します"
+  },
+  "正在发现 Mac…": {
+    "en": "Discovering Macs…",
+    "ja": "Mac を検出中…"
+  },
+  "未能发现设备，请检查 iOS 设置中的局域网权限，或手动输入 Mac 地址": {
+    "en": "No device discovered. Check Local Network permission in iOS Settings or enter the Mac address manually.",
+    "ja": "機器を検出できません。iOS 設定のローカルネットワーク権限を確認するか、Mac のアドレスを手動で入力してください。"
+  },
+  "尚未启用音频": {
+    "en": "Audio not active",
+    "ja": "オーディオは未起動です"
+  },
+  "USB 音频设备已断开，已暂停以避免转到扬声器": {
+    "en": "USB audio disconnected. Playback paused to avoid switching to speakers.",
+    "ja": "USB オーディオが切断されました。スピーカーへの切り替えを避けるため一時停止しました。"
+  },
+  "音频被系统中断，点击播放恢复": {
+    "en": "Audio interrupted by the system. Tap Play to resume.",
+    "ja": "システムが音声を中断しました。再生をタップして再開してください。"
+  },
+  "该格式尚不能在 iOS 播放，DSD／ISO 仍仅供识别": {
+    "en": "This format cannot play on iOS yet. DSD/ISO are identification only.",
+    "ja": "この形式は iOS で再生できません。DSD／ISO は識別のみ対応しています。"
+  },
+  "Mac 标识或协议版本改变，请重新配对": {
+    "en": "Mac identity or protocol changed. Pair again.",
+    "ja": "Mac の識別情報またはプロトコルが変更されました。再度ペアリングしてください。"
+  },
+  "保存配对信息失败": {
+    "en": "Could not save pairing credentials",
+    "ja": "ペアリング情報を保存できません"
+  },
+  "配对成功，但保存到钥匙串失败": {
+    "en": "Paired, but Keychain save failed",
+    "ja": "ペアリング成功、キーチェーン保存失敗"
+  },
+  "移除配对信息失败": {
+    "en": "Could not remove pairing credentials",
+    "ja": "ペアリング情報を削除できません"
+  },
+  "无法读取钥匙串中的配对信息": {
+    "en": "Cannot read pairing credentials from Keychain",
+    "ja": "キーチェーンのペアリング情報を読み取れません"
+  },
+  "发现在": {
+    "en": "Found on",
+    "ja": "検出場所"
+  },
+  "播放中": {
+    "en": "Playing",
+    "ja": "再生中"
+  },
+  "已暂停": {
+    "en": "Paused",
+    "ja": "一時停止"
+  },
+  "已扫描": {
+    "en": "Scanned",
+    "ja": "スキャン済み"
+  },
+  "正在扫描": {
+    "en": "Scanning",
+    "ja": "スキャン中"
+  },
+  "已读取": {
+    "en": "Read",
+    "ja": "読み取り済み"
+  },
+  "个音乐文件": {
+    "en": "music files",
+    "ja": "音楽ファイル"
+  },
+  "个镜像": {
+    "en": "disc images",
+    "ja": "イメージ"
+  },
+  "个目录": {
+    "en": "folders",
+    "ja": "フォルダ"
+  },
+  "个可用文件": {
+    "en": "available files",
+    "ja": "利用可能なファイル"
+  },
+  "首曲目": {
+    "en": "tracks",
+    "ja": "曲"
+  },
+  " 首": {
+    "en": " tracks",
+    "ja": " 曲"
+  },
+  "取消扫描": {
+    "en": "Cancel Scan",
+    "ja": "スキャンをキャンセル"
+  },
+  "8 位配对码": {
+    "en": "8-digit pairing code",
+    "ja": "8桁のペアリングコード"
+  },
+  "Mac HTTPS 地址": {
+    "en": "Mac HTTPS address",
+    "ja": "Mac の HTTPS アドレス"
+  },
+  "全屏": {
+    "en": "Full screen",
+    "ja": "全画面"
+  },
+  "加载更多": {
+    "en": "Load more",
+    "ja": "さらに読み込む"
+  },
+  "完成": {
+    "en": "Done",
+    "ja": "完了"
+  },
+  "封面": {
+    "en": "Artwork",
+    "ja": "ジャケット"
+  },
+  "已与 Mac 显示的完整指纹核对一致": {
+    "en": "I verified the full fingerprint shown on the Mac",
+    "ja": "Mac に表示された指紋全体の一致を確認しました"
+  },
+  "搜索 Mac": {
+    "en": "Find Macs",
+    "ja": "Mac を検索"
+  },
+  "播放位置": {
+    "en": "Playback position",
+    "ja": "再生位置"
+  },
+  "断开并移除配对": {
+    "en": "Disconnect and remove pairing",
+    "ja": "接続とペアリングを解除"
+  },
+  "曲库只读 · 文件管理在 Mac": {
+    "en": "Read-only library · Files managed on Mac",
+    "ja": "ライブラリは読み取り専用 · ファイル管理は Mac"
+  },
+  "磁盘离线或需要重新授权": {
+    "en": "Drive offline or authorization required",
+    "ja": "ドライブがオフラインか、再認証が必要です"
+  },
+  "系统音频路由": {
+    "en": "System audio route",
+    "ja": "システムの音声出力"
+  },
+  "设置": {
+    "en": "Settings",
+    "ja": "設定"
+  },
+  "跟随源采样率": {
+    "en": "Follow source sample rate",
+    "ja": "音源のサンプルレートに合わせる"
+  },
+  "连接 Mac 曲库": {
+    "en": "Connect to a Mac library",
+    "ja": "Mac のライブラリに接続"
+  },
+  "配对并连接": {
+    "en": "Pair and connect",
+    "ja": "ペアリングして接続"
+  },
+  "音乐由 Mac 管理；此设备只读浏览，在本机处理音频。": {
+    "en": "Mac manages the music. This device browses a read-only library and processes audio locally.",
+    "ja": "音楽は Mac が管理します。この端末は読み取り専用で閲覧し、音声を端末内で処理します。"
+  },
+  "音频版本已改变，歌词时间轴需要核对。": {
+    "en": "The audio version changed. Review lyric timing.",
+    "ja": "音源が変更されました。歌詞のタイミングを確認してください。"
+  },
+  "预设": {
+    "en": "Preset",
+    "ja": "プリセット"
+  },
+  "首选输出采样率": {
+    "en": "Preferred output sample rate",
+    "ja": "希望する出力サンプルレート"
+  },
+  "（空行）": {
+    "en": "(Empty line)",
+    "ja": "（空行）"
+  },
+  "USB 声卡由 iOS 系统路由，首选采样率仅是请求；上方显示实际输出。拔出音频设备会暂停。": {
+    "en": "iOS routes USB audio. The preferred sample rate is a request; actual output is shown above. Unplugging the audio device pauses playback.",
+    "ja": "USB オーディオは iOS が制御します。希望レートは要求値で、上に実際の出力を表示します。取り外すと一時停止します。"
+  },
+  "EQ、增益及输出由 iOS 处理。播放链路会按系统与 USB 设备能力转换采样率，不声明 bit-perfect。": {
+    "en": "iOS handles EQ, gain and output. Sample-rate conversion depends on the system and USB device; bit-perfect output is not guaranteed.",
+    "ja": "EQ、ゲイン、出力は iOS が処理します。システムと USB 機器に応じてサンプルレートを変換し、ビットパーフェクト出力は保証しません。"
+  },
+  "搜索局域网中的 Mac…": {
+    "en": "Searching for Macs on the LAN…",
+    "ja": "LAN 内の Mac を検索中…"
+  },
+  "找到 %d 台 Mac": {
+    "en": "Found %d Macs",
+    "ja": "%d 台の Mac を検出"
+  },
+  "%d 首曲目": {
+    "en": "%d tracks",
+    "ja": "%d 曲"
+  },
+  "%d 首": {
+    "en": "%d tracks",
+    "ja": "%d 曲"
+  },
+  "%d 个目录 · %d 个可用文件": {
+    "en": "%d folders · %d available files",
+    "ja": "%d フォルダ · %d 個の利用可能なファイル"
+  },
+  "%d 首 · %s": {
+    "en": "%d tracks · %s",
+    "ja": "%d 曲 · %s"
+  },
+  "开启": {
+    "en": "On",
+    "ja": "オン"
+  },
+  "未探测": {
+    "en": "Not probed",
+    "ja": "未解析"
+  },
+  "EQ 预设：": {
+    "en": "EQ preset: ",
+    "ja": "EQ プリセット："
+  },
+  "无法创建 iOS 音频格式": {
+    "en": "Cannot create the iOS audio format",
+    "ja": "iOS の音声フォーマットを作成できません"
+  },
+  "音频缓冲创建失败": {
+    "en": "Cannot create the audio buffer",
+    "ja": "音声バッファを作成できません"
+  },
+  "Mac 返回的音频流范围不一致": {
+    "en": "Mac returned an inconsistent audio range",
+    "ja": "Mac の音声範囲が一致しません"
+  },
+  "发现的 Mac 标识与配对结果不符": {
+    "en": "The discovered Mac identity does not match pairing",
+    "ja": "検出された Mac とペアリング結果の識別情報が一致しません"
+  },
+  "配对已失效，请重新连接 Mac": {
+    "en": "Pairing expired or was revoked. Reconnect to Mac.",
+    "ja": "ペアリングが無効になりました。Mac に再接続してください。"
+  },
+  "Mac 返回错误": {
+    "en": "Mac returned an error",
+    "ja": "Mac がエラーを返しました"
+  },
+  "地址无效": {
+    "en": "Invalid address",
+    "ja": "アドレスが無効です"
+  },
+  "请输入 Mac 显示的局域网 HTTPS 地址及端口": {
+    "en": "Enter the LAN HTTPS address and port shown on Mac",
+    "ja": "Mac に表示される LAN HTTPS アドレスとポートを入力してください"
+  },
+  "%d 首 · %@": {
+    "en": "%d tracks · %@",
+    "ja": "%d 曲 · %@"
+  },
+  "输出呈现延迟 %.1f ms": {
+    "en": "Output presentation latency %.1f ms",
+    "ja": "出力の提示遅延 %.1f ms"
+  },
+  "当前设备格式 %d Hz · %@": {
+    "en": "Current device format %d Hz · %@",
+    "ja": "現在の機器フォーマット %d Hz · %@"
+  },
+  "公开可写音量属性，尚未验证控制": {
+    "en": "Writable volume property; control not yet verified",
+    "ja": "音量の書き込み属性あり・制御は未検証"
+  },
+  "固定输出或未提供主音量": {
+    "en": "Fixed output or no master volume",
+    "ja": "固定出力またはマスター音量なし"
+  },
+  "播放队列 · %d": {
+    "en": "Play queue · %d",
+    "ja": "再生キュー · %d"
+  },
+  "%d 行 · 正 offset 表示延后 · 纳秒存储": {
+    "en": "%d lines · Positive offset delays lyrics · Nanosecond storage",
+    "ja": "%d 行 · 正のオフセットで歌詞を遅延 · ナノ秒で保存"
+  },
+  "%d 行在媒体范围外；已保留在草稿，未显示在波形范围内。": {
+    "en": "%d lines are outside the media duration. They remain in the draft and are hidden in the waveform.",
+    "ja": "%d 行がメディアの時間範囲外です。下書きに保持し、波形では非表示にしています。"
+  },
+  "MV 没有视频轨道": {
+    "en": "MV has no video track",
+    "ja": "MV に映像トラックがありません"
+  },
+  "MV 轨道创建失败": {
+    "en": "Cannot create the MV video track",
+    "ja": "MV の映像トラックを作成できません"
+  },
+  "MV 流范围不一致": {
+    "en": "Inconsistent MV stream range",
+    "ja": "MV ストリームの範囲が一致しません"
+  },
+  "视频请求过多": {
+    "en": "Too many video requests",
+    "ja": "映像リクエストが多すぎます"
+  },
+  "选择本地音乐开始播放": {
+    "en": "Choose local music to play",
+    "ja": "ローカルの音楽を選んで再生"
+  },
+  "尚未播放": {
+    "en": "Not playing",
+    "ja": "未再生"
+  },
+  "Mac 提供只读曲库与 PCM 流，音频由 iOS 处理": {
+    "en": "Mac serves a read-only library and PCM; iOS processes the audio",
+    "ja": "Mac は読み取り専用ライブラリと PCM を提供し、音声は iOS が処理します"
+  },
+  "服务启动失败，请检查系统局域网权限和防火墙": {
+    "en": "Cannot start the service. Check Local Network permission and firewall.",
+    "ja": "サービスを起動できません。ローカルネットワーク権限とファイアウォールを確認してください。"
+  },
+  "服务已关闭": {
+    "en": "Service off",
+    "ja": "サービスは停止中です"
+  },
+  "正在启动 HTTPS 服务…": {
+    "en": "Starting HTTPS service…",
+    "ja": "HTTPS サービスを起動中…"
+  },
+  "响度统一已关闭": {
+    "en": "Loudness normalization off",
+    "ja": "ラウドネス調整はオフです"
+  },
+  "无有效 ReplayGain 标签，未自动调整响度": {
+    "en": "No valid ReplayGain tag; loudness unchanged",
+    "ja": "有効な ReplayGain タグがないためラウドネスは変更しません"
+  },
+  "专辑标签缺失，使用逐曲标签": {
+    "en": "Album tag missing; using track tag",
+    "ja": "アルバムタグがないため曲のタグを使用します"
+  },
+  "使用专辑 ReplayGain": {
+    "en": "Using album ReplayGain",
+    "ja": "アルバム ReplayGain を使用"
+  },
+  "使用逐曲 ReplayGain": {
+    "en": "Using track ReplayGain",
+    "ja": "曲の ReplayGain を使用"
+  },
+  " · 按标签峰值限制增益": {
+    "en": " · Gain limited by peak tag",
+    "ja": " · ピークタグでゲインを制限"
+  },
+  "设备待确认": {
+    "en": "Device unconfirmed",
+    "ja": "出力機器は未確認です"
+  },
+  "（系统混音）": {
+    "en": "(System mixing)",
+    "ja": "（システムミックス）"
+  },
+  "采样率转换": {
+    "en": "Sample-rate conversion",
+    "ja": "サンプルレート変換"
+  },
+  " · 增益 %+.1f dB": {
+    "en": " · Gain %+.1f dB",
+    "ja": " · ゲイン %+.1f dB"
+  },
+  "%d Hz · %d 声道 · %d 位客户端格式": {
+    "en": "%d Hz · %d channels · %d-bit client format",
+    "ja": "%d Hz · %d チャンネル · %d ビットのクライアント形式"
+  },
+  "播放设置读取失败，已保留原文件：%@": {
+    "en": "Cannot load playback settings; original preserved: %@",
+    "ja": "再生設定を読み込めません。元のファイルは保持しました：%@"
+  },
+  "播放设置保存失败：%@": {
+    "en": "Cannot save playback settings: %@",
+    "ja": "再生設定を保存できません：%@"
+  },
+  "正在扫描 %@": {
+    "en": "Scanning %@",
+    "ja": "%@ をスキャン中"
+  },
+  "已扫描 %d 个音乐文件、%d 个镜像": {
+    "en": "Scanned %d music files and %d images",
+    "ja": "%d 個の音楽ファイルと %d 個のイメージをスキャンしました"
+  },
+  "已读取 %d 个文件 · %@": {
+    "en": "Read %d files · %@",
+    "ja": "%d 個のファイルを読み込み済み · %@"
+  },
+  "对应 LRC · %@": {
+    "en": "Matched LRC · %@",
+    "ja": "対応する LRC · %@"
+  },
+  "LRC 未载入：%@": {
+    "en": "LRC not loaded: %@",
+    "ja": "LRC を読み込めません：%@"
+  },
+  "队列中已有：%@": {
+    "en": "Already queued: %@",
+    "ja": "キューに追加済み：%@"
+  },
+  "已安排下一首：%@": {
+    "en": "Playing next: %@",
+    "ja": "次に再生：%@"
+  },
+  "已加入队列：%@": {
+    "en": "Added to queue: %@",
+    "ja": "キューに追加：%@"
+  },
+  "歌词版本校验未完成：%@": {
+    "en": "Lyric version verification incomplete: %@",
+    "ja": "歌詞バージョンの確認は未完了です：%@"
+  },
+  "数据库完整性：%@": {
+    "en": "Database integrity: %@",
+    "ja": "データベースの整合性：%@"
+  },
+  "已导出 %@": {
+    "en": "Exported %@",
+    "ja": "%@ を書き出しました"
+  },
+  "已导出 %@；LRC 不包含结束时间和编辑历史": {
+    "en": "Exported %@; LRC omits end times and edit history",
+    "ja": "%@ を書き出しました。LRC には終了時刻と編集履歴は含まれません"
+  },
+  "局域网服务需要 macOS 15 或更新版本": {
+    "en": "LAN service requires macOS 15 or later",
+    "ja": "LAN サービスには macOS 15 以降が必要です"
+  },
+  "Mac 证书指纹无效": {
+    "en": "Invalid Mac certificate fingerprint",
+    "ja": "Mac の証明書の指紋が無効です"
+  },
+  "本机 HTTPS 身份生成失败": {
+    "en": "Cannot generate a local HTTPS identity",
+    "ja": "ローカル HTTPS ID を生成できません"
+  },
+  "HTTPS 身份损坏，已保留原文件": {
+    "en": "HTTPS identity corrupted; original preserved",
+    "ja": "HTTPS ID が破損しています。元のファイルは保持しました"
+  },
+  "无法载入本机 HTTPS 身份（%@）": {
+    "en": "Cannot load local HTTPS identity (%@)",
+    "ja": "ローカル HTTPS ID を読み込めません（%@）"
+  },
+  "HTTPS 证书缺失": {
+    "en": "HTTPS certificate missing",
+    "ja": "HTTPS 証明書がありません"
+  },
+  "服务器标识损坏": {
+    "en": "Server identity corrupted",
+    "ja": "サーバーの識別情報が破損しています"
+  },
+  "请先开启局域网服务": {
+    "en": "Enable the LAN service first",
+    "ja": "先に LAN サービスを有効にしてください"
+  },
+  "配对数据损坏，已保留": {
+    "en": "Pairing data corrupted; original preserved",
+    "ja": "ペアリング情報が破損しています。元のデータは保持しました"
+  },
+  "配对设备已达上限，请先撤销旧设备": {
+    "en": "Pairing limit reached. Revoke an old device first.",
+    "ja": "ペアリング数の上限に達しました。古い端末を解除してください。"
+  },
+  "无法生成配对码": {
+    "en": "Cannot generate a pairing code",
+    "ja": "ペアリングコードを生成できません"
+  },
+  "无效服务请求": {
+    "en": "Invalid service request",
+    "ja": "サービスのリクエストが無効です"
+  },
+  "PCM 数据不完整或超过缓冲上限": {
+    "en": "PCM data incomplete or buffer limit exceeded",
+    "ja": "PCM データが不完全か、バッファ上限を超えています"
+  },
+  "PCM 通道长度不一致": {
+    "en": "PCM channel lengths differ",
+    "ja": "PCM チャンネルの長さが一致しません"
+  },
+  "音频流格式不支持（首版支持单声道／立体声 PCM）": {
+    "en": "Unsupported stream format (mono/stereo PCM supported)",
+    "ja": "非対応のストリーム形式です（モノラル／ステレオ PCM に対応）"
+  },
+  "音乐文件在传输期间改变或被截断": {
+    "en": "Music file changed or was truncated during streaming",
+    "ja": "ストリーミング中に音楽ファイルが変更または切り詰められました"
+  },
+  "播放设置版本不兼容，已保留原文件": {
+    "en": "Playback settings version incompatible; original preserved",
+    "ja": "再生設定のバージョンに互換性がありません。元のファイルは保持しました"
+  },
+  "无效的 offset": {
+    "en": "Invalid offset",
+    "ja": "オフセットが無効です"
+  },
+  "专辑标签缺失，使用逐曲标签 · 按标签峰值限制增益": {
+    "en": "Album tag missing; using track tag · Gain limited by peak tag",
+    "ja": "アルバムタグがないため曲のタグを使用します · ピークタグでゲインを制限"
+  },
+  "使用专辑 ReplayGain · 按标签峰值限制增益": {
+    "en": "Using album ReplayGain · Gain limited by peak tag",
+    "ja": "アルバム ReplayGain を使用 · ピークタグでゲインを制限"
+  },
+  "使用逐曲 ReplayGain · 按标签峰值限制增益": {
+    "en": "Using track ReplayGain · Gain limited by peak tag",
+    "ja": "曲の ReplayGain を使用 · ピークタグでゲインを制限"
+  },
+  "已载入": {
+    "en": "Loaded",
+    "ja": "読み込み済み"
+  },
+  "已选择": {
+    "en": "Selected",
+    "ja": "選択済み"
+  },
+  "扫描已取消，已有曲库保留": {
+    "en": "Scan cancelled; existing library preserved",
+    "ja": "スキャンをキャンセルしました。既存のライブラリは保持しました"
+  },
+  "播放中 · PCM 兼容输出": {
+    "en": "Playing · PCM compatibility output",
+    "ja": "再生中 · PCM 互換出力"
+  },
+  "播放后回读输出格式": {
+    "en": "Output format is read after playback starts",
+    "ja": "再生開始後に出力フォーマットを確認します"
+  },
+  "播放完成": {
+    "en": "Playback finished",
+    "ja": "再生終了"
+  },
+  "文件暂不可用，请重新扫描或授权目录": {
+    "en": "File unavailable. Rescan or authorize its folder.",
+    "ja": "ファイルを利用できません。再スキャンかフォルダの再認証を行ってください。"
+  },
+  "服务响应过大": {
+    "en": "Service response too large",
+    "ja": "サービスの応答が大きすぎます"
+  },
+  "Mac 协议版本不兼容": {
+    "en": "Incompatible Mac protocol version",
+    "ja": "Mac のプロトコルバージョンに互換性がありません"
+  },
+  "Mac 返回错误（%@）": {
+    "en": "Mac returned error (%@)",
+    "ja": "Mac がエラーを返しました（%@）"
+  },
+  "未知设备": {
+    "en": "Unknown device",
+    "ja": "不明な機器"
+  },
+  "校验期间音频文件改变，请重试": {
+    "en": "Audio changed during verification. Try again.",
+    "ja": "確認中に音源が変更されました。再試行してください。"
+  },
+  "歌词超过 8 MB": {
+    "en": "Lyrics exceed 8 MB",
+    "ja": "歌詞が 8 MB を超えています"
+  },
+  "波形分析不可用：%@": {
+    "en": "Waveform analysis unavailable: %@",
+    "ja": "波形解析を利用できません：%@"
+  },
+  "记住的输出设备离线；请选择设备后重新载入曲目": {
+    "en": "Saved output device is offline. Select a device and reload the track.",
+    "ja": "保存した出力機器はオフラインです。機器を選択して曲を再読み込みしてください。"
+  },
+  "设备切换未通过回读确认": {
+    "en": "Device switch could not be confirmed",
+    "ja": "出力機器の切り替えを確認できません"
+  },
+  "设备已切换，播放已暂停": {
+    "en": "Device switched; playback paused",
+    "ja": "出力機器を切り替え、一時停止しました"
+  },
+  "请先载入曲目": {
+    "en": "Load a track first",
+    "ja": "先に曲を読み込んでください"
+  },
+  "请先载入曲目，歌词将绑定到该音频文件版本": {
+    "en": "Load a track first. Lyrics bind to its audio version.",
+    "ja": "先に曲を読み込んでください。歌詞はその音源バージョンに関連付けられます。"
+  },
+  "请等待音频版本校验完成后编辑歌词": {
+    "en": "Wait for audio verification before editing lyrics",
+    "ja": "音源の確認が完了してから歌詞を編集してください"
+  },
+  "请重新授权曲目所在目录": {
+    "en": "Reauthorize the track's folder",
+    "ja": "曲があるフォルダを再認証してください"
+  },
+  "输出设备不可用": {
+    "en": "Output device unavailable",
+    "ja": "出力機器を利用できません"
+  },
+  "输出设备已断开；请重新选择设备并载入曲目": {
+    "en": "Output device disconnected. Select a device and reload the track.",
+    "ja": "出力機器が切断されました。機器を選択して曲を再読み込みしてください。"
+  },
+  "音频文件在扫描后改变，请重新扫描": {
+    "en": "Audio changed after scanning. Rescan.",
+    "ja": "スキャン後に音源が変更されました。再スキャンしてください。"
+  },
+  "音频配置改变；已停止输出，请重新载入曲目": {
+    "en": "Audio configuration changed. Output stopped; reload the track.",
+    "ja": "音声の構成が変更されました。出力を停止しました。曲を再読み込みしてください。"
+  },
+  "导入工程原来绑定其他音频版本；请核对母带、长度和前导静音。": {
+    "en": "The imported project used another audio version. Review mastering, duration and leading silence.",
+    "ja": "読み込んだプロジェクトは別の音源に関連付けられていました。マスタリング、長さ、冒頭の無音を確認してください。"
+  },
+  "%@ 已识别；原始 DSD 解码与 DoP 输出尚未接通，未转为 PCM 播放": {
+    "en": "%@ identified; DSD decoding and DoP output unavailable. No PCM playback conversion.",
+    "ja": "%@ を識別しました。DSD デコードと DoP 出力は未実装で、PCM 変換再生も行いません。"
+  },
+  "保持设备当前采样率": {
+    "en": "Keep the current device sample rate",
+    "ja": "現在のデバイスのサンプルレートを維持"
+  },
+  "跟随歌曲源采样率（下次载入生效）": {
+    "en": "Match the track sample rate (on next load)",
+    "ja": "曲のサンプルレートに合わせる（次回読み込み時）"
+  },
+  "切换前停止输出，确认设备采样率后恢复。此设置会改变所选设备的系统格式；不支持时保留当前格式并转换。仅匹配采样率不代表独占或逐比特输出。": {
+    "en": "Output stops before switching and resumes after the device rate is confirmed. This changes the selected device’s system format; unsupported rates use conversion. Matching the rate alone does not ensure exclusive or bit-perfect output.",
+    "ja": "切り替え前に出力を停止し、デバイスのレートを確認して再開します。選択したデバイスのシステム形式が変わります。未対応のレートは変換します。レートの一致だけでは排他・ビットパーフェクト出力を保証しません。"
+  },
+  "设备不支持源采样率，保留当前格式并进行采样率转换": {
+    "en": "The source rate is unsupported; keeping the current format with sample rate conversion",
+    "ja": "ソースのレートは未対応です。現在の形式を維持して変換します"
+  },
+  "采样率切换失败，播放保持暂停": {
+    "en": "Sample rate switching failed; playback remains paused",
+    "ja": "サンプルレート切り替えに失敗しました。再生は一時停止中です"
+  },
+  "采样率切换未通过回读确认，播放保持暂停": {
+    "en": "The device did not confirm the new sample rate; playback remains paused",
+    "ja": "新しいサンプルレートを確認できませんでした。再生は一時停止中です"
+  },
+  "跟随源采样率需要先明确选择输出设备": {
+    "en": "Select an output device before matching the source sample rate",
+    "ja": "ソースのレートに合わせるには、先に出力デバイスを選択してください"
+  },
+  "静音切换采样率…": {
+    "en": "Switching sample rate with output stopped…",
+    "ja": "出力を停止してサンプルレートを切り替え中…"
+  },
+  "已跟随源采样率，设备回读确认": {
+    "en": "Source sample rate matched and confirmed by the device",
+    "ja": "ソースのサンプルレートに一致し、デバイスで確認済み"
+  },
+  "支持的 PCM 采样率：": {
+    "en": "Supported PCM sample rates: ",
+    "ja": "対応 PCM サンプルレート："
+  },
+  "驱动回报格式：": {
+    "en": "Driver-reported format: ",
+    "ja": "ドライバーの報告形式："
+  },
+  "未知艺人": {
+    "en": "Unknown artist",
+    "ja": "不明なアーティスト"
+  },
+  "未标记专辑": {
+    "en": "Untagged album",
+    "ja": "アルバムタグなし"
+  },
+  "MV 未能载入，继续显示封面与歌词": {
+    "en": "MV could not load; showing artwork and lyrics",
+    "ja": "MV を読み込めませんでした。ジャケットと歌詞を表示します"
+  }
+}

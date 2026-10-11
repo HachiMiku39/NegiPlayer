@@ -7,6 +7,7 @@ import MediaIO
 import AudioCore
 import LyricCore
 import UniformTypeIdentifiers
+import LANHost
 
 @MainActor final class AppModel: ObservableObject {
     @Published var roots: [LibraryRoot] = []
@@ -43,6 +44,7 @@ import UniformTypeIdentifiers
     @Published var listeningLyricStatus = ""
     @Published var artworkRevision = 0
     let artworkRepository: ArtworkRepository
+    let lan: LANController
     private var listeningTask: Task<Void,Never>?
     private var releaseMembers: [String:[MediaFile]] = [:]
     var discImages: [MediaFile] { files.filter(\.isDiscImage).sorted { $0.relativePath.localizedStandardCompare($1.relativePath) == .orderedAscending } }
@@ -81,6 +83,11 @@ import UniformTypeIdentifiers
         artistCounts = [:]
         for file in browseFiles { for artist in Set(file.artists) { artistCounts[artist,default: 0] += 1 } }
         artistNames = artistCounts.keys.sorted()
+        let catalog = music.compactMap { media -> CatalogEntry? in
+            guard let root = access[media.rootID]?.0 else { return nil }
+            return CatalogEntry(media:media,root:root,source:root.appendingPathComponent(media.relativePath))
+        }
+        Task { await lan.server?.update(catalog) }
     }
     var canUndo: Bool { !undoStack.isEmpty }
     var canRedo: Bool { !redoStack.isEmpty }
@@ -99,6 +106,7 @@ import UniformTypeIdentifiers
         else { folder = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0].appendingPathComponent("NegiPlayer") }
         databaseURL = folder.appendingPathComponent("Library.sqlite")
         artworkRepository = ArtworkRepository(cacheDirectory:folder.appendingPathComponent("Caches/Artwork"))
+        lan = LANController(directory:folder.appendingPathComponent("LAN"),artwork:artworkRepository)
         let settingsStore = PlaybackPreferencesStore(url: folder.appendingPathComponent("PlaybackSettings.json"))
         let settings: PlaybackPreferences
         var canSaveSettings = true
@@ -160,8 +168,8 @@ import UniformTypeIdentifiers
     func importFolder(reauthorizing rootID: String? = nil) {
         guard !scanning, let database else { return }
         let panel = NSOpenPanel(); panel.canChooseDirectories = true; panel.canChooseFiles = false
-        panel.allowsMultipleSelection = false; panel.prompt = rootID == nil ? "引用音乐文件夹" : "重新授权"
-        panel.message = "只读引用：音乐保留原位，不复制、不改写。索引与歌词草稿保存在本机。"
+        panel.allowsMultipleSelection = false; panel.prompt = L(rootID == nil ? "引用音乐文件夹" : "重新授权")
+        panel.message = L("只读引用：音乐保留原位，不复制、不改写。索引与歌词草稿保存在本机。")
         guard panel.runModal() == .OK, let url = panel.url else { return }
         do {
             let bookmark = try url.bookmarkData(options: [.withSecurityScope, .securityScopeAllowOnlyReadAccess], includingResourceValuesForKeys: nil, relativeTo: nil)
@@ -251,11 +259,13 @@ import UniformTypeIdentifiers
         }
     }
     func play(_ media: MediaFile, replaceQueue: Bool = true) {
-        do {
-            let url = try url(for: media)
-            if replaceQueue { try playback.setQueue(filtered, startingAt: media, url: url) }
-            else { try playback.load(media, url: url, autoplay: true) }
-        } catch { self.error = error.localizedDescription }
+        Task {
+            do {
+                let url = try url(for: media)
+                if replaceQueue { try await playback.setQueue(filtered, startingAt: media, url: url) }
+                else { try await playback.load(media, url: url, autoplay: true) }
+            } catch is CancellationError { } catch { self.error = error.localizedDescription }
+        }
     }
     func toggle() { do { try playback.toggle() } catch { self.error = error.localizedDescription } }
     func enqueue(_ media: MediaFile, next: Bool) {

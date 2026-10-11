@@ -1,0 +1,76 @@
+{
+  "schemaVersion": 1,
+  "version": "0.4.0",
+  "context": "Native macOS app, original low-level generated signals, Core Audio and AVAudioEngine readback; no acoustic capture",
+  "device": "E.S.combo",
+  "transport": "USB",
+  "supportedPCMRatesHz": [
+    44100,
+    48000,
+    96000
+  ],
+  "sourceRateFollowing": "opt-in; output stopped before request and readback",
+  "results": [
+    {
+      "sourceHz": 44100,
+      "deviceHz": 44100,
+      "clientHz": 44100,
+      "clientChannels": 2,
+      "clientBits": 32,
+      "clientEncoding": "Float",
+      "driverBits": 16,
+      "driverEncoding": "PCM",
+      "result": "readback-confirmed",
+      "converted": false
+    },
+    {
+      "sourceHz": 48000,
+      "deviceHz": 48000,
+      "clientHz": 48000,
+      "clientChannels": 2,
+      "clientBits": 32,
+      "clientEncoding": "Float",
+      "driverBits": 16,
+      "driverEncoding": "PCM",
+      "result": "readback-confirmed",
+      "converted": false
+    },
+    {
+      "sourceHz": 96000,
+      "deviceHz": 96000,
+      "clientHz": 96000,
+      "clientChannels": 2,
+      "clientBits": 32,
+      "clientEncoding": "Float",
+      "driverBits": 16,
+      "driverEncoding": "PCM",
+      "result": "readback-confirmed",
+      "converted": false
+    },
+    {
+      "sourceHz": 88200,
+      "deviceHz": 96000,
+      "clientHz": 96000,
+      "clientChannels": 2,
+      "clientBits": 32,
+      "clientEncoding": "Float",
+      "driverBits": 16,
+      "driverEncoding": "PCM",
+      "result": "readback-confirmed",
+      "converted": true
+    }
+  ],
+  "eqEnabledAndBypassed": true,
+  "pauseResume": true,
+  "endDeviceRateHz": 48000,
+  "notVerified": [
+    "acoustic or loopback capture",
+    "exclusive access",
+    "integer HAL output",
+    "bit-perfect",
+    "hardware volume",
+    "DoP",
+    "physical unplug or sleep",
+    "iOS USB DAC"
+  ]
+}

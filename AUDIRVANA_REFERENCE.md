@@ -53,3 +53,11 @@ NegiPlayer 独立实现相应产品行为，不复用 Audirvana 的代码、引�
 4. DSD 原始位流、DST 解压与严格 DoP 输出，接真实 DAC 后验收；分析和歌词继续使用独立后台路径。
 
 研究不会自动打开上述高级设置。当前应用能力以 README 和实际验证报告为准。
+
+## 0.4 USB 参考与本机验证
+
+同日只读检查 Audirvana 3.5.50 的 E.S.combo 详情：本地 USB 设备、立体声 PCM 44.1／48／96 kHz、DSD 不支持；切换采样率时静音开启、最大采样率无上限、额外等待无、最大 24-bit 关闭；独占和整数模式开启、大 Core Audio buffer 关闭；软件音量关闭、ReplayGain 关闭、最大音量 100%。未改变任何参考软件设置。这些观察不证明其输出音质，也不把其私有实现复制进 NegiPlayer。
+
+NegiPlayer 0.4 独立实现 USB 连接类型、驱动支持采样率、物理格式和可写性回读，以及可选跟随源采样率。输出停止后请求、回读确认并等待配置稳定，再重建音频图；失败保持暂停或按明确的不支持状态转换。E.S.combo 实测 44.1／48／96 kHz，88.2 kHz 源保持 96 kHz 并显示转换；完成 EQ 开启／旁路和暂停，结束恢复 48 kHz。客户端 32-bit Float 与驱动 16-bit PCM 分别显示，未实现独占／整数 HAL／DoP 或硬件音量。
+
+参考官方说明：[Audirvāna playback technology](https://audirvana.com/exclusive-playback-technology/)；实现依据为 Apple [available nominal sample rates](https://developer.apple.com/documentation/coreaudio/kaudiodevicepropertyavailablenominalsamplerates) 与 [nominal sample rate](https://developer.apple.com/documentation/coreaudio/kaudiodevicepropertynominalsamplerate)。不据厂商的音质宣传作本项目测量结论。

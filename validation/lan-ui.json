@@ -1,0 +1,43 @@
+{
+  "version": "0.4.0",
+  "method": "Native UI through Device Hub; original generated audio/art/LRC/video and an isolated Mac database",
+  "device": "iPhone Duo iOS 27.1 Simulator",
+  "checks": {
+    "bonjourDiscovery": true,
+    "fullFingerprintAndOneUseCodePairing": true,
+    "keychainPairingRestorationAfterAppUpdate": true,
+    "readOnlyLibraryTracks": 7,
+    "flacSourcePCMLyrics": true,
+    "folderWAVCoverNoLyricsCentered": true,
+    "alacPlayback": true,
+    "eqEnabledVoicePreset": true,
+    "lyricSeekSeconds": 12.2,
+    "mvDisplayedVideoFrameSeconds": 12.167,
+    "mvAudio": "video-only composition plus enforced mute/zero volume; no acoustic capture",
+    "defaultWithoutMV": "artwork and lyrics",
+    "windowModes": [
+      "open",
+      "closed"
+    ],
+    "uiThemes": [
+      "Negi",
+      "Day",
+      "Night"
+    ],
+    "uiLanguages": [
+      "zh-Hans",
+      "ja",
+      "en"
+    ],
+    "pausedTrackAndSettingsPagePreservedAcrossAppearanceChanges": true,
+    "macEndpointReadback": "Speaker / 44100 Hz / EQ enabled / paused"
+  },
+  "notVerified": [
+    "physical iOS USB DAC",
+    "physical folding",
+    "physical Local Network permission prompt",
+    "physical background/lock screen",
+    "long-duration or adverse network soak",
+    "all movie/container variants"
+  ]
+}

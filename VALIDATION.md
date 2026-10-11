@@ -1,3 +1,57 @@
+# NegiPlayer 0.4.0 验证记录
+
+2026-10-11，Apple Silicon arm64、macOS 27.2、Xcode 27.1 beta、macOS SDK 27.0／iOS SDK 27.1、Swift 6.4（语言模式 5）。最低 macOS 14／iOS 17；低版本及 Intel 真机未验收。下文 0.3 记录保留为历史证据。
+
+## 构建与自动化
+
+macOS Release 与 ad-hoc 签名、iOS 设备 SDK 未签名构建、模拟器本地签名构建均通过。iOS 模拟器使用默认的 Sign to Run Locally，以便正常使用 Keychain；设备 SDK 的未签名产物不能作为可安装 IPA。[Mac 日志](validation/lan-mac-build.log)、[iOS 设备编译日志](validation/lan-ios-device-build.log)、[模拟器日志](validation/lan-ios-simulator-build.log)均移除个人路径。
+
+**41 项 XCTest 通过，0 失败、0 跳过**：[测试日志](validation/lan-core-tests.log)。新增 LAN 检查包括有界 HTTP 报文／Range、私有 IPv4／IPv6、一次性配对与撤销、路径与符号链接边界、PCM 浮点交错／定位、MV 唯一同名匹配、Duo 窗口布局，以及真实 NWListener／URLSession HTTPS 配对、错误证书指纹拒绝、206 流与 LRC offset。设置测试确认新增可选采样率策略能读取 0.2／0.3 无该键的历史 JSON。选择真实曲库的两项集成方法由本机输入和原生报告支持；未设置这些本机输入时会明确跳过，不包含私人文件。
+
+[原创 PCM 解码与 LAN 报告](validation/lan-native-codecs.json)由原生应用生成：WAV／MP3／FLAC／AAC／ALAC 各 4096 帧，LAN 浮点 PCM 与独立 AVAudioFile 解码逐样本相同，源大小／时间未变。DSF／raw DFF 仅探测，不宣称解码或移动播放。三个本机选定真实 PCM 文件同样核验 4096 帧，个人报告不发布。
+
+[Mac 原生 DSP](validation/lan-native-codecs.dsp.json)验证 −6 dB 增益；[移动增益组件原生 DSP](validation/lan-native-codecs.mobile-dsp.json)使用 iOS 直接引用的 PCMLevelControl 三级增益组件，经真实 AVAudioEngine 离线渲染，验证 −180／−96／−6／0／6／30／72 dB、双声道与 50% 音量，误差在相对 0.3% 内。此测试在 Mac 渲染共享组件，不代表实体 iOS／DAC 波形测量。
+
+复现（源码工程，FFmpeg 仅生成原创信号）：
+
+```sh
+python3 scripts/generate-fixtures.py /tmp/NegiPlayer-fixtures
+zsh scripts/build-app.sh
+# 可由 debug 原生应用的开发验证菜单生成 codec、DSP、mobile-DSP 报告。
+# 非受限环境可直接运行原生解码／DSP；受限环境使用本次实际报告。
+NEGI_FIXTURES=/tmp/NegiPlayer-fixtures \
+NEGI_NATIVE_REPORT=/tmp/NegiPlayer-native-codecs.json \
+NEGI_NATIVE_DSP_REPORT=/tmp/NegiPlayer-native-codecs.dsp.json \
+NEGI_NATIVE_MOBILE_DSP_REPORT=/tmp/NegiPlayer-native-codecs.mobile-dsp.json \
+zsh scripts/swift.sh test
+xcodebuild -project iOS/NegiPlayeriOS.xcodeproj -scheme NegiPlayeriOS \
+  -sdk iphonesimulator -destination 'generic/platform=iOS Simulator' build
+```
+
+## Mac USB 实测
+
+参考本机 Audirvana 3.5.50 的 DAC 配置后，独立实现设备能力与源采样率策略。[USB 回读记录](validation/usb-output.json)：E.S.combo 驱动支持 44.1／48／96 kHz，立体声物理 16-bit PCM；客户端为 32-bit Float，分别显示而不混淆。开启跟随源采样率，停止输出、请求并回读，三档均确认后开始播放；88.2 kHz 源保留当前 96 kHz 并明确显示采样率转换。低电平原创信号、软件音量约 1.4%，完成 EQ 开启／旁路、播放／暂停，结束恢复 48 kHz。
+
+这些是驱动／客户端状态验证，没有声学或硬件环回捕获。当前仍经系统混音和软件音量；独占、整数 HAL、逐比特、硬件音量、DoP、实际拔插／休眠及实体 iOS USB 未验收。
+
+## iPhone Duo 模拟器与界面
+
+Device Hub 内可用的 iPhone Duo iOS 27.1 模拟器完成 Bonjour 发现、完整指纹与一次性配对码连接、Keychain 配对恢复、只读分页曲库、原创 FLAC／WAV／ALAC PCM 播放、封面、混合语言 LRC、高亮与点击定位。人声 EQ 预设与开启状态保存，Mac 终端页回报 Speaker／44,100 Hz／EQ 开启／暂停。
+
+Day／Night／Negi 与英／日／中文界面已检查；标签和原歌词保持原文，切换后当前页面及暂停曲目保留。Duo 展开使用封面／控制与歌词双栏；闭合无 LRC 时居中封面，控制可滚动。修复迷你播放器遮住侧边设置入口的问题。模拟器窗口切换不代表实体折叠或后台验收。
+
+原创 640×360 H.264 测试 MV 故意含 AAC 音轨；应用组成的播放项只插入视频轨道，并持续强制 mute／volume 0。屏幕可见视频帧、歌词叠加和歌曲进度；歌词定位 12.2 秒后视频帧时间 12.167 秒。默认仍是封面和歌词，只有同目录唯一同名视频才提供 MV 开关；损坏／不可加载时保留封面并提示。未对全部视频容器和实体 iOS 输出作验证。
+
+## 本轮外置盘只读复核
+
+[汇总](validation/lan-readonly-summary.json)：77,521 个非隐藏文件无增删，全部大小／修改时间未变；14,217 个音频扩展名文件的大小／修改时间／inode 均未变。两个空 TXT 的 inode 不同，原因未确定，因此完整目录 inode 比较不标记通过。不是全库逐字节哈希。私人路径、书签、歌词／音乐／封面、配对码／token、证书与个人界面截图均未发布。
+
+## 发布范围与待验收
+
+macOS arm64 ad-hoc 开发预览与 iOS Xcode 源码工程。实体 iOS 需用户开发签名后安装，USB、后台／锁屏、网络切换、硬件折叠和长时播放仍需实测；最低 OS、Intel、正式签名／公证、App Sandbox 全流程、独占／DSD／ISO 音频仍未完成。LAN 是本项目协议，没有实现 RAAT；Mac 管理源文件和本机 SQLite，iOS 只读 API 且不保存音乐副本或可写数据库。
+
+---
+
 # NegiPlayer 0.3.0 验证记录
 
 2026-10-11，macOS 27.2（26B5101f）、Apple Silicon arm64、Xcode 27.1 beta（27A9269）、SDK 27.0、Swift 6.4，语言模式 5。最低部署目标 macOS 14；尚未做低版本或 Intel 真机验收。

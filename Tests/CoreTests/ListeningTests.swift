@@ -23,11 +23,16 @@ final class ListeningTests: XCTestCase {
         defer { try? FileManager.default.removeItem(at:folder) }
         let store = PlaybackPreferencesStore(url:folder.appendingPathComponent("PlaybackSettings.json"))
         var s = PlaybackPreferences(); s.volume = 0.8; s.volumeLimit = 0.25; s.headroomDB = 3
-        s.preferredDeviceUID = "stable-dac-uid"; s.loudnessMode = .album; s.gains = [99,-99]
+        s.preferredDeviceUID = "stable-dac-uid"; s.loudnessMode = .album; s.gains = [99,-99]; s.followSourceSampleRate = true
         try store.save(s)
         let restored = try store.load()
         XCTAssertEqual(restored.volume,0.25); XCTAssertEqual(restored.headroomDB,3)
         XCTAssertEqual(restored.gains,[12,-12,0,0,0,0,0,0,0,0]); XCTAssertEqual(restored.preferredDeviceUID,"stable-dac-uid")
+        XCTAssertEqual(restored.followSourceSampleRate,true)
+        var legacy = try XCTUnwrap(JSONSerialization.jsonObject(with:Data(contentsOf:store.url)) as? [String:Any])
+        legacy.removeValue(forKey:"followSourceSampleRate")
+        try JSONSerialization.data(withJSONObject:legacy).write(to:store.url)
+        XCTAssertNil(try store.load().followSourceSampleRate)
         var future = restored; future.version = 20
         let bytes = try JSONEncoder().encode(future); try bytes.write(to:store.url)
         XCTAssertThrowsError(try store.load()); XCTAssertEqual(try Data(contentsOf:store.url),bytes)

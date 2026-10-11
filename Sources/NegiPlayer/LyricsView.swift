@@ -17,25 +17,25 @@ struct LyricsView: View {
             if playback.current == nil {
                 VStack(spacing: 16) {
                     Image(systemName: "text.line.first.and.arrowtriangle.forward").font(.system(size: 60, weight: .ultraLight)).foregroundStyle(accent)
-                    Text("跟随音乐，记下每一个字").font(.title2)
-                    Text("先从音乐库载入曲目。歌词草稿会绑定到具体音频文件版本，\n并共享播放器时钟。").foregroundStyle(.secondary).multilineTextAlignment(.center)
+                    Text(L("跟随音乐，记下每一个字")).font(.title2)
+                    Text(L("先从音乐库载入曲目。歌词草稿会绑定到具体音频文件版本，\n并共享播放器时钟。")).foregroundStyle(.secondary).multilineTextAlignment(.center)
                 }.frame(maxWidth: .infinity, maxHeight: .infinity)
             } else if !model.lyricReady {
                 VStack(spacing: 16) {
                     if model.draftStatus.hasPrefix("正在") { ProgressView() }
-                    Text(model.draftStatus).foregroundStyle(.secondary)
-                    Text("仅校验当前曲目；音乐文件保持只读。").font(.caption).foregroundStyle(.secondary)
+                    Text(L(model.draftStatus)).foregroundStyle(.secondary)
+                    Text(L("仅校验当前曲目；音乐文件保持只读。")).font(.caption).foregroundStyle(.secondary)
                 }.frame(maxWidth: .infinity, maxHeight: .infinity)
             } else {
                 tools
                 if model.needsAudioReview {
-                    HStack { Text("音频版本已改变，歌词时间轴需要核对。").foregroundStyle(.orange); Spacer(); Button("确认重新关联当前音频") { model.confirmAudioBinding() } }.font(.caption)
+                    HStack { Text(L("音频版本已改变，歌词时间轴需要核对。")).foregroundStyle(.orange); Spacer(); Button(L("确认重新关联当前音频")) { model.confirmAudioBinding() } }.font(.caption)
                 }
-                if !model.document.warnings.isEmpty { Text(model.document.warnings.joined(separator: "\n")).font(.caption).foregroundStyle(.orange) }
+                if !model.document.warnings.isEmpty { Text(L(model.document.warnings.joined(separator: "\n"))).font(.caption).foregroundStyle(.orange) }
                 if model.document.rows.isEmpty {
-                    Text("粘贴歌词正文，或导入 TXT / LRC / Enhanced LRC / SRT / Negi 工程").font(.callout).foregroundStyle(.secondary)
-                    TextEditor(text: $model.lyricText).font(.system(size: 16)).frame(minHeight: 180).scrollContentBackground(.hidden).padding(8).background(.white.opacity(0.04), in: RoundedRectangle(cornerRadius: 8))
-                    Button("建立打轴草稿") { model.prepareLyrics() }.negiProminentButton()
+                    Text(L("粘贴歌词正文，或导入 TXT / LRC / Enhanced LRC / SRT / Negi 工程")).font(.callout).foregroundStyle(.secondary)
+                    TextEditor(text: $model.lyricText).font(.system(size: 16)).frame(minHeight: 180).scrollContentBackground(.hidden).padding(8).background(Color.primary.opacity(0.04), in: RoundedRectangle(cornerRadius: 8))
+                    Button(L("建立打轴草稿")) { model.prepareLyrics() }.negiProminentButton()
                     Spacer()
                 } else {
                     ScrollViewReader { proxy in
@@ -53,9 +53,9 @@ struct LyricsView: View {
                     timingControls
                     timeline
                     HStack {
-                        Text(model.draftStatus).foregroundStyle(accent)
+                        Text(L(model.draftStatus)).foregroundStyle(accent)
                         Spacer()
-                        Text("\(model.document.rows.count) 行 · 正 offset 表示延后 · 纳秒存储").foregroundStyle(.secondary)
+                        Text(LF("%d 行 · 正 offset 表示延后 · 纳秒存储",model.document.rows.count)).foregroundStyle(.secondary)
                     }.font(.caption)
                 }
             }
@@ -75,21 +75,21 @@ struct LyricsView: View {
     }
     var tools: some View {
         HStack {
-            Picker("打轴方式", selection: Binding(get: { model.document.mode }, set: { model.changeMode($0) })) {
-                Text("逐句").tag(TimingMode.line); Text("逐字").tag(TimingMode.character); Text("逐词").tag(TimingMode.word)
+            Picker(L("打轴方式"), selection: Binding(get: { model.document.mode }, set: { model.changeMode($0) })) {
+                Text(L("逐句")).tag(TimingMode.line); Text(L("逐字")).tag(TimingMode.character); Text(L("逐词")).tag(TimingMode.word)
             }.pickerStyle(.segmented).frame(width: 220)
-            Button("导入…") { model.importLyrics() }
-            Menu("导出") {
-                Button("LRC / Enhanced LRC…") { model.exportLyrics(kind: "lrc") }
-                Button("完整歌词工程…") { model.exportLyrics(kind: "project") }
-                Button("纯文本 TXT…") { model.exportLyrics(kind: "txt") }
-                if model.document.importedProject != nil { Button("回导 Negi 草稿…") { model.exportLyrics(kind: "negi") } }
+            Button(L("导入…")) { model.importLyrics() }
+            Menu(L("导出")) {
+                Button(L("LRC / Enhanced LRC…")) { model.exportLyrics(kind: "lrc") }
+                Button(L("完整歌词工程…")) { model.exportLyrics(kind: "project") }
+                Button(L("纯文本 TXT…")) { model.exportLyrics(kind: "txt") }
+                if model.document.importedProject != nil { Button(L("回导 Negi 草稿…")) { model.exportLyrics(kind: "negi") } }
             }
             Spacer()
             Button { model.undo() } label: { Image(systemName: "arrow.uturn.backward") }.disabled(!model.canUndo)
             Button { model.redo() } label: { Image(systemName: "arrow.uturn.forward") }.disabled(!model.canRedo)
-            Button("下一处未打点") { model.nextUntimed() }
-            Button("T 打点") { model.stamp(eventUptime: ProcessInfo.processInfo.systemUptime, advance: true) }.negiProminentButton()
+            Button(L("下一处未打点")) { model.nextUntimed() }
+            Button(L("T 打点")) { model.stamp(eventUptime: ProcessInfo.processInfo.systemUptime, advance: true) }.negiProminentButton()
         }.padding(10).negiGlass(14)
     }
     func rowView(_ index: Int, _ row: LyricRow) -> some View {
@@ -97,10 +97,10 @@ struct LyricsView: View {
             HStack(spacing: 12) {
                 Text(String(format: "%02d", index+1)).font(.caption.monospacedDigit()).foregroundStyle(.secondary).frame(width: 24)
                 Button { model.select(index, model.document.mode == .line ? nil : 0) } label: {
-                    Text(row.start.map { durationText(model.document.displayTime($0).seconds) } ?? "未打点").font(.caption.monospacedDigit()).foregroundStyle(row.start == nil ? .secondary : accent)
+                    Text(row.start.map { durationText(model.document.displayTime($0).seconds) } ?? L("未打点")).font(.caption.monospacedDigit()).foregroundStyle(row.start == nil ? .secondary : accent)
                 }.buttonStyle(.plain).frame(width: 60)
-                Text(row.text.isEmpty ? "（空行）" : row.text).font(.system(size: 19, weight: model.document.activeRow(at: playback.position) == row.id ? .semibold : .regular))
-                    .foregroundStyle(!model.needsAudioReview && model.document.activeRow(at: playback.position) == row.id ? accent : .white.opacity(0.85)).textSelection(.enabled)
+                Text(row.text.isEmpty ? L("（空行）") : row.text).font(.system(size: 19, weight: model.document.activeRow(at: playback.position) == row.id ? .semibold : .regular))
+                    .foregroundStyle(!model.needsAudioReview && model.document.activeRow(at: playback.position) == row.id ? accent : Color.primary.opacity(0.85)).textSelection(.enabled)
                 Spacer()
             }.contentShape(Rectangle()).onTapGesture { model.select(index, model.document.mode == .line ? nil : 0) }
             if model.document.mode != .line {
@@ -116,7 +116,7 @@ struct LyricsView: View {
                     }
                 }.padding(.leading, 98)
             }
-        }.padding(12).background(model.selectedRow == index ? accent.opacity(0.07) : .white.opacity(0.02), in: RoundedRectangle(cornerRadius: 8))
+        }.padding(12).background(model.selectedRow == index ? accent.opacity(0.07) : Color.primary.opacity(0.02), in: RoundedRectangle(cornerRadius: 8))
     }
     func isActive(_ index: Int, _ row: LyricRow) -> Bool {
         guard let t = row.tokens[index].start else { return false }
@@ -127,18 +127,18 @@ struct LyricsView: View {
     var timingControls: some View {
         VStack(alignment: .leading, spacing: 9) {
             HStack {
-                Text("选中时间（基础秒）").font(.caption)
-                TextField("未打点", text: $exactTime).textFieldStyle(.roundedBorder).frame(width: 110).onSubmit { applyTime() }
-                Button("应用") { applyTime() }
-                Button("−10 ms") { model.adjustSelected(-10) }
-                Button("+10 ms") { model.adjustSelected(10) }
-                Button("清除") { model.setSelectedBase(nil) }
+                Text(L("选中时间（基础秒）")).font(.caption)
+                TextField(L("未打点"), text: $exactTime).textFieldStyle(.roundedBorder).frame(width: 110).onSubmit { applyTime() }
+                Button(L("应用")) { applyTime() }
+                Button(L("−10 ms")) { model.adjustSelected(-10) }
+                Button(L("+10 ms")) { model.adjustSelected(10) }
+                Button(L("清除")) { model.setSelectedBase(nil) }
                 Spacer()
-                Text("全局偏移 ms").font(.caption)
+                Text(L("全局偏移 ms")).font(.caption)
                 TextField("0", text: $offsetMS).textFieldStyle(.roundedBorder).frame(width: 80).onSubmit { applyOffset() }
-                Button("应用偏移") { applyOffset() }
+                Button(L("应用偏移")) { applyOffset() }
             }
-            Text("播放时按 T 或拖过单元打点；暂停后选择并精修。拖歌词标记只改歌词，点击波形改变播放位置。").font(.caption).foregroundStyle(.secondary)
+            Text(L("播放时按 T 或拖过单元打点；暂停后选择并精修。拖歌词标记只改歌词，点击波形改变播放位置。")).font(.caption).foregroundStyle(.secondary)
         }
     }
     func updateTime() {
@@ -156,9 +156,9 @@ struct LyricsView: View {
     var timeline: some View {
         VStack(alignment: .leading, spacing: 8) {
             HStack {
-                Text("歌词时间轴").font(.headline)
-                Text(analysisStatus).font(.caption).foregroundStyle(.secondary)
-                Spacer(); Text("缩放").font(.caption); Slider(value: $model.timelineZoom, in: 1...8).frame(width: 120)
+                Text(L("歌词时间轴")).font(.headline)
+                Text(L(analysisStatus)).font(.caption).foregroundStyle(.secondary)
+                Spacer(); Text(L("缩放")).font(.caption); Slider(value: $model.timelineZoom, in: 1...8).frame(width: 120)
             }
             GeometryReader { geometry in
                 let width = max(geometry.size.width, geometry.size.width*model.timelineZoom)
@@ -197,14 +197,14 @@ struct LyricsView: View {
                                 }
                             }
                         }
-                        Rectangle().fill(.white.opacity(0.9)).frame(width: 1, height: 150).position(x: CGFloat(playback.position/duration)*width, y: 75).allowsHitTesting(false)
+                        Rectangle().fill(Color.primary.opacity(0.9)).frame(width: 1, height: 150).position(x: CGFloat(playback.position/duration)*width, y: 75).allowsHitTesting(false)
                     }.frame(width: width, height: 155).clipShape(RoundedRectangle(cornerRadius: 8))
                 }
             }.frame(height: 165)
             let outOfRange = model.document.rows.filter { r in
                 guard let time = r.start else { return false }; let t = model.document.displayTime(time).seconds; return t < 0 || t > playback.duration
             }.count
-            if outOfRange > 0 { Text("\(outOfRange) 行在媒体范围外；已保留在草稿，未显示在波形范围内。").font(.caption).foregroundStyle(.orange) }
+            if outOfRange > 0 { Text(LF("%d 行在媒体范围外；已保留在草稿，未显示在波形范围内。",outOfRange)).font(.caption).foregroundStyle(.orange) }
         }
     }
 }
@@ -247,11 +247,11 @@ final class ChipView: NSView {
     }
     override func draw(_ dirtyRect: NSRect) {
         let color = NSColor(calibratedRed: 0.224, green: 0.773, blue: 0.733, alpha: 1)
-        (selected || active ? color.withAlphaComponent(0.18) : NSColor.white.withAlphaComponent(0.045)).setFill()
+        (selected || active ? color.withAlphaComponent(0.18) : NSColor.labelColor.withAlphaComponent(0.045)).setFill()
         let shape = NSBezierPath(roundedRect: bounds.insetBy(dx: 1, dy: 1), xRadius: 6, yRadius: 6); shape.fill()
         if selected { color.withAlphaComponent(0.6).setStroke(); shape.stroke() }
         let paragraph = NSMutableParagraphStyle(); paragraph.alignment = .center
-        (text as NSString).draw(in: NSRect(x: 4, y: 5, width: bounds.width-8, height: 22), withAttributes: [.font: NSFont.systemFont(ofSize: 14), .foregroundColor: active ? color : NSColor.white, .paragraphStyle: paragraph])
+        (text as NSString).draw(in: NSRect(x: 4, y: 5, width: bounds.width-8, height: 22), withAttributes: [.font: NSFont.systemFont(ofSize: 14), .foregroundColor: active ? color : NSColor.labelColor, .paragraphStyle: paragraph])
         (time as NSString).draw(in: NSRect(x: 4, y: 28, width: bounds.width-8, height: 15), withAttributes: [.font: NSFont.monospacedDigitSystemFont(ofSize: 9, weight: .regular), .foregroundColor: NSColor.secondaryLabelColor, .paragraphStyle: paragraph])
     }
     override func mouseDown(with event: NSEvent) { window?.makeFirstResponder(self); selectAction?(); stampAction?(event) }

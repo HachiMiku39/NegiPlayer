@@ -1,15 +1,19 @@
 {
   "schemaVersion": 1,
   "product": "NegiPlayer",
-  "version": "0.3.0",
-  "deploymentTarget": "macOS 14.0",
+  "version": "0.4.0",
+  "deploymentTarget": {
+    "macOS": "14.0",
+    "iOS": "17.0"
+  },
   "validatedArchitecture": "arm64",
   "validatedHost": "macOS 27.2 (26B5101f)",
   "toolchain": {
     "xcode": "27.1 beta (27A9269)",
     "macosSDK": "27.0",
     "swift": "6.4 (swiftlang-6.4.0.34.1)",
-    "swiftLanguageMode": "5"
+    "swiftLanguageMode": "5",
+    "iOSSDK": "27.1"
   },
   "swiftPackageDependencies": [],
   "systemDependencies": {
@@ -32,8 +36,16 @@
       "UniformTypeIdentifiers",
       "MediaPlayer",
       "ImageIO",
-      "CoreGraphics"
-    ]
+      "CoreGraphics",
+      "Network",
+      "Security",
+      "UIKit",
+      "AVKit"
+    ],
+    "openssl": {
+      "source": "system /usr/bin/openssl",
+      "use": "generate Mac LAN self-signed certificate and PKCS#12 identity; not bundled"
+    }
   },
   "lyricReference": {
     "repository": "https://github.com/HachiMiku39/NegiFlick",

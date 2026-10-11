@@ -20,6 +20,8 @@ public struct PlaybackPreferences: Codable, Equatable, Sendable {
     public var presetName = "自定义"
     public var mediaControls = true
     public var preferredDeviceUID: String?
+    // Optional for backwards compatible decoding of v0.2/v0.3 preferences.
+    public var followSourceSampleRate: Bool?
     public init() {}
     public func sanitized() -> Self {
         var s = self

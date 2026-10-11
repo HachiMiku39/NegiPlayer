@@ -1,8 +1,16 @@
 # NegiPlayer
 
-macOS 本地音乐播放器与歌词工作室，开发预览 0.3.0。默认使用 Miku 青绿与少量粉色，macOS 27 使用原生 SwiftUI Liquid Glass；减少透明度时使用实色背景。最低部署目标 macOS 14，当前验证架构为 Apple Silicon / arm64。
+macOS 本地音乐播放器与歌词工作室，开发预览 0.4.0。提供 Negi（Miku 青绿与少量粉色）、日间、夜间三套主题及中文／日文／英文界面，macOS 27 使用原生 SwiftUI Liquid Glass；减少透明度时使用实色背景。最低部署目标 macOS 14，当前验证架构为 Apple Silicon / arm64。
 
-本轮增加真实专辑封面、正在播放页面和自动 LRC 显示，延续本地 PCM 播放、曲库浏览、歌词编辑与聆听设置。它仍是开发预览，完整 DSD、标签管理与正式发布验收见 [ROADMAP.md](ROADMAP.md)。
+本轮增加 iOS LAN 播放端、Mac 只读 HTTPS 曲库服务、三套主题／三种语言和两端共用图标，保留真实专辑封面、正在播放页面和自动 LRC 显示，延续本地 PCM 播放、曲库浏览、歌词编辑与聆听设置。它仍是开发预览，完整 DSD、标签管理与正式发布验收见 [ROADMAP.md](ROADMAP.md)。
+
+## iOS 与 LAN
+
+Mac 的「iOS 连接」页面可手动开启服务、生成配对码、查看终端输出状态并撤销配对。iOS 原生工程位于 [iOS/NegiPlayeriOS.xcodeproj](iOS/NegiPlayeriOS.xcodeproj)；签名安装、配对步骤、音频与 MV 链路见 [iOS/README.md](iOS/README.md)。Mac 管理文件和索引，iOS 只读浏览分页 API，音频由 iOS EQ 与系统／USB 路由处理。Mac 不将自己的音量或 DSP 应用于传输流。
+
+0.4 已通过 macOS Release、iOS 设备 SDK 和模拟器构建，以及 41 项 XCTest。Device Hub 的 iPhone Duo iOS 27.1 模拟器完成 LAN 配对、曲库浏览、PCM 播放、封面／LRC、静音 MV、展开／闭合布局和主题／语言检查；Mac 的 E.S.combo USB 声卡完成 44.1／48／96 kHz 源采样率切换回读。iOS 实体 USB、硬件折叠、后台长时播放及断连恢复仍待真机验收，iOS 首版提供 Xcode 源码工程，需要自己的签名配置。详细证据和限制见 [VALIDATION.md](VALIDATION.md)。
+
+「外观与语言」可独立选择主题和界面语言；音乐标签和歌词保持原文。共用图标母版与设计说明见 [Resources/Brand](Resources/Brand)。
 
 ## 音乐目录只读
 
@@ -34,7 +42,9 @@ macOS 本地音乐播放器与歌词工作室，开发预览 0.3.0。默认使�
 | 封面 | FLAC PICTURE、ID3 APIC/PIC（MP3／WAV／DSF）、M4A covr；缺失时读取同目录图片，缓存仅写本机应用数据 |
 | 正在播放 | 居中封面或封面／歌词双栏；同目录 LRC 只读匹配、offset、高亮滚动与点击定位 |
 | ISO 专区 | 单独收录、识别 SACD 主目录／ISO 9660／无效头；不进入音频队列，镜像播放未接通 |
-| 输出与 EQ | 按 UID 记住设备，10 段 PCM EQ、前级和 4 个预设；关闭 EQ 时绕过 EQ 节点 |
+| 输出与 EQ | 按 UID 记住设备，USB 连接类型、支持采样率及驱动物理格式回读；可选跟随源采样率，停止输出并确认后载入；10 段 PCM EQ 与前级可旁路 |
+| LAN 与 iOS | 手动开启私有网络 HTTPS、完整证书指纹核对和一次性配对码；Mac 只读输出源 PCM，iOS 负责增益、EQ 和系统／USB 路由 |
+| iOS MV | 同目录唯一同名本地视频，手动开启；播放项只插入视频轨道并强制静音，失败回退封面和歌词 |
 | 聆听设置 | 逐曲／专辑 ReplayGain、数字余量、标签峰值保护、音量上限、静音；设置本机保存 |
 | 系统控制 | MediaPlayer Now Playing、媒体控制命令、原生播放菜单；系统控件交互仍待验收 |
 | 输出状态 | 显示实际源编码、PCM 处理、软件音量、设备与输出采样率；明确标注系统混音 |
@@ -42,7 +52,7 @@ macOS 本地音乐播放器与歌词工作室，开发预览 0.3.0。默认使�
 | SQLite | WAL、原子扫描提交、草稿与修订、完整性检查、Online Backup 一致备份 |
 | 歌词 | 精确到纳秒，0 与未打点分开，100 分钟以上，正负 offset，UTF-16 与完整字素簇边界 |
 
-没有完成独占、PCM bit-perfect 或 USB DAC 接收端验收。DoP 封装器只有纯数据测试，未连接输出设备。DSD 文件会明确提示未接通，禁止冒用直通状态。
+Mac USB PCM 设备与采样率回读已验证；没有完成独占、PCM bit-perfect、实体 iOS USB 或 DoP 接收端验收。DoP 封装器只有纯数据测试，未连接输出设备。DSD 文件会明确提示未接通，禁止冒用直通状态。
 
 AVFoundation 的标签读取覆盖随容器而异，当前不是完整 mp3tag 替代品。原生多值字段全覆盖、批量标签编辑、播放列表、自动监听、无缝播放、库切换与恢复向导仍待完成。
 
@@ -87,7 +97,7 @@ NEGI_NATIVE_REPORT=/tmp/NegiPlayer-native-codecs.json \
 NEGI_NATIVE_DSP_REPORT=/tmp/NegiPlayer-native-codecs.dsp.json zsh scripts/swift.sh test
 ```
 
-原生验证命令还会生成同名 `.dsp.json`，记录原创 PCM 经真实增益节点的离线渲染结果。实际命令、33 项核心测试（含本机选择的只读集成样本）、外置盘测试和界面检查见 [VALIDATION.md](VALIDATION.md)。WAV 标签验证器只对生成样本的新副本写入 ASCII RIFF INFO，保留未知 chunk 并验证载荷不变；未接入应用，也不会对用户音乐调用。
+原生验证命令还会生成同名 `.dsp.json`，记录原创 PCM 经真实增益节点的离线渲染结果。实际命令、41 项测试（含本机选择的只读集成样本）、外置盘测试和界面检查见 [VALIDATION.md](VALIDATION.md)。WAV 标签验证器只对生成样本的新副本写入 ASCII RIFF INFO，保留未知 chunk 并验证载荷不变；未接入应用，也不会对用户音乐调用。
 
 现代 Hi-Fi 功能与已实现／后续范围见 [MODERN_HIFI.md](MODERN_HIFI.md)。
 

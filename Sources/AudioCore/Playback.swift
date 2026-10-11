@@ -13,6 +13,9 @@ import LibraryDomain
     @Published public private(set) var devices: [OutputDevice] = []
     @Published public private(set) var actualDeviceID: UInt32?
     @Published public private(set) var outputRate = 0.0
+    @Published public private(set) var preparingOutput = false
+    @Published public private(set) var sampleRateStatus = "保持设备当前采样率"
+    @Published public var followSourceSampleRate = false { didSet { persistSettings() } }
     @Published public var volume: Float = 0.5 { didSet {
         let safe = volume.isFinite ? min(volumeLimit, max(0,volume)) : 0
         if volume != safe { volume = safe }
@@ -53,12 +56,14 @@ import LibraryDomain
     private var deviceObserver: NSObjectProtocol?
     private var anchor = PlaybackAnchor(mediaSeconds: 0, eventUptime: 0, running: false)
     private var lastDeviceCheck = 0.0
+    private var expectedRateChange: (device: UInt32, rate: Double, deadline: Double)?
     public init(preferences: PlaybackPreferences = .init()) {
         let s = preferences.sanitized()
         volumeLimit = s.volumeLimit; volume = s.volume; loudnessMode = s.loudnessMode
         loudnessPreampDB = s.loudnessPreampDB; preventPeakOverload = s.preventPeakOverload; headroomDB = s.headroomDB
         eqEnabled = s.eqEnabled; gains = s.gains; preamp = s.eqPreampDB; presetName = s.presetName
         mediaControls = s.mediaControls; preferredDeviceUID = s.preferredDeviceUID
+        followSourceSampleRate = s.followSourceSampleRate ?? false
         engine.attach(player); engine.attach(eq); engine.attach(gainUnit)
         gainUnit.bands[0].bypass = true
         for (i, frequency) in frequencies.enumerated() {
@@ -91,7 +96,7 @@ import LibraryDomain
         var s = PlaybackPreferences(); s.volume = volume; s.volumeLimit = volumeLimit; s.loudnessMode = loudnessMode
         s.loudnessPreampDB = loudnessPreampDB; s.preventPeakOverload = preventPeakOverload; s.headroomDB = headroomDB
         s.eqEnabled = eqEnabled; s.gains = gains; s.eqPreampDB = preamp; s.presetName = presetName
-        s.mediaControls = mediaControls; s.preferredDeviceUID = preferredDeviceUID; return s.sanitized()
+        s.mediaControls = mediaControls; s.preferredDeviceUID = preferredDeviceUID; s.followSourceSampleRate = followSourceSampleRate; return s.sanitized()
     }
     private func persistSettings() { onPreferencesChanged?(preferences) }
     private func applyLoudness() {
@@ -108,8 +113,8 @@ import LibraryDomain
         if current?.id == mediaID { current?.audioIdentity = identity }
         for i in queue.indices where queue[i].id == mediaID { queue[i].audioIdentity = identity }
     }
-    public func setQueue(_ files: [MediaFile], startingAt media: MediaFile, url: URL) throws {
-        queue = files; try load(media, url: url, autoplay: true)
+    public func setQueue(_ files: [MediaFile], startingAt media: MediaFile, url: URL) async throws {
+        queue = files; try await load(media, url: url, autoplay: true)
     }
     public func enqueue(_ media: MediaFile, next: Bool) { queue = QueuePlan.inserting(media, into: queue, currentID: current?.id, next: next) }
     public func removeQueued(_ mediaID: String) { if mediaID != current?.id { queue.removeAll { $0.id == mediaID } } }
@@ -118,17 +123,19 @@ import LibraryDomain
         guard let index = queue.firstIndex(where: { $0.id == mediaID }), queue.indices.contains(index+delta) else { return }
         queue.swapAt(index,index+delta)
     }
-    public func load(_ media: MediaFile, url: URL, autoplay: Bool) throws {
+    public func load(_ media: MediaFile, url: URL, autoplay: Bool) async throws {
         guard media.available else { throw NSError(domain: "Playback", code: 1, userInfo: [NSLocalizedDescriptionKey: "文件暂不可用，请重新扫描或授权目录"]) }
         guard !media.isDiscImage else { throw NSError(domain: "Playback", code: 5, userInfo: [NSLocalizedDescriptionKey: media.issue ?? "镜像播放尚未接通"]) }
         guard !media.isDSD else { throw NSError(domain: "Playback", code: 2, userInfo: [NSLocalizedDescriptionKey: "\(media.codec) 已识别；原始 DSD 解码与 DoP 输出尚未接通，未转为 PCM 播放"]) }
         let audio = try AVAudioFile(forReading: url)
         generation += 1; player.stop(); engine.stop(); freeze(at: 0)
-        file = audio; current = media; baseFrame = 0; position = 0
+        let version = generation
+        preparingOutput = true
+        defer { if generation == version { preparingOutput = false } }
+        file = nil; current = media; baseFrame = 0; position = 0; outputRate = 0
         applyLoudness()
         duration = Double(audio.length)/audio.processingFormat.sampleRate
-        configureGraph(audio.processingFormat)
-        schedule(from: 0)
+        refreshDevices()
         if let uid = preferredDeviceUID {
             refreshDevices()
             guard let device = devices.first(where: { $0.uid == uid }) else {
@@ -137,6 +144,34 @@ import LibraryDomain
             }
             if AudioDevices.current(engine.outputNode.audioUnit) != device.id { try chooseDevice(device.id) }
         }
+        sampleRateStatus = "保持设备当前采样率"
+        if followSourceSampleRate {
+            guard let uid = preferredDeviceUID, let device = devices.first(where: { $0.uid == uid }) else {
+                throw NSError(domain:"Playback",code:6,userInfo:[NSLocalizedDescriptionKey:"跟随源采样率需要先明确选择输出设备"])
+            }
+            let rate = audio.processingFormat.sampleRate
+            if !device.supports(rate) || !device.sampleRateWritable {
+                sampleRateStatus = "设备不支持源采样率，保留当前格式并进行采样率转换"
+            } else if abs((AudioDevices.nominalRate(device.id) ?? 0)-rate) > 1 {
+                status = "静音切换采样率…"
+                expectedRateChange = (device.id, rate, ProcessInfo.processInfo.systemUptime+4)
+                try AudioDevices.requestRate(rate,device:device)
+                var confirmed = false
+                for _ in 0..<40 {
+                    try await Task.sleep(nanoseconds:50_000_000)
+                    guard generation == version else { throw CancellationError() }
+                    if let actual = AudioDevices.nominalRate(device.id), abs(actual-rate) < 1 { confirmed = true; break }
+                }
+                guard confirmed else { throw NSError(domain:"Playback",code:7,userInfo:[NSLocalizedDescriptionKey:"采样率切换未通过回读确认，播放保持暂停"]) }
+                // Let the stopped engine consume its configuration notification before reconnecting.
+                try await Task.sleep(nanoseconds:100_000_000)
+                sampleRateStatus = "已跟随源采样率，设备回读确认"
+            } else { sampleRateStatus = "已跟随源采样率，设备回读确认" }
+        }
+        guard generation == version else { throw CancellationError() }
+        engine.reset(); file = audio
+        configureGraph(audio.processingFormat); schedule(from: 0); refreshDevices()
+        preparingOutput = false
         if autoplay { try start() } else { freeze(at: 0); status = "已载入" }
         onTrackChanged?(media)
     }
@@ -158,7 +193,7 @@ import LibraryDomain
         }
     }
     public func start() throws {
-        guard file != nil else { return }
+        guard file != nil, !preparingOutput else { return }
         if position >= duration { try seek(to: 0) }
         if !engine.isRunning { try engine.start() }
         player.play(); isPlaying = true; status = "播放中 · PCM 兼容输出"
@@ -242,6 +277,14 @@ import LibraryDomain
     public var onNext: ((MediaFile) -> Void)?
     public func advance() { if let next = nextItem { onNext?(next) } }
     private func handleConfigurationChange() {
+        if preparingOutput { return }
+        if let expected = expectedRateChange,
+           ProcessInfo.processInfo.systemUptime < expected.deadline,
+           AudioDevices.current(engine.outputNode.audioUnit) == expected.device,
+           let rate = AudioDevices.nominalRate(expected.device), abs(rate-expected.rate) < 1,
+           abs(engine.outputNode.outputFormat(forBus:0).sampleRate-expected.rate) < 1 {
+            refreshDevices(); return
+        }
         guard current != nil else { return }
         player.stop(); engine.stop(); generation += 1; freeze(at: position); file = nil
         status = "音频配置改变；已停止输出，请重新载入曲目"

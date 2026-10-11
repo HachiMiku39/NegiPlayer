@@ -1,6 +1,6 @@
 # 来源与许可清单
 
-NegiPlayer 0.2.0 的项目源码采用 [MIT](LICENSE) 许可。系统框架和参考项目各自保持原许可；未将 NegiFlick 原始 JavaScript 或其他组件重新标为 MIT。
+NegiPlayer 0.4 工作版本 的项目源码采用 [MIT](LICENSE) 许可。系统框架和参考项目各自保持原许可；未将 NegiFlick 原始 JavaScript 或其他组件重新标为 MIT。
 
 | 项目 | 实际用途 | 分发与许可状态 |
 | --- | --- | --- |
@@ -24,3 +24,7 @@ Negi 基线读取路径与 Git blob：
 SFB Audio Engine、TagLib、GRDB 与 FFmpeg DST 库尚未作为工程依赖引入；它们是规格中的候选后续组件，不列为已经集成的能力。未来接入需固定版本／commit、编译选项、补丁和真实链接方式，重新审核分发义务。
 
 名称配色来自用户要求；界面只采用颜色和系统符号，未使用初音未来的官方角色图、Logo 或歌曲资源。测试信号由本项目脚本原创生成；用户外置盘音乐仅在本机只读测试，未复制或分发。
+
+0.4 使用 Apple Network / Security 构建本地 HTTPS 与配对，并在本机首次开启服务时调用系统 LibreSSL/openssl 生成私有 TLS 身份；不打包 openssl，也不公开私钥或配对数据。iOS 同样使用系统 AVFoundation、UIKit、MediaPlayer、Security 与 SwiftUI。
+
+MV 模式只参考 [SEGA MikuFlick 的官方呈现](https://miku.sega.jp/flick/en/)中音乐与影像的组合方向，实际交互为独立的本地静音视频加歌词，不复制游戏界面、源码、角色、音乐或视频。中性共用图标由内置 ImageGen 生成；母版和设计说明见 [Resources/Brand/README.md](Resources/Brand/README.md)。

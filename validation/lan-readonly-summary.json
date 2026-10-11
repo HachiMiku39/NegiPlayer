@@ -1,0 +1,19 @@
+{
+  "beforeFileCount": 77521,
+  "afterFileCount": 77521,
+  "added": 0,
+  "removed": 0,
+  "changed": 2,
+  "readErrors": 0,
+  "comparison": [
+    "size",
+    "mtime_ns",
+    "inode"
+  ],
+  "notWholeLibraryByteHash": true,
+  "audioExtensionFileCount": 14217,
+  "audioChangedOrRemoved": 0,
+  "wholeDirectorySizeOrMtimeChanged": 0,
+  "difference": "Two empty TXT files have different inode values with unchanged size and mtime; cause not established; full inode comparison is not marked passed",
+  "noAddedOrRemovedNonhiddenFiles": true
+}

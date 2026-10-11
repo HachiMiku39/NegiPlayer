@@ -6,8 +6,12 @@
 <key>CFBundleName</key><string>NegiPlayer</string>
 <key>CFBundleDisplayName</key><string>NegiPlayer</string>
 <key>CFBundlePackageType</key><string>APPL</string>
-<key>CFBundleShortVersionString</key><string>0.3.0</string>
-<key>CFBundleVersion</key><string>3</string>
+<key>CFBundleShortVersionString</key><string>0.4.0</string>
+<key>CFBundleVersion</key><string>4</string>
+<key>NSLocalNetworkUsageDescription</key><string>向已配对的 iPhone 和 iPad 提供只读音乐库与音频流。</string>
+<key>NSBonjourServices</key><array><string>_negiplayer._tcp</string></array>
+<key>CFBundleLocalizations</key><array><string>zh-Hans</string><string>ja</string><string>en</string></array>
+<key>CFBundleIconFile</key><string>AppIcon</string>
 <key>LSMinimumSystemVersion</key><string>14.0</string>
 <key>NSHighResolutionCapable</key><true/>
 <key>NSPrincipalClass</key><string>NSApplication</string>

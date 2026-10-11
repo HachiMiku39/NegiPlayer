@@ -1,8 +1,43 @@
 import XCTest
 import MediaIO
+import LANHost
+import LANCore
+import LibraryDomain
+import AVFoundation
 
 /// Opt-in integration with a locally selected corpus. Paths and media never enter the repository.
 final class SelectedLibraryTests: XCTestCase {
+    func testReadOnlyLANPCMSelectedFiles() throws {
+        
+        guard let input=ProcessInfo.processInfo.environment["NEGI_PRESENTATION_REAL_INPUT"] else { throw XCTSkip("Optional selected local music for LAN PCM") }
+        let config=try JSONDecoder().decode([String:String].self,from:Data(contentsOf:URL(fileURLWithPath:input)))
+        if ProcessInfo.processInfo.environment["NEGI_VERIFY_REAL_LAN_PCM"] != "1" {
+            guard let reportPath=ProcessInfo.processInfo.environment["NEGI_NATIVE_LAN_REAL_REPORT"] else { throw XCTSkip("Opt-in real PCM needs decoding service or native app LAN report") }
+            let report=try JSONSerialization.jsonObject(with:Data(contentsOf:URL(fileURLWithPath:reportPath))) as? [String:Any]
+            let rows=try XCTUnwrap(report?["results"] as? [[String:Any]])
+            for key in ["flac","mp3","wav","lyricAudio"] {
+                guard let path=config[key] else { continue };let source=URL(fileURLWithPath:path)
+                let row=try XCTUnwrap(rows.first{$0["file"] as? String == source.lastPathComponent})
+                XCTAssertEqual(row["lanPCMStatus"] as? String,"passed");XCTAssertEqual(row["audioIdentity"] as? String,try AudioIdentity.digest(source))
+                XCTAssertGreaterThan(row["lanPCMBytes"] as? Int ?? 0,0);XCTAssertEqual(row["sourceStatUnchanged"] as? Bool,true)
+            }
+            return
+        }
+        let root=URL(fileURLWithPath:try XCTUnwrap(config["root"]))
+        for key in ["flac","mp3","wav","lyricAudio"] {
+            guard let path=config[key] else { continue }; let url=URL(fileURLWithPath:path)
+            let before=try FileManager.default.attributesOfItem(atPath:path),probe=try MediaProbe.detect(url)
+            let media=MediaFile(rootID:"local-selected",relativePath:url.lastPathComponent,title:"Local selection",codec:probe.codec,sampleRate:probe.rate,channels:probe.channels,available:true)
+            let pcm=try PCMSource(entry:CatalogEntry(media:media,root:root,source:url)),independent=try AVAudioFile(forReading:url,commonFormat:.pcmFormatFloat32,interleaved:false)
+            let count=AVAudioFrameCount(min(Int64(1024),independent.length-500))
+            let buffer=try XCTUnwrap(AVAudioPCMBuffer(pcmFormat:independent.processingFormat,frameCapacity:count));independent.framePosition=500;try independent.read(into:buffer,frameCount:count)
+            let samples=try PCMTransport.decode(pcm.read(start:500*pcm.info.bytesPerFrame,count:Int(count)*Int(pcm.info.bytesPerFrame)),channels:pcm.info.channels)
+            let channels=try XCTUnwrap(buffer.floatChannelData)
+            for c in 0..<pcm.info.channels { XCTAssertEqual(samples[c],Array(UnsafeBufferPointer(start:channels[c],count:Int(count))),key) }
+            let after=try FileManager.default.attributesOfItem(atPath:path)
+            for k in [FileAttributeKey.size,.modificationDate,.systemFileNumber] { XCTAssertEqual(String(describing:before[k]),String(describing:after[k]),"Read-only LAN source") }
+        }
+    }
     func testReadOnlyArtworkLyricsAndSACDHeaders() async throws {
         guard let input = ProcessInfo.processInfo.environment["NEGI_PRESENTATION_REAL_INPUT"] else {
             throw XCTSkip("Optional: set NEGI_PRESENTATION_REAL_INPUT to local JSON with root, flac, mp3, lyricAudio, sacd and optional wav paths")
