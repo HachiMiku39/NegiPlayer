@@ -1,0 +1,15 @@
+.build/
+.swiftpm/
+dist/
+.DS_Store
+*.sqlite
+*.sqlite-wal
+*.sqlite-shm
+PlaybackSettings.json
+VerificationRequest.json
+validation/*
+!validation/modern-native-codecs.json
+!validation/modern-native-codecs.dsp.json
+!validation/public-core-tests.log
+!validation/public-build.log
+!validation/listening-ui.json

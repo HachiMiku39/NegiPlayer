@@ -1,0 +1,92 @@
+Building for debugging...
+[Pre-planning 1 / 241]
+[Planning deferred tasks]
+[1 / 16] MediaIO
+[3 / 8] CoreTests-product
+[6 / 11] CoreTests-product
+[9 / 12] CoreTests-product
+[11 / 15] CoreTests-product
+Build complete! (2.39 sec)
+Test Suite 'All tests' started at 2026-10-11 16:41:47.459.
+Test Suite 'CoreTests.xctest' started at 2026-10-11 16:41:47.460.
+Test Suite 'AudioTests' started at 2026-10-11 16:41:47.460.
+Test Case '-[CoreTests.AudioTests testDirectTransitionMustPauseBeforeRemovingAttenuation]' started.
+Test Case '-[CoreTests.AudioTests testDirectTransitionMustPauseBeforeRemovingAttenuation]' passed (0.003 seconds).
+Test Case '-[CoreTests.AudioTests testEventClockPauseSeekAndRateMapping]' started.
+Test Case '-[CoreTests.AudioTests testEventClockPauseSeekAndRateMapping]' passed (0.000 seconds).
+Test Case '-[CoreTests.AudioTests testIndependentDoPByteLayoutAndBoundaryContinuity]' started.
+Test Case '-[CoreTests.AudioTests testIndependentDoPByteLayoutAndBoundaryContinuity]' passed (0.000 seconds).
+Test Suite 'AudioTests' passed at 2026-10-11 16:41:47.463.
+	 Executed 3 tests, with 0 failures (0 unexpected) in 0.003 (0.004) seconds
+Test Suite 'BrowseTests' started at 2026-10-11 16:41:47.463.
+Test Case '-[CoreTests.BrowseTests testCombinedSourceFiltersAndNumericSorting]' started.
+Test Case '-[CoreTests.BrowseTests testCombinedSourceFiltersAndNumericSorting]' passed (0.000 seconds).
+Test Case '-[CoreTests.BrowseTests testPlayNextMovesWithoutDuplicatingOrChangingCurrent]' started.
+Test Case '-[CoreTests.BrowseTests testPlayNextMovesWithoutDuplicatingOrChangingCurrent]' passed (0.000 seconds).
+Test Suite 'BrowseTests' passed at 2026-10-11 16:41:47.464.
+	 Executed 2 tests, with 0 failures (0 unexpected) in 0.000 (0.001) seconds
+Test Suite 'FileOperationTests' started at 2026-10-11 16:41:47.464.
+Test Case '-[CoreTests.FileOperationTests testWAVTagCopyPreservesAudioAndUnknownChunks]' started.
+Test Case '-[CoreTests.FileOperationTests testWAVTagCopyPreservesAudioAndUnknownChunks]' passed (0.008 seconds).
+Test Suite 'FileOperationTests' passed at 2026-10-11 16:41:47.472.
+	 Executed 1 test, with 0 failures (0 unexpected) in 0.008 (0.009) seconds
+Test Suite 'ListeningTests' started at 2026-10-11 16:41:47.472.
+Test Case '-[CoreTests.ListeningTests testActualOfflinePCMPreGainAndBypass]' started.
+Test Case '-[CoreTests.ListeningTests testActualOfflinePCMPreGainAndBypass]' passed (0.001 seconds).
+Test Case '-[CoreTests.ListeningTests testMetadataPeakBudgetIncludesEQBoostAndHeadroom]' started.
+Test Case '-[CoreTests.ListeningTests testMetadataPeakBudgetIncludesEQBoostAndHeadroom]' passed (0.000 seconds).
+Test Case '-[CoreTests.ListeningTests testReplayGainAlbumFallbackMissingAndPeakHeadroom]' started.
+Test Case '-[CoreTests.ListeningTests testReplayGainAlbumFallbackMissingAndPeakHeadroom]' passed (0.000 seconds).
+Test Case '-[CoreTests.ListeningTests testSettingsRestartVolumeCeilingAndUnknownVersionPreserved]' started.
+Test Case '-[CoreTests.ListeningTests testSettingsRestartVolumeCeilingAndUnknownVersionPreserved]' passed (0.004 seconds).
+Test Suite 'ListeningTests' passed at 2026-10-11 16:41:47.478.
+	 Executed 4 tests, with 0 failures (0 unexpected) in 0.005 (0.006) seconds
+Test Suite 'LyricTests' started at 2026-10-11 16:41:47.478.
+Test Case '-[CoreTests.LyricTests testAppliedOnlyNegiCreatesEditableDraft]' started.
+Test Case '-[CoreTests.LyricTests testAppliedOnlyNegiCreatesEditableDraft]' passed (0.001 seconds).
+Test Case '-[CoreTests.LyricTests testEnhancedRoundTripPreservesAllText]' started.
+Test Case '-[CoreTests.LyricTests testEnhancedRoundTripPreservesAllText]' passed (0.001 seconds).
+Test Case '-[CoreTests.LyricTests testGraphemesAndUTF16]' started.
+Test Case '-[CoreTests.LyricTests testGraphemesAndUTF16]' passed (0.000 seconds).
+Test Case '-[CoreTests.LyricTests testNegiDraftContinuationAndUnrelatedFieldPreservation]' started.
+Test Case '-[CoreTests.LyricTests testNegiDraftContinuationAndUnrelatedFieldPreservation]' passed (0.001 seconds).
+Test Case '-[CoreTests.LyricTests testOffsetInverseZeroAndNullPersistence]' started.
+Test Case '-[CoreTests.LyricTests testOffsetInverseZeroAndNullPersistence]' passed (0.000 seconds).
+Test Case '-[CoreTests.LyricTests testPlainWhitespaceWordsAndSimultaneousRows]' started.
+Test Case '-[CoreTests.LyricTests testPlainWhitespaceWordsAndSimultaneousRows]' passed (0.000 seconds).
+Test Case '-[CoreTests.LyricTests testPrecisionAndLongMinutes]' started.
+Test Case '-[CoreTests.LyricTests testPrecisionAndLongMinutes]' passed (0.000 seconds).
+Test Case '-[CoreTests.LyricTests testSRTEndAndMarkup]' started.
+Test Case '-[CoreTests.LyricTests testSRTEndAndMarkup]' passed (0.000 seconds).
+Test Suite 'LyricTests' passed at 2026-10-11 16:41:47.483.
+	 Executed 8 tests, with 0 failures (0 unexpected) in 0.004 (0.005) seconds
+Test Suite 'MetadataTests' started at 2026-10-11 16:41:47.483.
+Test Case '-[CoreTests.MetadataTests testFLACMultiValuesAndCorruptLengths]' started.
+Test Case '-[CoreTests.MetadataTests testFLACMultiValuesAndCorruptLengths]' passed (0.002 seconds).
+Test Suite 'MetadataTests' passed at 2026-10-11 16:41:47.484.
+	 Executed 1 test, with 0 failures (0 unexpected) in 0.002 (0.002) seconds
+Test Suite 'ProbeTests' started at 2026-10-11 16:41:47.484.
+Test Case '-[CoreTests.ProbeTests testGeneratedCodecCorpus]' started.
+Test Case '-[CoreTests.ProbeTests testGeneratedCodecCorpus]' passed (0.510 seconds).
+Test Case '-[CoreTests.ProbeTests testRejectsCorruptPayloadBounds]' started.
+Test Case '-[CoreTests.ProbeTests testRejectsCorruptPayloadBounds]' passed (0.002 seconds).
+Test Suite 'ProbeTests' passed at 2026-10-11 16:41:47.997.
+	 Executed 2 tests, with 0 failures (0 unexpected) in 0.512 (0.512) seconds
+Test Suite 'StoreTests' started at 2026-10-11 16:41:47.997.
+Test Case '-[CoreTests.StoreTests testActualWAVIncrementalScanAndCancellation]' started.
+2026-10-11 16:41:47.997 xctest[20405:11386130] Audio files cannot be non-interleaved. Ignoring setting AVLinearPCMIsNonInterleaved YES.
+Test Case '-[CoreTests.StoreTests testActualWAVIncrementalScanAndCancellation]' passed (0.105 seconds).
+Test Case '-[CoreTests.StoreTests testReadOnlyReferenceExportGuardAndLazyBinding]' started.
+Test Case '-[CoreTests.StoreTests testReadOnlyReferenceExportGuardAndLazyBinding]' passed (0.012 seconds).
+Test Case '-[CoreTests.StoreTests testWALBackupRestartOfflineAndDraftSurviveScan]' started.
+Test Case '-[CoreTests.StoreTests testWALBackupRestartOfflineAndDraftSurviveScan]' passed (0.011 seconds).
+Test Suite 'StoreTests' passed at 2026-10-11 16:41:48.125.
+	 Executed 3 tests, with 0 failures (0 unexpected) in 0.128 (0.128) seconds
+Test Suite 'CoreTests.xctest' passed at 2026-10-11 16:41:48.125.
+	 Executed 24 tests, with 0 failures (0 unexpected) in 0.663 (0.665) seconds
+Test Suite 'All tests' passed at 2026-10-11 16:41:48.125.
+	 Executed 24 tests, with 0 failures (0 unexpected) in 0.663 (0.666) seconds
+◇ Test run started.
+↳ Testing Library Version: 2084
+↳ Target Platform: arm64e-apple-macos14.0
+✔ Test run with 0 tests in 0 suites passed after 0.001 seconds.

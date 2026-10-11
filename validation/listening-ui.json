@@ -1,0 +1,26 @@
+{
+  "version": "0.2.0",
+  "date": "2026-10-11",
+  "method": "Native UI operations on independently generated FLAC signal; isolated development database",
+  "trackGainDB": -6,
+  "albumGainDB": -3.25,
+  "headroomDB": 3,
+  "finalPreGainDB": -6.25,
+  "volumeCeiling": 0.2,
+  "currentVolumeClamped": true,
+  "settingsRestoredAfterRestart": [
+    "album ReplayGain",
+    "3 dB headroom",
+    "20% volume ceiling",
+    "vocal EQ preset",
+    "EQ enabled",
+    "selected device UID"
+  ],
+  "confirmedOutput": {
+    "rate": 48000,
+    "channels": 2,
+    "clientBits": 32,
+    "device": "MacBook Pro Speakers"
+  },
+  "systemControls": "Public MediaPlayer API integrated; OS control UI access timed out; remote interaction not verified"
+}
