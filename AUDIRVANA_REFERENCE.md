@@ -60,4 +60,6 @@ NegiPlayer 独立实现相应产品行为，不复用 Audirvana 的代码、引�
 
 NegiPlayer 0.4 独立实现 USB 连接类型、驱动支持采样率、物理格式和可写性回读，以及可选跟随源采样率。输出停止后请求、回读确认并等待配置稳定，再重建音频图；失败保持暂停或按明确的不支持状态转换。E.S.combo 实测 44.1／48／96 kHz，88.2 kHz 源保持 96 kHz 并显示转换；完成 EQ 开启／旁路和暂停，结束恢复 48 kHz。客户端 32-bit Float 与驱动 16-bit PCM 分别显示，未实现独占／整数 HAL／DoP 或硬件音量。
 
+更换为 JadeAudio JA11 后，使用独立测试数据库及原创低电平立体声 WAV，逐档确认 44.1／48／88.2／96／176.4／192／352.8／384 kHz 的源格式、客户端格式和设备采样率一致；384 kHz 下完成 EQ 开启／旁路、暂停和恢复。测试前后设备均为 352.8 kHz，结束保持暂停。驱动当前回报 16-bit PCM、固定输出／无主音量；这不等于设备所有物理格式已验证，也不代表逐比特输出。
+
 参考官方说明：[Audirvāna playback technology](https://audirvana.com/exclusive-playback-technology/)；实现依据为 Apple [available nominal sample rates](https://developer.apple.com/documentation/coreaudio/kaudiodevicepropertyavailablenominalsamplerates) 与 [nominal sample rate](https://developer.apple.com/documentation/coreaudio/kaudiodevicepropertynominalsamplerate)。不据厂商的音质宣传作本项目测量结论。

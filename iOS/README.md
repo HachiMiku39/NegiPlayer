@@ -37,7 +37,7 @@ MV is available only for a unique same-stem `.mp4`, `.m4v` or `.mov` in the audi
 
 Both apps offer Negi (teal/pink), Day (light neutral) and Night (dark neutral), with Chinese, Japanese and English UI selection. Song tags and lyric text retain their original language. Theme/language changes keep the audio model alive. Both platforms use the same neutral N/leaf/play icon.
 
-Duo layouts use the current SwiftUI window size, never a fixed screen, orientation, device name or UIScreen.main. The expanded window can show a library split view and a player/lyrics split view; compact cover windows use the same audio session in a single-column view. This follows [Apple's iPhone Duo preparation guidance](https://developer.apple.com/iphone-duo/prepare/). Open/closed window changes were checked in the iPhone Duo simulator. Physical folding, background transitions and iOS USB DAC output still require device testing.
+Duo layouts use the current SwiftUI window size, never a fixed screen, orientation, device name or UIScreen.main. The expanded window can show a library split view and a player/lyrics split view; compact cover windows use the same audio session in a single-column view. Albums offer a persisted Cover Grid / Cover List picker, square artwork, readable titles and thumbnail rows. This follows [Apple's iPhone Duo preparation guidance](https://developer.apple.com/iphone-duo/prepare/). Open/closed window changes were checked in the iPhone Duo simulator. Physical folding, background transitions and iOS USB DAC output still require device testing.
 
 ## Verification status
 

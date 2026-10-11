@@ -9,7 +9,16 @@ struct DiscoveredMac:Identifiable { let id:String; let name:String; let url:URL;
     @Published var servers:[DiscoveredMac]=[]
     @Published var status="点击搜索同一局域网中的 Mac"
     private let browser=NetServiceBrowser(); private var resolving:[NetService]=[]
-    func start() { browser.stop(); resolving.removeAll(); servers=[]; browser.delegate=self; status="正在发现 Mac…"; browser.searchForServices(ofType:NegiLAN.serviceType,inDomain:"local.") }
+    private var searching=false; private var restartPending=false
+    func start() {
+        browser.delegate=self; resolving.forEach{$0.stop()}; resolving.removeAll(); servers=[]; status="正在发现 Mac…"
+        if searching { restartPending=true; browser.stop() } else { beginSearch() }
+    }
+    private func beginSearch() { searching=true; browser.searchForServices(ofType:NegiLAN.serviceType,inDomain:"local.") }
+    func netServiceBrowserDidStopSearch(_ browser:NetServiceBrowser) {
+        searching=false
+        if restartPending { restartPending=false; beginSearch() }
+    }
     func netServiceBrowser(_ browser:NetServiceBrowser,didFind service:NetService,moreComing:Bool) { guard resolving.count<32 else { return }; resolving.append(service); service.delegate=self; service.resolve(withTimeout:10) }
     func netServiceDidResolveAddress(_ service:NetService) {
         guard let host=service.hostName, let bytes=service.txtRecordData() else { return }; let txt=NetService.dictionary(fromTXTRecord:bytes)
@@ -17,5 +26,5 @@ struct DiscoveredMac:Identifiable { let id:String; let name:String; let url:URL;
         servers.removeAll{$0.id==id}; servers.append(.init(id:id,name:service.name,url:url,fingerprint:fp)); status=LF("找到 %d 台 Mac",servers.count)
     }
     func netServiceBrowser(_ browser:NetServiceBrowser,didRemove service:NetService,moreComing:Bool) { resolving.removeAll{$0===service}; servers.removeAll{$0.name==service.name} }
-    func netServiceBrowser(_ browser:NetServiceBrowser,didNotSearch errorDict:[String:NSNumber]) { status="未能发现设备，请检查 iOS 设置中的局域网权限，或手动输入 Mac 地址" }
+    func netServiceBrowser(_ browser:NetServiceBrowser,didNotSearch errorDict:[String:NSNumber]) { searching=false; restartPending=false; status="未能发现设备，请检查 iOS 设置中的局域网权限，或手动输入 Mac 地址" }
 }

@@ -1,5 +1,21 @@
 import SwiftUI
 
+enum AlbumDisplayMode:String,CaseIterable {
+    case grid,list
+    var title:String { self == .grid ? "封面网格" : "缩略图列表" }
+    var icon:String { self == .grid ? "square.grid.2x2" : "list.bullet" }
+}
+struct AlbumDisplayPicker:View {
+    @Binding var mode:String
+    var body:some View {
+        Picker(L("专辑显示方式"),selection:$mode) {
+            ForEach(AlbumDisplayMode.allCases,id:\.rawValue) { mode in
+                Label(L(mode.title),systemImage:mode.icon).tag(mode.rawValue)
+            }
+        }.pickerStyle(.segmented).labelsHidden().accessibilityLabel(L("专辑显示方式"))
+    }
+}
+
 enum PlayerTheme:String,CaseIterable {
     case negi,day,night
     var name:String { switch self { case .negi:return "Negi"; case .day:return "日间"; case .night:return "夜间" } }

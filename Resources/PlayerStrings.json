@@ -1538,5 +1538,33 @@
   "MV 未能载入，继续显示封面与歌词": {
     "en": "MV could not load; showing artwork and lyrics",
     "ja": "MV を読み込めませんでした。ジャケットと歌詞を表示します"
+  },
+  "封面网格": {
+    "en": "Cover Grid",
+    "ja": "カバーグリッド"
+  },
+  "缩略图列表": {
+    "en": "Cover List",
+    "ja": "カバーリスト"
+  },
+  "专辑显示方式": {
+    "en": "Album View",
+    "ja": "アルバム表示"
+  },
+  "%d 张专辑": {
+    "en": "%d albums",
+    "ja": "%d アルバム"
+  },
+  "没有匹配的专辑": {
+    "en": "No albums found",
+    "ja": "アルバムが見つかりません"
+  },
+  "调整搜索或筛选条件": {
+    "en": "Adjust the search or filters",
+    "ja": "検索や絞り込み条件を変更してください"
+  },
+  "从 Mac 导入音乐后刷新曲库": {
+    "en": "Import music on Mac, then refresh the library",
+    "ja": "Mac で音楽を追加してからライブラリを更新してください"
   }
 }

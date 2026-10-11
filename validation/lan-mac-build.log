@@ -1,14 +1,8 @@
 Building for production...
-[Provisioning 9 / 12]
-[Planning deferred tasks]
-[2 / 5] LANCore
-[3 / 6] LANCore
-[14 / 25] AudioCore
-[17 / 27] AudioCore
-[28 / 31] NegiPlayer-product
-[29 / 32] NegiPlayer-product
-[31 / 32] NegiPlayer-product
-Build complete! (13.86 sec)
-<build-cache>: replacing existing signature
-Built: <project>/dist/NegiPlayer.app
-Verified staging bundle: <build-cache>
+[2 / 8] LANHost
+[4 / 9] LANHost
+[8 / 9] NegiPlayer-product
+Build complete! (4.05 sec)
+<TMP>/NegiPlayer-LAN-release/app-stage/NegiPlayer.app: replacing existing signature
+Built: <PROJECT>/dist/NegiPlayer.app
+Verified staging bundle: <TMP>/NegiPlayer-LAN-release/app-stage/NegiPlayer.app

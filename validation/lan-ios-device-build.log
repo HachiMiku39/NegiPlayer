@@ -1,46 +1,47 @@
-2026-10-11 22:50:39.366 xcodebuild[79466:12252037]  DVTFilePathFSEvents: Failed to start fs event stream.
-2026-10-11 22:50:40.187 xcodebuild[79466:12252036] CoreSimulatorService connection became invalid.  Simulator services will no longer be available.
+2026-10-11 23:40:18.576 xcodebuild[88835:12386819]  DVTFilePathFSEvents: Failed to start fs event stream.
+2026-10-11 23:40:19.220 xcodebuild[88835:12386821] CoreSimulatorService connection became invalid.  Simulator services will no longer be available.
 Command line invocation:
-    /Applications/Xcode-27.1-beta.app/Contents/Developer/usr/bin/xcodebuild -project iOS/NegiPlayeriOS.xcodeproj -scheme NegiPlayeriOS -sdk iphoneos -destination generic/platform=iOS -derivedDataPath <build-cache> CODE_SIGNING_ALLOWED=NO OTHER_SWIFT_FLAGS=-disable-sandbox build
+    /Applications/Xcode-27.1-beta.app/Contents/Developer/usr/bin/xcodebuild -project iOS/NegiPlayeriOS.xcodeproj -scheme NegiPlayeriOS -sdk iphoneos -destination generic/platform=iOS -derivedDataPath <TMP>/NegiPlayer-iOS-device CODE_SIGNING_ALLOWED=NO OTHER_SWIFT_FLAGS=-disable-sandbox build
 
 Build settings from command line:
     CODE_SIGNING_ALLOWED = NO
     OTHER_SWIFT_FLAGS = -disable-sandbox
     SDKROOT = iphoneos27.1
 
-2026-10-11 22:50:40.280 xcodebuild[79466:12252031] [MT] DVTAssertions: Warning in DVTFrameworks/DVTFoundation/FileTypes/DVTFileDataTypeDetection.m:80
+2026-10-11 23:40:19.293 xcodebuild[88835:12386812] [MT] DVTAssertions: Warning in DVTFrameworks/DVTFoundation/FileTypes/DVTFileDataTypeDetection.m:80
 Details:  detectedTypeIdentifier (com.apple.binary-property-list) does not conform to matchedTypeIdentifier in MagicFileDataTypeDetector extenson com.apple.property-list. When both are specified, this conformance is required unless overridden by setting allowNonInheritance. extension.identifier:Xcode.MagicFileDataTypeDetector.BinaryPlist
-Object:   <DVTFileDataTypeDetectionMagicCache: 0x7cfe48d440>
+Object:   <DVTFileDataTypeDetectionMagicCache: 0x780e41d5c0>
 Method:   -initWithExtension:
-Thread:   <_NSMainThread: 0x105309440>{number = 1, name = main}
+Thread:   <_NSMainThread: 0x1037bd440>{number = 1, name = main}
 Please file a bug at https://feedbackassistant.apple.com with this warning message and any useful information you can provide.
-2026-10-11 22:50:40.280 xcodebuild[79466:12252031] [MT] DVTAssertions: Warning in DVTFrameworks/DVTFoundation/FileTypes/DVTFileDataTypeDetection.m:80
+2026-10-11 23:40:19.293 xcodebuild[88835:12386812] [MT] DVTAssertions: Warning in DVTFrameworks/DVTFoundation/FileTypes/DVTFileDataTypeDetection.m:80
 Details:  detectedTypeIdentifier (com.apple.xml-property-list) does not conform to matchedTypeIdentifier in MagicFileDataTypeDetector extenson com.apple.property-list. When both are specified, this conformance is required unless overridden by setting allowNonInheritance. extension.identifier:Xcode.MagicFileDataTypeDetector.XMLPlist
-Object:   <DVTFileDataTypeDetectionMagicCache: 0x7cfe48d440>
+Object:   <DVTFileDataTypeDetectionMagicCache: 0x780e466c40>
 Method:   -initWithExtension:
-Thread:   <_NSMainThread: 0x105309440>{number = 1, name = main}
+Thread:   <_NSMainThread: 0x1037bd440>{number = 1, name = main}
 Please file a bug at https://feedbackassistant.apple.com with this warning message and any useful information you can provide.
-2026-10-11 22:50:40.344 xcodebuild[79466:12252156] Logging connecton invalid: <OS_xpc_error: <dictionary: 0x1eb1762b0> { count = 1, transaction: 0, voucher = 0x0, contents =
+2026-10-11 23:40:19.365 xcodebuild[88835:12387001] Logging connecton invalid: <OS_xpc_error: <dictionary: 0x1eb1762b0> { count = 1, transaction: 0, voucher = 0x0, contents =
 	"XPCErrorDescription" => <string: 0x1eb1763f0> { string cache = 0x0, length = 18, contents = "Connection invalid" }
 }>
+2026-10-11 23:40:19.365 xcodebuild[88835:12387112] Error opening log file (<USER>/Library/Logs/CoreSimulator/CoreSimulator.com.apple.dt.xcodebuild.log): Operation not permitted
+[-[SimServiceContext initWithDeveloperDir:connectionType:error:]:499] WARN  : Unable to discover any Simulator runtimes. Developer Directory is /Applications/Xcode-27.1-beta.app/Contents/Developer.
+[-[SimDiskImageManager _onQueue_checkConnection:]:270] ERROR : simdiskimaged connection is currently unavailable because connection became invalid
+[-[SimServiceContext initWithDeveloperDir:connectionType:error:]_block_invoke:556] ERROR : Could not get list of trusted mount directories: Error Domain=com.apple.CoreSimulator.SimError Code=409 "Cannot talk to the service used to manage runtime disk images (simdiskimaged) because its launchd job is not registered or was unloaded" UserInfo={NSLocalizedDescription=Cannot talk to the service used to manage runtime disk images (simdiskimaged) because its launchd job is not registered or was unloaded}
 [-[SimDiskImageManager init]:226] ERROR : Could not kickstart simdiskimaged; SimDiskImageManager services will not be available: Error Domain=NSPOSIXErrorDomain Code=53 "Software caused connection abort" UserInfo={NSLocalizedDescription=Error returned in reply from CoreSimulatorService: Connection invalid}
 [-[SimDiskImageManager _onQueue_checkConnection:]:290] ERROR : simdiskimaged returned error (invalid), marking disconnected.
-[-[SimDiskImageManager _onQueue_checkConnection:]:290] ERROR : simdiskimaged returned error (invalid), marking disconnected.
-[-[SimServiceContext initWithDeveloperDir:connectionType:error:]_block_invoke:556] ERROR : Could not get list of trusted mount directories: Error Domain=com.apple.CoreSimulator.SimError Code=410 "The service used to manage runtime disk images (simdiskimaged) crashed or is not responding" UserInfo={NSLocalizedDescription=The service used to manage runtime disk images (simdiskimaged) crashed or is not responding}
-[-[SimServiceContext initWithDeveloperDir:connectionType:error:]:499] WARN  : Unable to discover any Simulator runtimes. Developer Directory is /Applications/Xcode-27.1-beta.app/Contents/Developer.
 [-[SimServiceContext sendRequest:reply:error:]:2083] ERROR : Unable to deliver request ({
     request = "notification_subscription";
-    "set_path" = "<home>/Library/Developer/CoreSimulator/Devices";
+    "set_path" = "<USER>/Library/Developer/CoreSimulator/Devices";
 }) because we are not connected to CoreSimulatorService.
-2026-10-11 22:50:40.345 xcodebuild[79466:12252150] Error Domain=NSPOSIXErrorDomain Code=61 "Connection refused" UserInfo={NSLocalizedDescription=CoreSimulatorService connection became invalid.  Simulator services will no longer be available.}
+2026-10-11 23:40:19.366 xcodebuild[88835:12386819] Error Domain=NSPOSIXErrorDomain Code=61 "Connection refused" UserInfo={NSLocalizedDescription=CoreSimulatorService connection became invalid.  Simulator services will no longer be available.}
 [-[SimServiceContext sendRequest:reply:error:]:2083] ERROR : Unable to deliver request ({
     request = "notification_subscription";
-    "set_path" = "<home>/Library/Developer/CoreSimulator/Devices";
+    "set_path" = "<USER>/Library/Developer/CoreSimulator/Devices";
 }) because we are not connected to CoreSimulatorService.
-2026-10-11 22:50:40.346 xcodebuild[79466:12252037] Error Domain=NSPOSIXErrorDomain Code=61 "Connection refused" UserInfo={NSLocalizedDescription=CoreSimulatorService connection became invalid.  Simulator services will no longer be available.}
-2026-10-11 22:50:40.346 xcodebuild[79466:12252150]  iOSSimulator: [SimServiceContext defaultDeviceSetWithError:] returned nil (Error Domain=NSPOSIXErrorDomain Code=61 "Connection refused" UserInfo={NSLocalizedFailureReason=Failed to subscribe to notifications from CoreSimulatorService., NSLocalizedDescription=Failed to initialize simulator device set., NSUnderlyingError=0x7cfe2d77b0 {Error Domain=NSPOSIXErrorDomain Code=61 "Connection refused" UserInfo={NSLocalizedDescription=CoreSimulatorService connection became invalid.  Simulator services will no longer be available.}}}). Simulator device support disabled.
-2026-10-11 22:50:40.346 xcodebuild[79466:12252037]  IDESimulatorAvailability: startObservingSimulatorUpdates() FAILED to register SimDeviceSet observer
-2026-10-11 22:50:40.456 xcodebuild[79466:12252031] [MT] IDERunDestination: Supported platforms for the buildables in the current scheme is empty.
+2026-10-11 23:40:19.367 xcodebuild[88835:12387034] Error Domain=NSPOSIXErrorDomain Code=61 "Connection refused" UserInfo={NSLocalizedDescription=CoreSimulatorService connection became invalid.  Simulator services will no longer be available.}
+2026-10-11 23:40:19.367 xcodebuild[88835:12386819]  IDESimulatorAvailability: startObservingSimulatorUpdates() FAILED to register SimDeviceSet observer
+2026-10-11 23:40:19.367 xcodebuild[88835:12387034]  iOSSimulator: [SimServiceContext defaultDeviceSetWithError:] returned nil (Error Domain=NSPOSIXErrorDomain Code=61 "Connection refused" UserInfo={NSLocalizedFailureReason=Failed to subscribe to notifications from CoreSimulatorService., NSLocalizedDescription=Failed to initialize simulator device set., NSUnderlyingError=0x780e845d70 {Error Domain=NSPOSIXErrorDomain Code=61 "Connection refused" UserInfo={NSLocalizedDescription=CoreSimulatorService connection became invalid.  Simulator services will no longer be available.}}}). Simulator device support disabled.
+2026-10-11 23:40:19.417 xcodebuild[88835:12386812] [MT] IDERunDestination: Supported platforms for the buildables in the current scheme is empty.
 ComputePackagePrebuildTargetDependencyGraph
 
 Prepare packages
@@ -60,76 +61,609 @@ GatherProvisioningInputs
 
 CreateBuildDescription
 
-ClangStatCache /Applications/Xcode-27.1-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang-stat-cache /Applications/Xcode-27.1-beta.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS27.1.sdk <build-cache>
-    cd <project>/iOS/NegiPlayeriOS.xcodeproj
-    /Applications/Xcode-27.1-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang-stat-cache /Applications/Xcode-27.1-beta.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS27.1.sdk -o <build-cache>
-Failed to create FS event stream. Considering the cache up-to-date.
+ExecuteExternalTool /Applications/Xcode-27.1-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -v -E -dM -isysroot /Applications/Xcode-27.1-beta.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS27.1.sdk -x c -c /dev/null
+
+ExecuteExternalTool /Applications/Xcode-27.1-beta.app/Contents/Developer/usr/bin/actool --print-asset-tag-combinations --output-format xml1 <PROJECT>/iOS/NegiPlayeriOS/Assets.xcassets
+
+ExecuteExternalTool /Applications/Xcode-27.1-beta.app/Contents/Developer/usr/bin/actool --version --output-format xml1
+
+ExecuteExternalTool /Applications/Xcode-27.1-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc --version
+
+ExecuteExternalTool /Applications/Xcode-27.1-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ld -version_details
+
+Build description signature: 81ad91c230237417daebda59b60749b4
+Build description path: <TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/XCBuildData/81ad91c230237417daebda59b60749b4.xcbuilddata
+CreateBuildDirectory <TMP>/NegiPlayer-iOS-device/ModuleCache.noindex
+    cd <PROJECT>/iOS/NegiPlayeriOS.xcodeproj
+    builtin-create-build-directory <TMP>/NegiPlayer-iOS-device/ModuleCache.noindex
+
+CreateBuildDirectory <TMP>/NegiPlayer-iOS-device/SDKExplicitPrecompiledModules
+    cd <PROJECT>/iOS/NegiPlayeriOS.xcodeproj
+    builtin-create-build-directory <TMP>/NegiPlayer-iOS-device/SDKExplicitPrecompiledModules
+
+CreateBuildDirectory <TMP>/NegiPlayer-iOS-device/CompilationCache.noindex
+    cd <PROJECT>/iOS/NegiPlayeriOS.xcodeproj
+    builtin-create-build-directory <TMP>/NegiPlayer-iOS-device/CompilationCache.noindex
+
+ClangStatCache /Applications/Xcode-27.1-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang-stat-cache /Applications/Xcode-27.1-beta.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS27.1.sdk <TMP>/NegiPlayer-iOS-device/SDKStatCaches.noindex/iphoneos27.1-24A94403-29888104f5519c7ccaec30f664100971.sdkstatcache
+    cd <PROJECT>/iOS/NegiPlayeriOS.xcodeproj
+    /Applications/Xcode-27.1-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang-stat-cache /Applications/Xcode-27.1-beta.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS27.1.sdk -o <TMP>/NegiPlayer-iOS-device/SDKStatCaches.noindex/iphoneos27.1-24A94403-29888104f5519c7ccaec30f664100971.sdkstatcache
+
+CreateBuildDirectory <TMP>/NegiPlayer-iOS-device/Build/Products
+    cd <PROJECT>/iOS/NegiPlayeriOS.xcodeproj
+    builtin-create-build-directory <TMP>/NegiPlayer-iOS-device/Build/Products
+
+CreateBuildDirectory <TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex
+    cd <PROJECT>/iOS/NegiPlayeriOS.xcodeproj
+    builtin-create-build-directory <TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex
+
+CreateBuildDirectory <TMP>/NegiPlayer-iOS-device/Build/Products/Debug-iphoneos
+    cd <PROJECT>/iOS/NegiPlayeriOS.xcodeproj
+    builtin-create-build-directory <TMP>/NegiPlayer-iOS-device/Build/Products/Debug-iphoneos
+
+CreateBuildDirectory <TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules
+    cd <PROJECT>/iOS/NegiPlayeriOS.xcodeproj
+    builtin-create-build-directory <TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules
+
+CreateBuildDirectory <TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/ExplicitPrecompiledModules
+    cd <PROJECT>/iOS/NegiPlayeriOS.xcodeproj
+    builtin-create-build-directory <TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/ExplicitPrecompiledModules
+
+CreateBuildDirectory <TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/PrecompiledHeaders
+    cd <PROJECT>/iOS/NegiPlayeriOS.xcodeproj
+    builtin-create-build-directory <TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/PrecompiledHeaders
+
+CreateBuildDirectory <TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/EagerLinkingTBDs/Debug-iphoneos
+    cd <PROJECT>/iOS/NegiPlayeriOS.xcodeproj
+    builtin-create-build-directory <TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/EagerLinkingTBDs/Debug-iphoneos
+
+WriteAuxiliaryFile <TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/NegiPlayeriOS.build/Debug-iphoneos/NegiPlayeriOS-74aa8ed9e72634d941f3da5f4ed2af83-VFS-iphoneos/all-product-headers.yaml
+    cd <PROJECT>/iOS/NegiPlayeriOS.xcodeproj
+    write-file <TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/NegiPlayeriOS.build/Debug-iphoneos/NegiPlayeriOS-74aa8ed9e72634d941f3da5f4ed2af83-VFS-iphoneos/all-product-headers.yaml
+
+WriteAuxiliaryFile <TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/NegiPlayeriOS.build/Debug-iphoneos/NegiPlayeriOS.build/NegiPlayer-project-headers.hmap (in target 'NegiPlayeriOS' from project 'NegiPlayeriOS')
+    cd <PROJECT>/iOS
+    write-file <TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/NegiPlayeriOS.build/Debug-iphoneos/NegiPlayeriOS.build/NegiPlayer-project-headers.hmap
+
+WriteAuxiliaryFile <TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/NegiPlayeriOS.build/Debug-iphoneos/NegiPlayeriOS.build/NegiPlayer.hmap (in target 'NegiPlayeriOS' from project 'NegiPlayeriOS')
+    cd <PROJECT>/iOS
+    write-file <TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/NegiPlayeriOS.build/Debug-iphoneos/NegiPlayeriOS.build/NegiPlayer.hmap
+
+WriteAuxiliaryFile <TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/NegiPlayeriOS.build/Debug-iphoneos/NegiPlayeriOS.build/NegiPlayer-own-target-headers.hmap (in target 'NegiPlayeriOS' from project 'NegiPlayeriOS')
+    cd <PROJECT>/iOS
+    write-file <TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/NegiPlayeriOS.build/Debug-iphoneos/NegiPlayeriOS.build/NegiPlayer-own-target-headers.hmap
+
+WriteAuxiliaryFile <TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/NegiPlayeriOS.build/Debug-iphoneos/NegiPlayeriOS.build/NegiPlayer-generated-files.hmap (in target 'NegiPlayeriOS' from project 'NegiPlayeriOS')
+    cd <PROJECT>/iOS
+    write-file <TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/NegiPlayeriOS.build/Debug-iphoneos/NegiPlayeriOS.build/NegiPlayer-generated-files.hmap
+
+WriteAuxiliaryFile <TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/NegiPlayeriOS.build/Debug-iphoneos/NegiPlayeriOS.build/NegiPlayer-all-target-headers.hmap (in target 'NegiPlayeriOS' from project 'NegiPlayeriOS')
+    cd <PROJECT>/iOS
+    write-file <TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/NegiPlayeriOS.build/Debug-iphoneos/NegiPlayeriOS.build/NegiPlayer-all-target-headers.hmap
+
+WriteAuxiliaryFile <TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/NegiPlayeriOS.build/Debug-iphoneos/NegiPlayeriOS.build/NegiPlayer-all-non-framework-target-headers.hmap (in target 'NegiPlayeriOS' from project 'NegiPlayeriOS')
+    cd <PROJECT>/iOS
+    write-file <TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/NegiPlayeriOS.build/Debug-iphoneos/NegiPlayeriOS.build/NegiPlayer-all-non-framework-target-headers.hmap
+
+MkDir <TMP>/NegiPlayer-iOS-device/Build/Products/Debug-iphoneos/NegiPlayer.app (in target 'NegiPlayeriOS' from project 'NegiPlayeriOS')
+    cd <PROJECT>/iOS
+    /bin/mkdir -p <TMP>/NegiPlayer-iOS-device/Build/Products/Debug-iphoneos/NegiPlayer.app
+
+WriteAuxiliaryFile <TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/NegiPlayeriOS.build/Debug-iphoneos/NegiPlayeriOS.build/NegiPlayer-DebugDylibInstallName-normal-arm64.txt (in target 'NegiPlayeriOS' from project 'NegiPlayeriOS')
+    cd <PROJECT>/iOS
+    write-file <TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/NegiPlayeriOS.build/Debug-iphoneos/NegiPlayeriOS.build/NegiPlayer-DebugDylibInstallName-normal-arm64.txt
+
+WriteAuxiliaryFile <TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/NegiPlayeriOS.build/Debug-iphoneos/NegiPlayeriOS.build/Objects-normal/arm64/NegiPlayeriOS-OutputFileMap.json (in target 'NegiPlayeriOS' from project 'NegiPlayeriOS')
+    cd <PROJECT>/iOS
+    write-file <TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/NegiPlayeriOS.build/Debug-iphoneos/NegiPlayeriOS.build/Objects-normal/arm64/NegiPlayeriOS-OutputFileMap.json
+
+WriteAuxiliaryFile <TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/NegiPlayeriOS.build/Debug-iphoneos/NegiPlayeriOS.build/Objects-normal/arm64/NegiPlayeriOS_const_extract_protocols.json (in target 'NegiPlayeriOS' from project 'NegiPlayeriOS')
+    cd <PROJECT>/iOS
+    write-file <TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/NegiPlayeriOS.build/Debug-iphoneos/NegiPlayeriOS.build/Objects-normal/arm64/NegiPlayeriOS_const_extract_protocols.json
+
+WriteAuxiliaryFile <TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/NegiPlayeriOS.build/Debug-iphoneos/NegiPlayeriOS.build/Objects-normal/arm64/NegiPlayer.LinkFileList (in target 'NegiPlayeriOS' from project 'NegiPlayeriOS')
+    cd <PROJECT>/iOS
+    write-file <TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/NegiPlayeriOS.build/Debug-iphoneos/NegiPlayeriOS.build/Objects-normal/arm64/NegiPlayer.LinkFileList
+
+WriteAuxiliaryFile <TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/NegiPlayeriOS.build/Debug-iphoneos/NegiPlayeriOS.build/Objects-normal/arm64/NegiPlayer.SwiftConstValuesFileList (in target 'NegiPlayeriOS' from project 'NegiPlayeriOS')
+    cd <PROJECT>/iOS
+    write-file <TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/NegiPlayeriOS.build/Debug-iphoneos/NegiPlayeriOS.build/Objects-normal/arm64/NegiPlayer.SwiftConstValuesFileList
+
+WriteAuxiliaryFile <TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/NegiPlayeriOS.build/Debug-iphoneos/NegiPlayeriOS.build/Objects-normal/arm64/NegiPlayer.SwiftFileList (in target 'NegiPlayeriOS' from project 'NegiPlayeriOS')
+    cd <PROJECT>/iOS
+    write-file <TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/NegiPlayeriOS.build/Debug-iphoneos/NegiPlayeriOS.build/Objects-normal/arm64/NegiPlayer.SwiftFileList
+
+WriteAuxiliaryFile <TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/NegiPlayeriOS.build/Debug-iphoneos/NegiPlayeriOS.build/NegiPlayer.DependencyStaticMetadataFileList (in target 'NegiPlayeriOS' from project 'NegiPlayeriOS')
+    cd <PROJECT>/iOS
+    write-file <TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/NegiPlayeriOS.build/Debug-iphoneos/NegiPlayeriOS.build/NegiPlayer.DependencyStaticMetadataFileList
+
+WriteAuxiliaryFile <TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/NegiPlayeriOS.build/Debug-iphoneos/NegiPlayeriOS.build/NegiPlayer-DebugDylibPath-normal-arm64.txt (in target 'NegiPlayeriOS' from project 'NegiPlayeriOS')
+    cd <PROJECT>/iOS
+    write-file <TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/NegiPlayeriOS.build/Debug-iphoneos/NegiPlayeriOS.build/NegiPlayer-DebugDylibPath-normal-arm64.txt
+
+WriteAuxiliaryFile <TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/NegiPlayeriOS.build/Debug-iphoneos/NegiPlayeriOS.build/NegiPlayer.DependencyMetadataFileList (in target 'NegiPlayeriOS' from project 'NegiPlayeriOS')
+    cd <PROJECT>/iOS
+    write-file <TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/NegiPlayeriOS.build/Debug-iphoneos/NegiPlayeriOS.build/NegiPlayer.DependencyMetadataFileList
+
+MkDir <TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/NegiPlayeriOS.build/Debug-iphoneos/NegiPlayeriOS.build/assetcatalog_output/thinned (in target 'NegiPlayeriOS' from project 'NegiPlayeriOS')
+    cd <PROJECT>/iOS
+    /bin/mkdir -p <TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/NegiPlayeriOS.build/Debug-iphoneos/NegiPlayeriOS.build/assetcatalog_output/thinned
+
+Ld <TMP>/NegiPlayer-iOS-device/Build/Products/Debug-iphoneos/NegiPlayer.app/__preview.dylib normal (in target 'NegiPlayeriOS' from project 'NegiPlayeriOS')
+    cd <PROJECT>/iOS
+    /Applications/Xcode-27.1-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -Xlinker -reproducible -target arm64-apple-ios17.0 -dynamiclib -isysroot /Applications/Xcode-27.1-beta.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS27.1.sdk -Os -Xlinker -no_warn_duplicate_libraries -L<TMP>/NegiPlayer-iOS-device/Build/Products/Debug-iphoneos -F<TMP>/NegiPlayer-iOS-device/Build/Products/Debug-iphoneos -install_name @rpath/NegiPlayer.debug.dylib -Xlinker -dead_strip -Xlinker -dependency_info -Xlinker <TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/NegiPlayeriOS.build/Debug-iphoneos/NegiPlayeriOS.build/Objects-normal/arm64/NegiPlayer_dependency_info.dat -o <TMP>/NegiPlayer-iOS-device/Build/Products/Debug-iphoneos/NegiPlayer.app/__preview.dylib
+
+MkDir <TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/NegiPlayeriOS.build/Debug-iphoneos/NegiPlayeriOS.build/assetcatalog_output/unthinned (in target 'NegiPlayeriOS' from project 'NegiPlayeriOS')
+    cd <PROJECT>/iOS
+    /bin/mkdir -p <TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/NegiPlayeriOS.build/Debug-iphoneos/NegiPlayeriOS.build/assetcatalog_output/unthinned
+
+CpResource <TMP>/NegiPlayer-iOS-device/Build/Products/Debug-iphoneos/NegiPlayer.app/PlayerStrings.json <PROJECT>/Resources/PlayerStrings.json (in target 'NegiPlayeriOS' from project 'NegiPlayeriOS')
+    cd <PROJECT>/iOS
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -strip-unsigned-binaries -strip-deterministic -strip-tool /Applications/Xcode-27.1-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/strip -resolve-src-symlinks <PROJECT>/Resources/PlayerStrings.json <TMP>/NegiPlayer-iOS-device/Build/Products/Debug-iphoneos/NegiPlayer.app
+
+CopyStringsFile <TMP>/NegiPlayer-iOS-device/Build/Products/Debug-iphoneos/NegiPlayer.app/zh-Hans.lproj/InfoPlist.strings <PROJECT>/Resources/zh-Hans.lproj/InfoPlist.strings (in target 'NegiPlayeriOS' from project 'NegiPlayeriOS')
+    cd <PROJECT>/iOS
+    builtin-copyStrings --validate --outputencoding binary --outfilename InfoPlist.strings --outdir <TMP>/NegiPlayer-iOS-device/Build/Products/Debug-iphoneos/NegiPlayer.app/zh-Hans.lproj -- <PROJECT>/Resources/zh-Hans.lproj/InfoPlist.strings
+<PROJECT>/Resources/zh-Hans.lproj/InfoPlist.strings:1:1: note: detected encoding of input file as Unicode (UTF-8) (in target 'NegiPlayeriOS' from project 'NegiPlayeriOS')
+
+CopyStringsFile <TMP>/NegiPlayer-iOS-device/Build/Products/Debug-iphoneos/NegiPlayer.app/ja.lproj/InfoPlist.strings <PROJECT>/Resources/ja.lproj/InfoPlist.strings (in target 'NegiPlayeriOS' from project 'NegiPlayeriOS')
+    cd <PROJECT>/iOS
+    builtin-copyStrings --validate --outputencoding binary --outfilename InfoPlist.strings --outdir <TMP>/NegiPlayer-iOS-device/Build/Products/Debug-iphoneos/NegiPlayer.app/ja.lproj -- <PROJECT>/Resources/ja.lproj/InfoPlist.strings
+<PROJECT>/Resources/ja.lproj/InfoPlist.strings:1:1: note: detected encoding of input file as Unicode (UTF-8) (in target 'NegiPlayeriOS' from project 'NegiPlayeriOS')
+
+GenerateAssetSymbols <PROJECT>/iOS/NegiPlayeriOS/Assets.xcassets (in target 'NegiPlayeriOS' from project 'NegiPlayeriOS')
+    cd <PROJECT>/iOS
+    /Applications/Xcode-27.1-beta.app/Contents/Developer/usr/bin/actool <PROJECT>/iOS/NegiPlayeriOS/Assets.xcassets --compile <TMP>/NegiPlayer-iOS-device/Build/Products/Debug-iphoneos/NegiPlayer.app --output-format human-readable-text --notices --warnings --export-dependency-info <TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/NegiPlayeriOS.build/Debug-iphoneos/NegiPlayeriOS.build/assetcatalog_dependencies --output-partial-info-plist <TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/NegiPlayeriOS.build/Debug-iphoneos/NegiPlayeriOS.build/assetcatalog_generated_info.plist --app-icon AppIcon --compress-pngs --enable-on-demand-resources YES --development-region zh-Hans --target-device iphone --target-device ipad --minimum-deployment-target 17.0 --platform iphoneos --bundle-identifier com.negiplayer.ios --generate-swift-asset-symbol-extensions NO --generate-swift-asset-symbols <TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/NegiPlayeriOS.build/Debug-iphoneos/NegiPlayeriOS.build/DerivedSources/GeneratedAssetSymbols.swift --generate-objc-asset-symbols <TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/NegiPlayeriOS.build/Debug-iphoneos/NegiPlayeriOS.build/DerivedSources/GeneratedAssetSymbols.h --generate-asset-symbol-index <TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/NegiPlayeriOS.build/Debug-iphoneos/NegiPlayeriOS.build/DerivedSources/GeneratedAssetSymbols-Index.plist
+2026-10-11 23:40:23.100 ibtoold[88913:12387444] CoreSimulatorService connection became invalid.  Simulator services will no longer be available.
+2026-10-11 23:40:23.165 ibtoold[88913:12387562] Logging connecton invalid: <OS_xpc_error: <dictionary: 0x1eb1762b0> { count = 1, transaction: 0, voucher = 0x0, contents =
+	"XPCErrorDescription" => <string: 0x1eb1763f0> { string cache = 0x0, length = 18, contents = "Connection invalid" }
+}>
+2026-10-11 23:40:23.165 ibtoold[88913:12387556] Error opening log file (<USER>/Library/Logs/CoreSimulator/CoreSimulator.com.apple.ibtool.log): Operation not permitted
+[-[SimDiskImageManager _onQueue_checkConnection:]:290] ERROR : simdiskimaged returned error (invalid), marking disconnected.
+[-[SimDiskImageManager _onQueue_checkConnection:]:270] ERROR : simdiskimaged connection is currently unavailable because connection became invalid
+[-[SimServiceContext initWithDeveloperDir:connectionType:error:]_block_invoke:556] ERROR : Could not get list of trusted mount directories: Error Domain=com.apple.CoreSimulator.SimError Code=409 "Cannot talk to the service used to manage runtime disk images (simdiskimaged) because its launchd job is not registered or was unloaded" UserInfo={NSLocalizedDescription=Cannot talk to the service used to manage runtime disk images (simdiskimaged) because its launchd job is not registered or was unloaded}
+[-[SimServiceContext initWithDeveloperDir:connectionType:error:]:499] WARN  : Unable to discover any Simulator runtimes. Developer Directory is /Applications/Xcode-27.1-beta.app/Contents/Developer.
+[-[SimDiskImageManager init]:226] ERROR : Could not kickstart simdiskimaged; SimDiskImageManager services will not be available: Error Domain=NSPOSIXErrorDomain Code=53 "Software caused connection abort" UserInfo={NSLocalizedDescription=Error returned in reply from CoreSimulatorService: Connection invalid}
+[-[SimServiceContext sendRequest:reply:error:]:2083] ERROR : Unable to deliver request ({
+    request = "notification_subscription";
+    "set_path" = "<USER>/Library/Developer/CoreSimulator/Devices";
+}) because we are not connected to CoreSimulatorService.
+2026-10-11 23:40:23.166 ibtoold[88913:12387443] Error Domain=NSPOSIXErrorDomain Code=61 "Connection refused" UserInfo={NSLocalizedDescription=CoreSimulatorService connection became invalid.  Simulator services will no longer be available.}
+/* com.apple.actool.compilation-results */
+<TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/NegiPlayeriOS.build/Debug-iphoneos/NegiPlayeriOS.build/DerivedSources/GeneratedAssetSymbols-Index.plist
+<TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/NegiPlayeriOS.build/Debug-iphoneos/NegiPlayeriOS.build/DerivedSources/GeneratedAssetSymbols.h
+<TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/NegiPlayeriOS.build/Debug-iphoneos/NegiPlayeriOS.build/DerivedSources/GeneratedAssetSymbols.swift
+
+
+CopyStringsFile <TMP>/NegiPlayer-iOS-device/Build/Products/Debug-iphoneos/NegiPlayer.app/en.lproj/InfoPlist.strings <PROJECT>/Resources/en.lproj/InfoPlist.strings (in target 'NegiPlayeriOS' from project 'NegiPlayeriOS')
+    cd <PROJECT>/iOS
+    builtin-copyStrings --validate --outputencoding binary --outfilename InfoPlist.strings --outdir <TMP>/NegiPlayer-iOS-device/Build/Products/Debug-iphoneos/NegiPlayer.app/en.lproj -- <PROJECT>/Resources/en.lproj/InfoPlist.strings
+<PROJECT>/Resources/en.lproj/InfoPlist.strings:1:1: note: detected encoding of input file as Unicode (UTF-8) (in target 'NegiPlayeriOS' from project 'NegiPlayeriOS')
+
+CompileAssetCatalogVariant thinned <TMP>/NegiPlayer-iOS-device/Build/Products/Debug-iphoneos/NegiPlayer.app <PROJECT>/iOS/NegiPlayeriOS/Assets.xcassets (in target 'NegiPlayeriOS' from project 'NegiPlayeriOS')
+    cd <PROJECT>/iOS
+    /Applications/Xcode-27.1-beta.app/Contents/Developer/usr/bin/actool <PROJECT>/iOS/NegiPlayeriOS/Assets.xcassets --compile <TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/NegiPlayeriOS.build/Debug-iphoneos/NegiPlayeriOS.build/assetcatalog_output/thinned --output-format human-readable-text --notices --warnings --export-dependency-info <TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/NegiPlayeriOS.build/Debug-iphoneos/NegiPlayeriOS.build/assetcatalog_dependencies_thinned --output-partial-info-plist <TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/NegiPlayeriOS.build/Debug-iphoneos/NegiPlayeriOS.build/assetcatalog_generated_info.plist_thinned --app-icon AppIcon --compress-pngs --enable-on-demand-resources YES --development-region zh-Hans --target-device iphone --target-device ipad --minimum-deployment-target 17.0 --platform iphoneos
+2026-10-11 23:40:23.054 ibtoold[88915:12387447] CoreSimulatorService connection became invalid.  Simulator services will no longer be available.
+2026-10-11 23:40:23.055 ibtoold[88915:12387553] Logging connecton invalid: <OS_xpc_error: <dictionary: 0x1eb1762b0> { count = 1, transaction: 0, voucher = 0x0, contents =
+	"XPCErrorDescription" => <string: 0x1eb1763f0> { string cache = 0x0, length = 18, contents = "Connection invalid" }
+}>
+2026-10-11 23:40:23.055 ibtoold[88915:12387447] Error opening log file (<USER>/Library/Logs/CoreSimulator/CoreSimulator.com.apple.ibtool.log): Operation not permitted
+[-[SimServiceContext sendRequest:]:2062] ERROR : Unable to deliver request ({
+    "developer_dir" = "/Applications/Xcode-27.1-beta.app/Contents/Developer";
+    request = "set_developer_dir";
+}) because we are not connected to CoreSimulatorService.
+[-[SimServiceContext initWithDeveloperDir:connectionType:error:]:499] WARN  : Unable to discover any Simulator runtimes. Developer Directory is /Applications/Xcode-27.1-beta.app/Contents/Developer.
+[-[SimDiskImageManager init]:226] ERROR : Could not kickstart simdiskimaged; SimDiskImageManager services will not be available: Error Domain=NSPOSIXErrorDomain Code=53 "Software caused connection abort" UserInfo={NSLocalizedDescription=Error returned in reply from CoreSimulatorService: Connection invalid}
+[-[SimDiskImageManager _onQueue_checkConnection:]:290] ERROR : simdiskimaged returned error (invalid), marking disconnected.
+[-[SimDiskImageManager _onQueue_checkConnection:]:270] ERROR : simdiskimaged connection is currently unavailable because connection became invalid
+[-[SimServiceContext initWithDeveloperDir:connectionType:error:]_block_invoke:556] ERROR : Could not get list of trusted mount directories: Error Domain=com.apple.CoreSimulator.SimError Code=409 "Cannot talk to the service used to manage runtime disk images (simdiskimaged) because its launchd job is not registered or was unloaded" UserInfo={NSLocalizedDescription=Cannot talk to the service used to manage runtime disk images (simdiskimaged) because its launchd job is not registered or was unloaded}
+[-[SimServiceContext sendRequest:reply:error:]:2083] ERROR : Unable to deliver request ({
+    request = "notification_subscription";
+    "set_path" = "<USER>/Library/Developer/CoreSimulator/Devices";
+}) because we are not connected to CoreSimulatorService.
+2026-10-11 23:40:23.132 ibtoold[88915:12387446] Error Domain=NSPOSIXErrorDomain Code=61 "Connection refused" UserInfo={NSLocalizedDescription=CoreSimulatorService connection became invalid.  Simulator services will no longer be available.}
+/* com.apple.actool.compilation-results */
+<TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/NegiPlayeriOS.build/Debug-iphoneos/NegiPlayeriOS.build/assetcatalog_generated_info.plist_thinned
+<TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/NegiPlayeriOS.build/Debug-iphoneos/NegiPlayeriOS.build/assetcatalog_output/thinned/AppIcon60x60@2x.png
+<TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/NegiPlayeriOS.build/Debug-iphoneos/NegiPlayeriOS.build/assetcatalog_output/thinned/AppIcon76x76@2x~ipad.png
+<TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/NegiPlayeriOS.build/Debug-iphoneos/NegiPlayeriOS.build/assetcatalog_output/thinned/Assets.car
+
 
 SwiftDriver NegiPlayeriOS normal arm64 com.apple.xcode.tools.swift.compiler (in target 'NegiPlayeriOS' from project 'NegiPlayeriOS')
-    cd <project>/iOS
-    builtin-SwiftDriver -- /Applications/Xcode-27.1-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc -module-name NegiPlayer -Onone @<build-cache> -DDEBUG -disable-sandbox -enable-bare-slash-regex -enable-experimental-feature DebugDescriptionMacro -sdk /Applications/Xcode-27.1-beta.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS27.1.sdk -target arm64-apple-ios17.0 -g -module-cache-path <build-cache> -Xfrontend -serialize-debugging-options -index-store-path <build-cache> -swift-version 5 -I <build-cache> -F <build-cache> -c -j16 -enable-batch-mode -incremental -Xcc -ivfsstatcache -Xcc <build-cache> -output-file-map <build-cache> -save-temps -no-color-diagnostics -explicit-module-build -module-cache-path <build-cache> -clang-scanner-module-cache-path <build-cache> -sdk-module-cache-path <build-cache> -emit-dependencies -emit-module -emit-module-path <build-cache> -serialize-diagnostics -dependency-scan-serialize-diagnostics-path <build-cache> -validate-clang-modules-once -clang-build-session-file <build-cache> -Xcc -fmodules-prune-interval\=86400 -Xcc -fmodules-prune-after\=345600 -emit-const-values -const-gather-protocols-list <build-cache> -Xcc -iquote -Xcc <build-cache> -Xcc -I<build-cache> -Xcc -I<build-cache> -Xcc -iquote -Xcc <build-cache> -Xcc -I<build-cache> -Xcc -I<build-cache> -Xcc -I<build-cache> -Xcc -I<build-cache> -emit-objc-header -emit-objc-header-path <build-cache> -working-directory <project>/iOS -experimental-emit-module-separately -disable-cmo
+    cd <PROJECT>/iOS
+    builtin-SwiftDriver -- /Applications/Xcode-27.1-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc -module-name NegiPlayer -Onone @<TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/NegiPlayeriOS.build/Debug-iphoneos/NegiPlayeriOS.build/Objects-normal/arm64/NegiPlayer.SwiftFileList -DDEBUG -disable-sandbox -enable-bare-slash-regex -enable-experimental-feature DebugDescriptionMacro -sdk /Applications/Xcode-27.1-beta.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS27.1.sdk -target arm64-apple-ios17.0 -g -module-cache-path <TMP>/NegiPlayer-iOS-device/ModuleCache.noindex -Xfrontend -serialize-debugging-options -index-store-path <TMP>/NegiPlayer-iOS-device/Index.noindex/DataStore -swift-version 5 -I <TMP>/NegiPlayer-iOS-device/Build/Products/Debug-iphoneos -F <TMP>/NegiPlayer-iOS-device/Build/Products/Debug-iphoneos -c -j16 -enable-batch-mode -incremental -Xcc -ivfsstatcache -Xcc <TMP>/NegiPlayer-iOS-device/SDKStatCaches.noindex/iphoneos27.1-24A94403-29888104f5519c7ccaec30f664100971.sdkstatcache -output-file-map <TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/NegiPlayeriOS.build/Debug-iphoneos/NegiPlayeriOS.build/Objects-normal/arm64/NegiPlayeriOS-OutputFileMap.json -save-temps -no-color-diagnostics -explicit-module-build -module-cache-path <TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules -clang-scanner-module-cache-path <TMP>/NegiPlayer-iOS-device/ModuleCache.noindex -sdk-module-cache-path <TMP>/NegiPlayer-iOS-device/SDKExplicitPrecompiledModules -emit-dependencies -emit-module -emit-module-path <TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/NegiPlayeriOS.build/Debug-iphoneos/NegiPlayeriOS.build/Objects-normal/arm64/NegiPlayer.swiftmodule -serialize-diagnostics -dependency-scan-serialize-diagnostics-path <TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/NegiPlayeriOS.build/Debug-iphoneos/NegiPlayeriOS.build/Objects-normal/arm64/NegiPlayer-dependency-scan.dia -validate-clang-modules-once -clang-build-session-file <TMP>/NegiPlayer-iOS-device/ModuleCache.noindex/Session.modulevalidation -Xcc -fmodules-prune-interval\=86400 -Xcc -fmodules-prune-after\=345600 -emit-const-values -const-gather-protocols-list <TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/NegiPlayeriOS.build/Debug-iphoneos/NegiPlayeriOS.build/Objects-normal/arm64/NegiPlayeriOS_const_extract_protocols.json -Xcc -iquote -Xcc <TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/NegiPlayeriOS.build/Debug-iphoneos/NegiPlayeriOS.build/NegiPlayer-generated-files.hmap -Xcc -I<TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/NegiPlayeriOS.build/Debug-iphoneos/NegiPlayeriOS.build/NegiPlayer-own-target-headers.hmap -Xcc -I<TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/NegiPlayeriOS.build/Debug-iphoneos/NegiPlayeriOS.build/NegiPlayer-all-target-headers.hmap -Xcc -iquote -Xcc <TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/NegiPlayeriOS.build/Debug-iphoneos/NegiPlayeriOS.build/NegiPlayer-project-headers.hmap -Xcc -I<TMP>/NegiPlayer-iOS-device/Build/Products/Debug-iphoneos/include -Xcc -I<TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/NegiPlayeriOS.build/Debug-iphoneos/NegiPlayeriOS.build/DerivedSources-normal/arm64 -Xcc -I<TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/NegiPlayeriOS.build/Debug-iphoneos/NegiPlayeriOS.build/DerivedSources/arm64 -Xcc -I<TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/NegiPlayeriOS.build/Debug-iphoneos/NegiPlayeriOS.build/DerivedSources -emit-objc-header -emit-objc-header-path <TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/NegiPlayeriOS.build/Debug-iphoneos/NegiPlayeriOS.build/Objects-normal/arm64/NegiPlayer-Swift.h -working-directory <PROJECT>/iOS -experimental-emit-module-separately -disable-cmo
 
-SwiftCompile normal arm64 Compiling\ MobileViews.swift <project>/iOS/NegiPlayeriOS/MobileViews.swift (in target 'NegiPlayeriOS' from project 'NegiPlayeriOS')
+LinkAssetCatalog <PROJECT>/iOS/NegiPlayeriOS/Assets.xcassets (in target 'NegiPlayeriOS' from project 'NegiPlayeriOS')
+    cd <PROJECT>/iOS
+    builtin-linkAssetCatalog --thinned <TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/NegiPlayeriOS.build/Debug-iphoneos/NegiPlayeriOS.build/assetcatalog_output/thinned --thinned-dependencies <TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/NegiPlayeriOS.build/Debug-iphoneos/NegiPlayeriOS.build/assetcatalog_dependencies_thinned --thinned-info-plist-content <TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/NegiPlayeriOS.build/Debug-iphoneos/NegiPlayeriOS.build/assetcatalog_generated_info.plist_thinned --unthinned <TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/NegiPlayeriOS.build/Debug-iphoneos/NegiPlayeriOS.build/assetcatalog_output/unthinned --unthinned-dependencies <TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/NegiPlayeriOS.build/Debug-iphoneos/NegiPlayeriOS.build/assetcatalog_dependencies_unthinned --unthinned-info-plist-content <TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/NegiPlayeriOS.build/Debug-iphoneos/NegiPlayeriOS.build/assetcatalog_generated_info.plist_unthinned --output <TMP>/NegiPlayer-iOS-device/Build/Products/Debug-iphoneos/NegiPlayer.app --plist-output <TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/NegiPlayeriOS.build/Debug-iphoneos/NegiPlayeriOS.build/assetcatalog_generated_info.plist
+note: Emplaced <TMP>/NegiPlayer-iOS-device/Build/Products/Debug-iphoneos/NegiPlayer.app/Assets.car (in target 'NegiPlayeriOS' from project 'NegiPlayeriOS')
+note: Emplaced <TMP>/NegiPlayer-iOS-device/Build/Products/Debug-iphoneos/NegiPlayer.app/AppIcon60x60@2x.png (in target 'NegiPlayeriOS' from project 'NegiPlayeriOS')
+note: Emplaced <TMP>/NegiPlayer-iOS-device/Build/Products/Debug-iphoneos/NegiPlayer.app/AppIcon76x76@2x~ipad.png (in target 'NegiPlayeriOS' from project 'NegiPlayeriOS')
 
-SwiftCompile normal arm64 <project>/iOS/NegiPlayeriOS/MobileViews.swift (in target 'NegiPlayeriOS' from project 'NegiPlayeriOS')
-    cd <project>/iOS
-    builtin-SwiftPerFileCompile MobileViews.swift
+ProcessInfoPlistFile <TMP>/NegiPlayer-iOS-device/Build/Products/Debug-iphoneos/NegiPlayer.app/Info.plist <PROJECT>/iOS/NegiPlayeriOS/Info.plist (in target 'NegiPlayeriOS' from project 'NegiPlayeriOS')
+    cd <PROJECT>/iOS
+    builtin-infoPlistUtility <PROJECT>/iOS/NegiPlayeriOS/Info.plist -producttype com.apple.product-type.application -genpkginfo <TMP>/NegiPlayer-iOS-device/Build/Products/Debug-iphoneos/NegiPlayer.app/PkgInfo -expandbuildsettings -format binary -platform iphoneos -additionalcontentfile <TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/NegiPlayeriOS.build/Debug-iphoneos/NegiPlayeriOS.build/assetcatalog_generated_info.plist -requiredArchitecture arm64 -o <TMP>/NegiPlayer-iOS-device/Build/Products/Debug-iphoneos/NegiPlayer.app/Info.plist
+
+SwiftExplicitDependencyGeneratePcm arm64 <TMP>/NegiPlayer-iOS-device/SDKExplicitPrecompiledModules/_Builtin_stdarg-3197BQKFG0Q3AE0INDLPB5ZSO.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <TMP>/NegiPlayer-iOS-device/SDKExplicitPrecompiledModules/_Builtin_stddef-99RFEOMEHOPVTQVLC6A6C5M9J.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <TMP>/NegiPlayer-iOS-device/SDKExplicitPrecompiledModules/_Builtin_stdbool-89OH4X82YPK9DK8086VYRMRUN.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <TMP>/NegiPlayer-iOS-device/SDKExplicitPrecompiledModules/ptrcheck-1HJK2H3Q57X8DCGXNOJ20B0Q2.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <TMP>/NegiPlayer-iOS-device/SDKExplicitPrecompiledModules/_AvailabilityInternal-C6HV7XDQR1FRL8SSOQQKWCWME.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <TMP>/NegiPlayer-iOS-device/SDKExplicitPrecompiledModules/ptrauth-EN2QW2P7YXFV8PUMLNJFMPX8V.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <TMP>/NegiPlayer-iOS-device/SDKExplicitPrecompiledModules/_Builtin_float-E0U15CETC3NYF689YTUXCFPI2.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <TMP>/NegiPlayer-iOS-device/SDKExplicitPrecompiledModules/DeveloperToolsSupport-E87EWM7UU9L37NLZG3ZMW7OIF.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <TMP>/NegiPlayer-iOS-device/SDKExplicitPrecompiledModules/_SwiftConcurrencyShims-97ONKDIL4TDKB2CLBLRPLIMXL.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <TMP>/NegiPlayer-iOS-device/SDKExplicitPrecompiledModules/SwiftShims-BXK3Y35XSDWQHL35IA7P04NI6.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <TMP>/NegiPlayer-iOS-device/SDKExplicitPrecompiledModules/_DarwinFoundation1-455IBYAKCJYOS9B7UVTT9SGPA.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <TMP>/NegiPlayer-iOS-device/SDKExplicitPrecompiledModules/_Builtin_limits-863KSG23OXQBLSYWGUKNRV0TH.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <TMP>/NegiPlayer-iOS-device/SDKExplicitPrecompiledModules/_DarwinFoundation2-56S2XGSCGPQB1075OSSN3D7K9.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <TMP>/NegiPlayer-iOS-device/SDKExplicitPrecompiledModules/sys_types-7B7WBVGJHMVD44G7J5ATGHOUF.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <TMP>/NegiPlayer-iOS-device/SDKExplicitPrecompiledModules/_Builtin_stdint-EAKDE3QRGRGCIL483M3TJHCTO.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <TMP>/NegiPlayer-iOS-device/SDKExplicitPrecompiledModules/_Builtin_tgmath-6LODQCOL05B43OO4Z0GPIEOIN.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <TMP>/NegiPlayer-iOS-device/SDKExplicitPrecompiledModules/string_h-D1SDL2QSAXBJMAXF2J1CIZTCX.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <TMP>/NegiPlayer-iOS-device/SDKExplicitPrecompiledModules/_Builtin_intrinsics-DA5UCX9LT0FX9HD5NESMJS0CR.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <TMP>/NegiPlayer-iOS-device/SDKExplicitPrecompiledModules/_DarwinFoundation3-54G11Z3D1TRQ6UBOG28GMAZ4Z.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <TMP>/NegiPlayer-iOS-device/SDKExplicitPrecompiledModules/_Builtin_stdatomic-CHT6DJ4LJ9231QYYD18WUH1Q7.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <TMP>/NegiPlayer-iOS-device/SDKExplicitPrecompiledModules/_Builtin_inttypes-7V8SNHKN3ZAJ242CUPB0V787.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <TMP>/NegiPlayer-iOS-device/SDKExplicitPrecompiledModules/Darwin-D5CER715VQUJO3YJCB87Y4BJ.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <TMP>/NegiPlayer-iOS-device/SDKExplicitPrecompiledModules/simd-4TYOX2GH2Z52GB6WUC7M3IHSG.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <TMP>/NegiPlayer-iOS-device/SDKExplicitPrecompiledModules/ObjectiveC-7FT35NPTHG26ZC4FNOEQV53KU.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <TMP>/NegiPlayer-iOS-device/SDKExplicitPrecompiledModules/MachO-8VJMGJMBED646TYN6FWNL9G48.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <TMP>/NegiPlayer-iOS-device/SDKExplicitPrecompiledModules/os_object-8M8ERL41X8ZA0NDDXCWODBLSM.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <TMP>/NegiPlayer-iOS-device/SDKExplicitPrecompiledModules/Spatial-9800MXCZQFECM6U45B9YL0ZAT.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <TMP>/NegiPlayer-iOS-device/SDKExplicitPrecompiledModules/os_workgroup-8EROBN4TGU6YPVHZ9VT8LD2P6.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <TMP>/NegiPlayer-iOS-device/SDKExplicitPrecompiledModules/Dispatch-7L7EUPDFSFF293HHJSCYU10P2.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <TMP>/NegiPlayer-iOS-device/SDKExplicitPrecompiledModules/XPC-DSR3W1DXQKKAGMWGIJU55YWHG.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <TMP>/NegiPlayer-iOS-device/SDKExplicitPrecompiledModules/CoreFoundation-5KGU4ZWT1BXPLISDNPHZQIQNP.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <TMP>/NegiPlayer-iOS-device/SDKExplicitPrecompiledModules/dnssd-A96CO482ED4P7FSKJ9S7K941L.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <TMP>/NegiPlayer-iOS-device/SDKExplicitPrecompiledModules/os-290I5ZT3PF7BLN9SRQDWZ3FNJ.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <TMP>/NegiPlayer-iOS-device/SDKExplicitPrecompiledModules/CFNetwork-EC3Q4T2LC6084WUQZKFHOQGAJ.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <TMP>/NegiPlayer-iOS-device/SDKExplicitPrecompiledModules/CoreAudioTypes-914E8V5Y51NRWCNJRTNUQ894H.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <TMP>/NegiPlayer-iOS-device/SDKExplicitPrecompiledModules/Security-295N07ZCM6LSYWV5FTJ6LS4L5.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <TMP>/NegiPlayer-iOS-device/SDKExplicitPrecompiledModules/CoreGraphics-4Q6FISQCNU9Z0FHLR7BYDF30S.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <TMP>/NegiPlayer-iOS-device/SDKExplicitPrecompiledModules/CoreAudio-5MQA8Z6S68IQ8O4675KZUJRI4.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <TMP>/NegiPlayer-iOS-device/SDKExplicitPrecompiledModules/Foundation-GU7ALIKJOTZEE4VW6QBJKFKP.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <TMP>/NegiPlayer-iOS-device/SDKExplicitPrecompiledModules/ImageIO-ET48JCXTD0G51H6PLGQKVUOJO.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <TMP>/NegiPlayer-iOS-device/SDKExplicitPrecompiledModules/CoreText-CC7Q3CUN28W6ACMG2O1DSZDE9.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <TMP>/NegiPlayer-iOS-device/SDKExplicitPrecompiledModules/CoreData-82880U10FVB16I70Y0OJEEYZX.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <TMP>/NegiPlayer-iOS-device/SDKExplicitPrecompiledModules/LocalAuthentication-7NNB7Y9WHXM9GJE1399A6JXAV.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <TMP>/NegiPlayer-iOS-device/SDKExplicitPrecompiledModules/UIUtilities-7PMVRIRXDPQDLD801UQ16T19Q.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <TMP>/NegiPlayer-iOS-device/SDKExplicitPrecompiledModules/DataDetection-RHFX5JRT86SP4SLGSTLSD622.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <TMP>/NegiPlayer-iOS-device/SDKExplicitPrecompiledModules/UniformTypeIdentifiers-3TYHINGU0JU2UXSLCMV6T35KN.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <TMP>/NegiPlayer-iOS-device/SDKExplicitPrecompiledModules/CoreTransferable-9SACTU4B79G0NJPNG3GMOBA64.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <TMP>/NegiPlayer-iOS-device/SDKExplicitPrecompiledModules/_LocationEssentials-6YY1MM1WNM6T9O0OT8GN2JZLQ.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <TMP>/NegiPlayer-iOS-device/SDKExplicitPrecompiledModules/IOSurface-21WCD2VI90RFFN8AT0M3V45IM.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <TMP>/NegiPlayer-iOS-device/SDKExplicitPrecompiledModules/UserNotifications-CWF47JMFS57D0ON2G8K7RYNPM.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <TMP>/NegiPlayer-iOS-device/SDKExplicitPrecompiledModules/Accessibility-64BMZG2UQODIWRTSCTS1SFEJ9.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <TMP>/NegiPlayer-iOS-device/SDKExplicitPrecompiledModules/Symbols-989CRB106EA8HDLBNXRZSZTI8.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <TMP>/NegiPlayer-iOS-device/SDKExplicitPrecompiledModules/FileProvider-CNLFP9FZOVIKLR4KI70KM6HMM.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <TMP>/NegiPlayer-iOS-device/SDKExplicitPrecompiledModules/Network-2I34FHF6XK4HLWP6JAG34RIZB.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <TMP>/NegiPlayer-iOS-device/SDKExplicitPrecompiledModules/CoreMIDI-ARC2C3WWUVN9HV7GZOGH5AKUS.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <TMP>/NegiPlayer-iOS-device/SDKExplicitPrecompiledModules/OSLog-E0X9WAPGIIQ5WWWDORQS9TETK.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <TMP>/NegiPlayer-iOS-device/SDKExplicitPrecompiledModules/CoreLocation-BZRE3UJNKOG4T2ARZCLDW5L5X.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <TMP>/NegiPlayer-iOS-device/SDKExplicitPrecompiledModules/Metal-ANXIRTOMSXIVY17M2TMR10PDN.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <TMP>/NegiPlayer-iOS-device/SDKExplicitPrecompiledModules/OpenGLES-4YT2ZBWLWN3PDL2SFPGJM5K6U.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <TMP>/NegiPlayer-iOS-device/SDKExplicitPrecompiledModules/AVRouting-5MRNTDMASICGIVLWJDEWO4Q0H.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <TMP>/NegiPlayer-iOS-device/SDKExplicitPrecompiledModules/AudioToolbox-FK4CYZXWRGNHN19V9SKAAHJA.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <TMP>/NegiPlayer-iOS-device/SDKExplicitPrecompiledModules/CoreMotion-5O21KNZER8X4PR3016JQLNV39.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <TMP>/NegiPlayer-iOS-device/SDKExplicitPrecompiledModules/CoreVideo-3AZNJVVX3R48YWBWUZ8BHGAH8.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <TMP>/NegiPlayer-iOS-device/SDKExplicitPrecompiledModules/QuartzCore-AI2N8FJ5W7QOJ82LWIM8P1LV7.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <TMP>/NegiPlayer-iOS-device/SDKExplicitPrecompiledModules/CoreImage-4Q8210PC5Y8BHRSO3CVLCLA5R.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <TMP>/NegiPlayer-iOS-device/SDKExplicitPrecompiledModules/CoreMedia-15S5FO22VIEF4758FMEV8MJG5.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <TMP>/NegiPlayer-iOS-device/SDKExplicitPrecompiledModules/SwiftUICore-32I3PZJ8YJB3TGHUHMM2GK641.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <TMP>/NegiPlayer-iOS-device/SDKExplicitPrecompiledModules/UIKit-DUIG74ISILWB7KK7QAN3F61P4.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <TMP>/NegiPlayer-iOS-device/SDKExplicitPrecompiledModules/VideoToolbox-3IY19VFW5NMAOLAVKAPJQUUBQ.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <TMP>/NegiPlayer-iOS-device/SDKExplicitPrecompiledModules/AVFAudio-PWOASEB1N2PFXQFFOT9B46V5.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <TMP>/NegiPlayer-iOS-device/SDKExplicitPrecompiledModules/MediaToolbox-5YE1XFMN708G8TWPKLNAW4WVN.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <TMP>/NegiPlayer-iOS-device/SDKExplicitPrecompiledModules/AVFoundation-AKP4Q5E304Y8SOB8OOCBBXC5U.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <TMP>/NegiPlayer-iOS-device/SDKExplicitPrecompiledModules/AVKit-C6KVIZAOOV9G4URGCUXC8W3CU.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <TMP>/NegiPlayer-iOS-device/SDKExplicitPrecompiledModules/SwiftUI-6V2ALP60TRGCTG95Z1FFQU97A.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 <TMP>/NegiPlayer-iOS-device/SDKExplicitPrecompiledModules/MediaPlayer-8G2MGAHB22QFDBCB0ESCW6LHE.pcm
 
 SwiftEmitModule normal arm64 Emitting\ module\ for\ NegiPlayer (in target 'NegiPlayeriOS' from project 'NegiPlayeriOS')
 
 SwiftCompile normal arm64 (in target 'NegiPlayeriOS' from project 'NegiPlayeriOS')
-    cd <project>/iOS
+    cd <PROJECT>/iOS
     
 
-SwiftDriverJobDiscovery normal arm64 Compiling MobileViews.swift (in target 'NegiPlayeriOS' from project 'NegiPlayeriOS')
+SwiftCompile normal arm64 Compiling\ PCM.swift <PROJECT>/Sources/LANCore/PCM.swift (in target 'NegiPlayeriOS' from project 'NegiPlayeriOS')
 
-SwiftDriver\ Compilation NegiPlayeriOS normal arm64 com.apple.xcode.tools.swift.compiler (in target 'NegiPlayeriOS' from project 'NegiPlayeriOS')
-    cd <project>/iOS
-    builtin-Swift-Compilation -- /Applications/Xcode-27.1-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc -module-name NegiPlayer -Onone @<build-cache> -DDEBUG -disable-sandbox -enable-bare-slash-regex -enable-experimental-feature DebugDescriptionMacro -sdk /Applications/Xcode-27.1-beta.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS27.1.sdk -target arm64-apple-ios17.0 -g -module-cache-path <build-cache> -Xfrontend -serialize-debugging-options -index-store-path <build-cache> -swift-version 5 -I <build-cache> -F <build-cache> -c -j16 -enable-batch-mode -incremental -Xcc -ivfsstatcache -Xcc <build-cache> -output-file-map <build-cache> -save-temps -no-color-diagnostics -explicit-module-build -module-cache-path <build-cache> -clang-scanner-module-cache-path <build-cache> -sdk-module-cache-path <build-cache> -emit-dependencies -emit-module -emit-module-path <build-cache> -serialize-diagnostics -dependency-scan-serialize-diagnostics-path <build-cache> -validate-clang-modules-once -clang-build-session-file <build-cache> -Xcc -fmodules-prune-interval\=86400 -Xcc -fmodules-prune-after\=345600 -emit-const-values -const-gather-protocols-list <build-cache> -Xcc -iquote -Xcc <build-cache> -Xcc -I<build-cache> -Xcc -I<build-cache> -Xcc -iquote -Xcc <build-cache> -Xcc -I<build-cache> -Xcc -I<build-cache> -Xcc -I<build-cache> -Xcc -I<build-cache> -emit-objc-header -emit-objc-header-path <build-cache> -working-directory <project>/iOS -experimental-emit-module-separately -disable-cmo
+SwiftCompile normal arm64 <PROJECT>/Sources/LANCore/PCM.swift (in target 'NegiPlayeriOS' from project 'NegiPlayeriOS')
+    cd <PROJECT>/iOS
+    builtin-SwiftPerFileCompile PCM.swift
+
+SwiftCompile normal arm64 Compiling\ MobileViews.swift <PROJECT>/iOS/NegiPlayeriOS/MobileViews.swift (in target 'NegiPlayeriOS' from project 'NegiPlayeriOS')
+
+SwiftCompile normal arm64 <PROJECT>/iOS/NegiPlayeriOS/MobileViews.swift (in target 'NegiPlayeriOS' from project 'NegiPlayeriOS')
+    cd <PROJECT>/iOS
+    builtin-SwiftPerFileCompile MobileViews.swift
+
+SwiftCompile normal arm64 Compiling\ DeviceState.swift <PROJECT>/Sources/LANCore/DeviceState.swift (in target 'NegiPlayeriOS' from project 'NegiPlayeriOS')
+
+SwiftCompile normal arm64 <PROJECT>/Sources/LANCore/DeviceState.swift (in target 'NegiPlayeriOS' from project 'NegiPlayeriOS')
+    cd <PROJECT>/iOS
+    builtin-SwiftPerFileCompile DeviceState.swift
+
+SwiftCompile normal arm64 Compiling\ Discovery.swift <PROJECT>/iOS/NegiPlayeriOS/Discovery.swift (in target 'NegiPlayeriOS' from project 'NegiPlayeriOS')
+
+SwiftCompile normal arm64 <PROJECT>/iOS/NegiPlayeriOS/Discovery.swift (in target 'NegiPlayeriOS' from project 'NegiPlayeriOS')
+    cd <PROJECT>/iOS
+    builtin-SwiftPerFileCompile Discovery.swift
+
+SwiftCompile normal arm64 Compiling\ MobileModel.swift <PROJECT>/iOS/NegiPlayeriOS/MobileModel.swift (in target 'NegiPlayeriOS' from project 'NegiPlayeriOS')
+
+SwiftCompile normal arm64 <PROJECT>/iOS/NegiPlayeriOS/MobileModel.swift (in target 'NegiPlayeriOS' from project 'NegiPlayeriOS')
+    cd <PROJECT>/iOS
+    builtin-SwiftPerFileCompile MobileModel.swift
+
+SwiftCompile normal arm64 Compiling\ App.swift <PROJECT>/iOS/NegiPlayeriOS/App.swift (in target 'NegiPlayeriOS' from project 'NegiPlayeriOS')
+
+SwiftCompile normal arm64 <PROJECT>/iOS/NegiPlayeriOS/App.swift (in target 'NegiPlayeriOS' from project 'NegiPlayeriOS')
+    cd <PROJECT>/iOS
+    builtin-SwiftPerFileCompile App.swift
+
+SwiftCompile normal arm64 Compiling\ ListeningSettings.swift <PROJECT>/Sources/AudioCore/ListeningSettings.swift (in target 'NegiPlayeriOS' from project 'NegiPlayeriOS')
+
+SwiftCompile normal arm64 <PROJECT>/Sources/AudioCore/ListeningSettings.swift (in target 'NegiPlayeriOS' from project 'NegiPlayeriOS')
+    cd <PROJECT>/iOS
+    builtin-SwiftPerFileCompile ListeningSettings.swift
+
+SwiftCompile normal arm64 Compiling\ PCMLevelControl.swift <PROJECT>/Sources/AudioCore/PCMLevelControl.swift (in target 'NegiPlayeriOS' from project 'NegiPlayeriOS')
+
+SwiftCompile normal arm64 <PROJECT>/Sources/AudioCore/PCMLevelControl.swift (in target 'NegiPlayeriOS' from project 'NegiPlayeriOS')
+    cd <PROJECT>/iOS
+    builtin-SwiftPerFileCompile PCMLevelControl.swift
+
+SwiftCompile normal arm64 Compiling\ Client.swift <PROJECT>/Sources/LANCore/Client.swift (in target 'NegiPlayeriOS' from project 'NegiPlayeriOS')
+
+SwiftCompile normal arm64 <PROJECT>/Sources/LANCore/Client.swift (in target 'NegiPlayeriOS' from project 'NegiPlayeriOS')
+    cd <PROJECT>/iOS
+    builtin-SwiftPerFileCompile Client.swift
+
+SwiftCompile normal arm64 Compiling\ GeneratedAssetSymbols.swift <TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/NegiPlayeriOS.build/Debug-iphoneos/NegiPlayeriOS.build/DerivedSources/GeneratedAssetSymbols.swift (in target 'NegiPlayeriOS' from project 'NegiPlayeriOS')
+
+SwiftCompile normal arm64 <TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/NegiPlayeriOS.build/Debug-iphoneos/NegiPlayeriOS.build/DerivedSources/GeneratedAssetSymbols.swift (in target 'NegiPlayeriOS' from project 'NegiPlayeriOS')
+    cd <PROJECT>/iOS
+    builtin-SwiftPerFileCompile GeneratedAssetSymbols.swift
+
+SwiftCompile normal arm64 Compiling\ HTTP.swift <PROJECT>/Sources/LANCore/HTTP.swift (in target 'NegiPlayeriOS' from project 'NegiPlayeriOS')
+
+SwiftCompile normal arm64 <PROJECT>/Sources/LANCore/HTTP.swift (in target 'NegiPlayeriOS' from project 'NegiPlayeriOS')
+    cd <PROJECT>/iOS
+    builtin-SwiftPerFileCompile HTTP.swift
+
+SwiftCompile normal arm64 Compiling\ Protocol.swift <PROJECT>/Sources/LANCore/Protocol.swift (in target 'NegiPlayeriOS' from project 'NegiPlayeriOS')
+
+SwiftCompile normal arm64 <PROJECT>/Sources/LANCore/Protocol.swift (in target 'NegiPlayeriOS' from project 'NegiPlayeriOS')
+    cd <PROJECT>/iOS
+    builtin-SwiftPerFileCompile Protocol.swift
+
+SwiftCompile normal arm64 Compiling\ MobilePlayer.swift <PROJECT>/iOS/NegiPlayeriOS/MobilePlayer.swift (in target 'NegiPlayeriOS' from project 'NegiPlayeriOS')
+<PROJECT>/iOS/NegiPlayeriOS/MobilePlayer.swift:116:96: warning: 'weak' ownership of capture 'self' differs from implicitly-captured strong reference in outer scope [#ImplicitStrongCapture]
+ 92 |         guard let info, let client, let trackID=track?.id else { return }
+ 93 |         startFrame=min(info.frames-1,max(0,Int64(max(0,seconds)*info.sampleRate))); scheduledEnd=startFrame; position=Double(startFrame)/info.sampleRate; buffering=true
+ 94 |         streamTask=Task {
+    |                         |- note: 'self' implicitly strongly captured here
+    |                         `- note: add 'self' as a capture list item to silence
+ 95 |             var next=startFrame
+ 96 |             do {
+    :
+114 |                     if node.isPlaying, let clock=clockFrame(), clock>=scheduledEnd, scheduledEnd>startFrame { node.stop(); startFrame=next }
+115 |                     next+=frames; scheduledEnd=next; let last=next==info.frames
+116 |                     node.scheduleBuffer(buffer,completionCallbackType:.dataPlayedBack) { [weak self] _ in
+    |                                                                                                |- warning: 'weak' ownership of capture 'self' differs from implicitly-captured strong reference in outer scope [#ImplicitStrongCapture]
+    |                                                                                                `- note: explicitly assign the capture list item to silence
+117 |                         if last { Task { @MainActor in guard let self, self.generation==id else { return }; self.position=self.duration; self.playing=false; self.buffering=false; self.updateNowPlaying(); self.onProgress?(self.position,false); self.onEnded?() } }
+118 |                     }
+
+[#ImplicitStrongCapture]: <https://docs.swift.org/compiler/documentation/diagnostics/implicit-strong-capture>
+
+SwiftCompile normal arm64 <PROJECT>/iOS/NegiPlayeriOS/MobilePlayer.swift (in target 'NegiPlayeriOS' from project 'NegiPlayeriOS')
+    cd <PROJECT>/iOS
+    builtin-SwiftPerFileCompile MobilePlayer.swift
+
+SwiftCompile normal arm64 Compiling\ VideoLoader.swift <PROJECT>/iOS/NegiPlayeriOS/VideoLoader.swift (in target 'NegiPlayeriOS' from project 'NegiPlayeriOS')
+
+SwiftCompile normal arm64 <PROJECT>/iOS/NegiPlayeriOS/VideoLoader.swift (in target 'NegiPlayeriOS' from project 'NegiPlayeriOS')
+    cd <PROJECT>/iOS
+    builtin-SwiftPerFileCompile VideoLoader.swift
+
+SwiftCompile normal arm64 Compiling\ SharedAppearance.swift <PROJECT>/Sources/NegiPlayer/SharedAppearance.swift (in target 'NegiPlayeriOS' from project 'NegiPlayeriOS')
+
+SwiftCompile normal arm64 <PROJECT>/Sources/NegiPlayer/SharedAppearance.swift (in target 'NegiPlayeriOS' from project 'NegiPlayeriOS')
+    cd <PROJECT>/iOS
+    builtin-SwiftPerFileCompile SharedAppearance.swift
+
+SwiftCompile normal arm64 Compiling\ ConnectionStore.swift <PROJECT>/iOS/NegiPlayeriOS/ConnectionStore.swift (in target 'NegiPlayeriOS' from project 'NegiPlayeriOS')
+
+SwiftCompile normal arm64 <PROJECT>/iOS/NegiPlayeriOS/ConnectionStore.swift (in target 'NegiPlayeriOS' from project 'NegiPlayeriOS')
+    cd <PROJECT>/iOS
+    builtin-SwiftPerFileCompile ConnectionStore.swift
 
 SwiftDriverJobDiscovery normal arm64 Emitting module for NegiPlayer (in target 'NegiPlayeriOS' from project 'NegiPlayeriOS')
 
 SwiftDriver\ Compilation\ Requirements NegiPlayeriOS normal arm64 com.apple.xcode.tools.swift.compiler (in target 'NegiPlayeriOS' from project 'NegiPlayeriOS')
-    cd <project>/iOS
-    builtin-Swift-Compilation-Requirements -- /Applications/Xcode-27.1-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc -module-name NegiPlayer -Onone @<build-cache> -DDEBUG -disable-sandbox -enable-bare-slash-regex -enable-experimental-feature DebugDescriptionMacro -sdk /Applications/Xcode-27.1-beta.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS27.1.sdk -target arm64-apple-ios17.0 -g -module-cache-path <build-cache> -Xfrontend -serialize-debugging-options -index-store-path <build-cache> -swift-version 5 -I <build-cache> -F <build-cache> -c -j16 -enable-batch-mode -incremental -Xcc -ivfsstatcache -Xcc <build-cache> -output-file-map <build-cache> -save-temps -no-color-diagnostics -explicit-module-build -module-cache-path <build-cache> -clang-scanner-module-cache-path <build-cache> -sdk-module-cache-path <build-cache> -emit-dependencies -emit-module -emit-module-path <build-cache> -serialize-diagnostics -dependency-scan-serialize-diagnostics-path <build-cache> -validate-clang-modules-once -clang-build-session-file <build-cache> -Xcc -fmodules-prune-interval\=86400 -Xcc -fmodules-prune-after\=345600 -emit-const-values -const-gather-protocols-list <build-cache> -Xcc -iquote -Xcc <build-cache> -Xcc -I<build-cache> -Xcc -I<build-cache> -Xcc -iquote -Xcc <build-cache> -Xcc -I<build-cache> -Xcc -I<build-cache> -Xcc -I<build-cache> -Xcc -I<build-cache> -emit-objc-header -emit-objc-header-path <build-cache> -working-directory <project>/iOS -experimental-emit-module-separately -disable-cmo
+    cd <PROJECT>/iOS
+    builtin-Swift-Compilation-Requirements -- /Applications/Xcode-27.1-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc -module-name NegiPlayer -Onone @<TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/NegiPlayeriOS.build/Debug-iphoneos/NegiPlayeriOS.build/Objects-normal/arm64/NegiPlayer.SwiftFileList -DDEBUG -disable-sandbox -enable-bare-slash-regex -enable-experimental-feature DebugDescriptionMacro -sdk /Applications/Xcode-27.1-beta.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS27.1.sdk -target arm64-apple-ios17.0 -g -module-cache-path <TMP>/NegiPlayer-iOS-device/ModuleCache.noindex -Xfrontend -serialize-debugging-options -index-store-path <TMP>/NegiPlayer-iOS-device/Index.noindex/DataStore -swift-version 5 -I <TMP>/NegiPlayer-iOS-device/Build/Products/Debug-iphoneos -F <TMP>/NegiPlayer-iOS-device/Build/Products/Debug-iphoneos -c -j16 -enable-batch-mode -incremental -Xcc -ivfsstatcache -Xcc <TMP>/NegiPlayer-iOS-device/SDKStatCaches.noindex/iphoneos27.1-24A94403-29888104f5519c7ccaec30f664100971.sdkstatcache -output-file-map <TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/NegiPlayeriOS.build/Debug-iphoneos/NegiPlayeriOS.build/Objects-normal/arm64/NegiPlayeriOS-OutputFileMap.json -save-temps -no-color-diagnostics -explicit-module-build -module-cache-path <TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules -clang-scanner-module-cache-path <TMP>/NegiPlayer-iOS-device/ModuleCache.noindex -sdk-module-cache-path <TMP>/NegiPlayer-iOS-device/SDKExplicitPrecompiledModules -emit-dependencies -emit-module -emit-module-path <TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/NegiPlayeriOS.build/Debug-iphoneos/NegiPlayeriOS.build/Objects-normal/arm64/NegiPlayer.swiftmodule -serialize-diagnostics -dependency-scan-serialize-diagnostics-path <TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/NegiPlayeriOS.build/Debug-iphoneos/NegiPlayeriOS.build/Objects-normal/arm64/NegiPlayer-dependency-scan.dia -validate-clang-modules-once -clang-build-session-file <TMP>/NegiPlayer-iOS-device/ModuleCache.noindex/Session.modulevalidation -Xcc -fmodules-prune-interval\=86400 -Xcc -fmodules-prune-after\=345600 -emit-const-values -const-gather-protocols-list <TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/NegiPlayeriOS.build/Debug-iphoneos/NegiPlayeriOS.build/Objects-normal/arm64/NegiPlayeriOS_const_extract_protocols.json -Xcc -iquote -Xcc <TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/NegiPlayeriOS.build/Debug-iphoneos/NegiPlayeriOS.build/NegiPlayer-generated-files.hmap -Xcc -I<TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/NegiPlayeriOS.build/Debug-iphoneos/NegiPlayeriOS.build/NegiPlayer-own-target-headers.hmap -Xcc -I<TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/NegiPlayeriOS.build/Debug-iphoneos/NegiPlayeriOS.build/NegiPlayer-all-target-headers.hmap -Xcc -iquote -Xcc <TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/NegiPlayeriOS.build/Debug-iphoneos/NegiPlayeriOS.build/NegiPlayer-project-headers.hmap -Xcc -I<TMP>/NegiPlayer-iOS-device/Build/Products/Debug-iphoneos/include -Xcc -I<TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/NegiPlayeriOS.build/Debug-iphoneos/NegiPlayeriOS.build/DerivedSources-normal/arm64 -Xcc -I<TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/NegiPlayeriOS.build/Debug-iphoneos/NegiPlayeriOS.build/DerivedSources/arm64 -Xcc -I<TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/NegiPlayeriOS.build/Debug-iphoneos/NegiPlayeriOS.build/DerivedSources -emit-objc-header -emit-objc-header-path <TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/NegiPlayeriOS.build/Debug-iphoneos/NegiPlayeriOS.build/Objects-normal/arm64/NegiPlayer-Swift.h -working-directory <PROJECT>/iOS -experimental-emit-module-separately -disable-cmo
 
-Copy <build-cache> <build-cache> (in target 'NegiPlayeriOS' from project 'NegiPlayeriOS')
-    cd <project>/iOS
-    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -strip-unsigned-binaries -strip-deterministic -strip-tool /Applications/Xcode-27.1-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/strip -resolve-src-symlinks -rename <build-cache> <build-cache>
+SwiftDriverJobDiscovery normal arm64 Compiling PCM.swift (in target 'NegiPlayeriOS' from project 'NegiPlayeriOS')
 
-Copy <build-cache> <build-cache> (in target 'NegiPlayeriOS' from project 'NegiPlayeriOS')
-    cd <project>/iOS
-    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -strip-unsigned-binaries -strip-deterministic -strip-tool /Applications/Xcode-27.1-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/strip -resolve-src-symlinks -rename <build-cache> <build-cache>
+SwiftDriverJobDiscovery normal arm64 Compiling DeviceState.swift (in target 'NegiPlayeriOS' from project 'NegiPlayeriOS')
 
-Ld <build-cache> normal (in target 'NegiPlayeriOS' from project 'NegiPlayeriOS')
-    cd <project>/iOS
-    /Applications/Xcode-27.1-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -Xlinker -reproducible -target arm64-apple-ios17.0 -dynamiclib -isysroot /Applications/Xcode-27.1-beta.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS27.1.sdk -Os -Xlinker -no_warn_duplicate_libraries -L<build-cache> -L<build-cache> -F<build-cache> -F<build-cache> -filelist <build-cache> -install_name @rpath/NegiPlayer.debug.dylib -Xlinker -rpath -Xlinker /usr/lib/swift -Xlinker -dead_strip -Xlinker -object_path_lto -Xlinker <build-cache> -rdynamic -Xlinker -dependency_info -Xlinker <build-cache> -fobjc-link-runtime -L/Applications/Xcode-27.1-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos -L/usr/lib/swift -Xlinker -add_ast_path -Xlinker <build-cache> -Xlinker -alias -Xlinker _main -Xlinker ___debug_main_executable_dylib_entry_point -o <build-cache>
+SwiftDriverJobDiscovery normal arm64 Compiling GeneratedAssetSymbols.swift (in target 'NegiPlayeriOS' from project 'NegiPlayeriOS')
 
-ConstructStubExecutorLinkFileList <build-cache> (in target 'NegiPlayeriOS' from project 'NegiPlayeriOS')
-    cd <project>/iOS
-    construct-stub-executor-link-file-list <build-cache> /Applications/Xcode-27.1-beta.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/lib/libPreviewsJITStubExecutor_no_swift_entry_point.a /Applications/Xcode-27.1-beta.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/lib/libPreviewsJITStubExecutor.a --output <build-cache>
+SwiftDriverJobDiscovery normal arm64 Compiling Discovery.swift (in target 'NegiPlayeriOS' from project 'NegiPlayeriOS')
+
+SwiftDriverJobDiscovery normal arm64 Compiling Client.swift (in target 'NegiPlayeriOS' from project 'NegiPlayeriOS')
+
+SwiftDriverJobDiscovery normal arm64 Compiling HTTP.swift (in target 'NegiPlayeriOS' from project 'NegiPlayeriOS')
+
+SwiftMergeGeneratedHeaders <TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/NegiPlayeriOS.build/Debug-iphoneos/NegiPlayeriOS.build/DerivedSources/NegiPlayer-Swift.h <TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/NegiPlayeriOS.build/Debug-iphoneos/NegiPlayeriOS.build/Objects-normal/arm64/NegiPlayer-Swift.h (in target 'NegiPlayeriOS' from project 'NegiPlayeriOS')
+    cd <PROJECT>/iOS
+    builtin-swiftHeaderTool -arch arm64 <TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/NegiPlayeriOS.build/Debug-iphoneos/NegiPlayeriOS.build/Objects-normal/arm64/NegiPlayer-Swift.h -o <TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/NegiPlayeriOS.build/Debug-iphoneos/NegiPlayeriOS.build/DerivedSources/NegiPlayer-Swift.h
+
+Copy <TMP>/NegiPlayer-iOS-device/Build/Products/Debug-iphoneos/NegiPlayer.swiftmodule/arm64-apple-ios.swiftdoc <TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/NegiPlayeriOS.build/Debug-iphoneos/NegiPlayeriOS.build/Objects-normal/arm64/NegiPlayer.swiftdoc (in target 'NegiPlayeriOS' from project 'NegiPlayeriOS')
+    cd <PROJECT>/iOS
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -strip-unsigned-binaries -strip-deterministic -strip-tool /Applications/Xcode-27.1-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/strip -resolve-src-symlinks -rename <TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/NegiPlayeriOS.build/Debug-iphoneos/NegiPlayeriOS.build/Objects-normal/arm64/NegiPlayer.swiftdoc <TMP>/NegiPlayer-iOS-device/Build/Products/Debug-iphoneos/NegiPlayer.swiftmodule/arm64-apple-ios.swiftdoc
+
+Copy <TMP>/NegiPlayer-iOS-device/Build/Products/Debug-iphoneos/NegiPlayer.swiftmodule/arm64-apple-ios.abi.json <TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/NegiPlayeriOS.build/Debug-iphoneos/NegiPlayeriOS.build/Objects-normal/arm64/NegiPlayer.abi.json (in target 'NegiPlayeriOS' from project 'NegiPlayeriOS')
+    cd <PROJECT>/iOS
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -strip-unsigned-binaries -strip-deterministic -strip-tool /Applications/Xcode-27.1-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/strip -resolve-src-symlinks -rename <TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/NegiPlayeriOS.build/Debug-iphoneos/NegiPlayeriOS.build/Objects-normal/arm64/NegiPlayer.abi.json <TMP>/NegiPlayer-iOS-device/Build/Products/Debug-iphoneos/NegiPlayer.swiftmodule/arm64-apple-ios.abi.json
+
+Copy <TMP>/NegiPlayer-iOS-device/Build/Products/Debug-iphoneos/NegiPlayer.swiftmodule/arm64-apple-ios.swiftmodule <TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/NegiPlayeriOS.build/Debug-iphoneos/NegiPlayeriOS.build/Objects-normal/arm64/NegiPlayer.swiftmodule (in target 'NegiPlayeriOS' from project 'NegiPlayeriOS')
+    cd <PROJECT>/iOS
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -strip-unsigned-binaries -strip-deterministic -strip-tool /Applications/Xcode-27.1-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/strip -resolve-src-symlinks -rename <TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/NegiPlayeriOS.build/Debug-iphoneos/NegiPlayeriOS.build/Objects-normal/arm64/NegiPlayer.swiftmodule <TMP>/NegiPlayer-iOS-device/Build/Products/Debug-iphoneos/NegiPlayer.swiftmodule/arm64-apple-ios.swiftmodule
+
+Copy <TMP>/NegiPlayer-iOS-device/Build/Products/Debug-iphoneos/NegiPlayer.swiftmodule/Project/arm64-apple-ios.swiftsourceinfo <TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/NegiPlayeriOS.build/Debug-iphoneos/NegiPlayeriOS.build/Objects-normal/arm64/NegiPlayer.swiftsourceinfo (in target 'NegiPlayeriOS' from project 'NegiPlayeriOS')
+    cd <PROJECT>/iOS
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -strip-unsigned-binaries -strip-deterministic -strip-tool /Applications/Xcode-27.1-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/strip -resolve-src-symlinks -rename <TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/NegiPlayeriOS.build/Debug-iphoneos/NegiPlayeriOS.build/Objects-normal/arm64/NegiPlayer.swiftsourceinfo <TMP>/NegiPlayer-iOS-device/Build/Products/Debug-iphoneos/NegiPlayer.swiftmodule/Project/arm64-apple-ios.swiftsourceinfo
+
+SwiftDriverJobDiscovery normal arm64 Compiling ListeningSettings.swift (in target 'NegiPlayeriOS' from project 'NegiPlayeriOS')
+
+SwiftDriverJobDiscovery normal arm64 Compiling ConnectionStore.swift (in target 'NegiPlayeriOS' from project 'NegiPlayeriOS')
+
+SwiftDriverJobDiscovery normal arm64 Compiling Protocol.swift (in target 'NegiPlayeriOS' from project 'NegiPlayeriOS')
+
+SwiftDriverJobDiscovery normal arm64 Compiling PCMLevelControl.swift (in target 'NegiPlayeriOS' from project 'NegiPlayeriOS')
+
+SwiftDriverJobDiscovery normal arm64 Compiling App.swift (in target 'NegiPlayeriOS' from project 'NegiPlayeriOS')
+
+SwiftDriverJobDiscovery normal arm64 Compiling SharedAppearance.swift (in target 'NegiPlayeriOS' from project 'NegiPlayeriOS')
+
+SwiftDriverJobDiscovery normal arm64 Compiling VideoLoader.swift (in target 'NegiPlayeriOS' from project 'NegiPlayeriOS')
+
+SwiftDriverJobDiscovery normal arm64 Compiling MobileModel.swift (in target 'NegiPlayeriOS' from project 'NegiPlayeriOS')
+
+SwiftDriverJobDiscovery normal arm64 Compiling MobilePlayer.swift (in target 'NegiPlayeriOS' from project 'NegiPlayeriOS')
+
+SwiftDriverJobDiscovery normal arm64 Compiling MobileViews.swift (in target 'NegiPlayeriOS' from project 'NegiPlayeriOS')
+
+SwiftDriver\ Compilation NegiPlayeriOS normal arm64 com.apple.xcode.tools.swift.compiler (in target 'NegiPlayeriOS' from project 'NegiPlayeriOS')
+    cd <PROJECT>/iOS
+    builtin-Swift-Compilation -- /Applications/Xcode-27.1-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc -module-name NegiPlayer -Onone @<TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/NegiPlayeriOS.build/Debug-iphoneos/NegiPlayeriOS.build/Objects-normal/arm64/NegiPlayer.SwiftFileList -DDEBUG -disable-sandbox -enable-bare-slash-regex -enable-experimental-feature DebugDescriptionMacro -sdk /Applications/Xcode-27.1-beta.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS27.1.sdk -target arm64-apple-ios17.0 -g -module-cache-path <TMP>/NegiPlayer-iOS-device/ModuleCache.noindex -Xfrontend -serialize-debugging-options -index-store-path <TMP>/NegiPlayer-iOS-device/Index.noindex/DataStore -swift-version 5 -I <TMP>/NegiPlayer-iOS-device/Build/Products/Debug-iphoneos -F <TMP>/NegiPlayer-iOS-device/Build/Products/Debug-iphoneos -c -j16 -enable-batch-mode -incremental -Xcc -ivfsstatcache -Xcc <TMP>/NegiPlayer-iOS-device/SDKStatCaches.noindex/iphoneos27.1-24A94403-29888104f5519c7ccaec30f664100971.sdkstatcache -output-file-map <TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/NegiPlayeriOS.build/Debug-iphoneos/NegiPlayeriOS.build/Objects-normal/arm64/NegiPlayeriOS-OutputFileMap.json -save-temps -no-color-diagnostics -explicit-module-build -module-cache-path <TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules -clang-scanner-module-cache-path <TMP>/NegiPlayer-iOS-device/ModuleCache.noindex -sdk-module-cache-path <TMP>/NegiPlayer-iOS-device/SDKExplicitPrecompiledModules -emit-dependencies -emit-module -emit-module-path <TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/NegiPlayeriOS.build/Debug-iphoneos/NegiPlayeriOS.build/Objects-normal/arm64/NegiPlayer.swiftmodule -serialize-diagnostics -dependency-scan-serialize-diagnostics-path <TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/NegiPlayeriOS.build/Debug-iphoneos/NegiPlayeriOS.build/Objects-normal/arm64/NegiPlayer-dependency-scan.dia -validate-clang-modules-once -clang-build-session-file <TMP>/NegiPlayer-iOS-device/ModuleCache.noindex/Session.modulevalidation -Xcc -fmodules-prune-interval\=86400 -Xcc -fmodules-prune-after\=345600 -emit-const-values -const-gather-protocols-list <TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/NegiPlayeriOS.build/Debug-iphoneos/NegiPlayeriOS.build/Objects-normal/arm64/NegiPlayeriOS_const_extract_protocols.json -Xcc -iquote -Xcc <TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/NegiPlayeriOS.build/Debug-iphoneos/NegiPlayeriOS.build/NegiPlayer-generated-files.hmap -Xcc -I<TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/NegiPlayeriOS.build/Debug-iphoneos/NegiPlayeriOS.build/NegiPlayer-own-target-headers.hmap -Xcc -I<TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/NegiPlayeriOS.build/Debug-iphoneos/NegiPlayeriOS.build/NegiPlayer-all-target-headers.hmap -Xcc -iquote -Xcc <TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/NegiPlayeriOS.build/Debug-iphoneos/NegiPlayeriOS.build/NegiPlayer-project-headers.hmap -Xcc -I<TMP>/NegiPlayer-iOS-device/Build/Products/Debug-iphoneos/include -Xcc -I<TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/NegiPlayeriOS.build/Debug-iphoneos/NegiPlayeriOS.build/DerivedSources-normal/arm64 -Xcc -I<TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/NegiPlayeriOS.build/Debug-iphoneos/NegiPlayeriOS.build/DerivedSources/arm64 -Xcc -I<TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/NegiPlayeriOS.build/Debug-iphoneos/NegiPlayeriOS.build/DerivedSources -emit-objc-header -emit-objc-header-path <TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/NegiPlayeriOS.build/Debug-iphoneos/NegiPlayeriOS.build/Objects-normal/arm64/NegiPlayer-Swift.h -working-directory <PROJECT>/iOS -experimental-emit-module-separately -disable-cmo
+
+Ld <TMP>/NegiPlayer-iOS-device/Build/Products/Debug-iphoneos/NegiPlayer.app/NegiPlayer.debug.dylib normal (in target 'NegiPlayeriOS' from project 'NegiPlayeriOS')
+    cd <PROJECT>/iOS
+    /Applications/Xcode-27.1-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -Xlinker -reproducible -target arm64-apple-ios17.0 -dynamiclib -isysroot /Applications/Xcode-27.1-beta.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS27.1.sdk -Os -Xlinker -no_warn_duplicate_libraries -L<TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/EagerLinkingTBDs/Debug-iphoneos -L<TMP>/NegiPlayer-iOS-device/Build/Products/Debug-iphoneos -F<TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/EagerLinkingTBDs/Debug-iphoneos -F<TMP>/NegiPlayer-iOS-device/Build/Products/Debug-iphoneos -filelist <TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/NegiPlayeriOS.build/Debug-iphoneos/NegiPlayeriOS.build/Objects-normal/arm64/NegiPlayer.LinkFileList -install_name @rpath/NegiPlayer.debug.dylib -Xlinker -rpath -Xlinker /usr/lib/swift -Xlinker -dead_strip -Xlinker -object_path_lto -Xlinker <TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/NegiPlayeriOS.build/Debug-iphoneos/NegiPlayeriOS.build/Objects-normal/arm64/NegiPlayer_lto.o -rdynamic -Xlinker -dependency_info -Xlinker <TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/NegiPlayeriOS.build/Debug-iphoneos/NegiPlayeriOS.build/Objects-normal/arm64/NegiPlayer_dependency_info.dat -fobjc-link-runtime -L/Applications/Xcode-27.1-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos -L/usr/lib/swift -Xlinker -add_ast_path -Xlinker <TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/NegiPlayeriOS.build/Debug-iphoneos/NegiPlayeriOS.build/Objects-normal/arm64/NegiPlayer.swiftmodule -Xlinker -alias -Xlinker _main -Xlinker ___debug_main_executable_dylib_entry_point -o <TMP>/NegiPlayer-iOS-device/Build/Products/Debug-iphoneos/NegiPlayer.app/NegiPlayer.debug.dylib
+
+ConstructStubExecutorLinkFileList <TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/NegiPlayeriOS.build/Debug-iphoneos/NegiPlayeriOS.build/NegiPlayer-ExecutorLinkFileList-normal-arm64.txt (in target 'NegiPlayeriOS' from project 'NegiPlayeriOS')
+    cd <PROJECT>/iOS
+    construct-stub-executor-link-file-list <TMP>/NegiPlayer-iOS-device/Build/Products/Debug-iphoneos/NegiPlayer.app/NegiPlayer.debug.dylib /Applications/Xcode-27.1-beta.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/lib/libPreviewsJITStubExecutor_no_swift_entry_point.a /Applications/Xcode-27.1-beta.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/lib/libPreviewsJITStubExecutor.a --output <TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/NegiPlayeriOS.build/Debug-iphoneos/NegiPlayeriOS.build/NegiPlayer-ExecutorLinkFileList-normal-arm64.txt
 note: Using stub executor library with Swift entry point. (in target 'NegiPlayeriOS' from project 'NegiPlayeriOS')
 
-Ld <build-cache> normal (in target 'NegiPlayeriOS' from project 'NegiPlayeriOS')
-    cd <project>/iOS
-    /Applications/Xcode-27.1-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -Xlinker -reproducible -target arm64-apple-ios17.0 -isysroot /Applications/Xcode-27.1-beta.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS27.1.sdk -Os -Xlinker -no_warn_duplicate_libraries -L<build-cache> -F<build-cache> -Xlinker -rpath -Xlinker @executable_path -rdynamic -e ___debug_blank_executor_main -Xlinker -sectcreate -Xlinker __TEXT -Xlinker __debug_dylib -Xlinker <build-cache> -Xlinker -sectcreate -Xlinker __TEXT -Xlinker __debug_instlnm -Xlinker <build-cache> -Xlinker -filelist -Xlinker <build-cache> <build-cache> -o <build-cache>
+Ld <TMP>/NegiPlayer-iOS-device/Build/Products/Debug-iphoneos/NegiPlayer.app/NegiPlayer normal (in target 'NegiPlayeriOS' from project 'NegiPlayeriOS')
+    cd <PROJECT>/iOS
+    /Applications/Xcode-27.1-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -Xlinker -reproducible -target arm64-apple-ios17.0 -isysroot /Applications/Xcode-27.1-beta.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS27.1.sdk -Os -Xlinker -no_warn_duplicate_libraries -L<TMP>/NegiPlayer-iOS-device/Build/Products/Debug-iphoneos -F<TMP>/NegiPlayer-iOS-device/Build/Products/Debug-iphoneos -Xlinker -rpath -Xlinker @executable_path -rdynamic -e ___debug_blank_executor_main -Xlinker -sectcreate -Xlinker __TEXT -Xlinker __debug_dylib -Xlinker <TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/NegiPlayeriOS.build/Debug-iphoneos/NegiPlayeriOS.build/NegiPlayer-DebugDylibPath-normal-arm64.txt -Xlinker -sectcreate -Xlinker __TEXT -Xlinker __debug_instlnm -Xlinker <TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/NegiPlayeriOS.build/Debug-iphoneos/NegiPlayeriOS.build/NegiPlayer-DebugDylibInstallName-normal-arm64.txt -Xlinker -filelist -Xlinker <TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/NegiPlayeriOS.build/Debug-iphoneos/NegiPlayeriOS.build/NegiPlayer-ExecutorLinkFileList-normal-arm64.txt <TMP>/NegiPlayer-iOS-device/Build/Products/Debug-iphoneos/NegiPlayer.app/NegiPlayer.debug.dylib -o <TMP>/NegiPlayer-iOS-device/Build/Products/Debug-iphoneos/NegiPlayer.app/NegiPlayer
 
-ExtractAppIntentsMetadata (in target 'NegiPlayeriOS' from project 'NegiPlayeriOS')
-    cd <project>/iOS
-    /Applications/Xcode-27.1-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/appintentsmetadataprocessor --toolchain-dir /Applications/Xcode-27.1-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain --module-name NegiPlayer --sdk-root /Applications/Xcode-27.1-beta.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS27.1.sdk --xcode-version 27A9269 --platform-family iOS --deployment-target 17.0 --bundle-identifier com.negiplayer.ios --output <build-cache> --target-triple arm64-apple-ios17.0 --binary-file <build-cache> --dependency-file <build-cache> --stringsdata-file <build-cache> --source-file-list <build-cache> --metadata-file-list <build-cache> --static-metadata-file-list <build-cache> --swift-const-vals-list <build-cache> --compile-time-extraction --deployment-aware-processing --no-app-shortcuts-localization
-2026-10-11 22:50:43.433 appintentsmetadataprocessor[79523:12252490] Starting appintentsmetadataprocessor export
-2026-10-11 22:50:43.435 appintentsmetadataprocessor[79523:12252490] warning: Metadata extraction skipped, no AppIntents.framework dependency found
-
-CopySwiftLibs <build-cache> (in target 'NegiPlayeriOS' from project 'NegiPlayeriOS')
-    cd <project>/iOS
-    builtin-swiftStdLibTool --copy --verbose --scan-executable <build-cache> --scan-folder <build-cache> --scan-folder <build-cache> --scan-folder <build-cache> --scan-folder <build-cache> --platform iphoneos --toolchain /Applications/Xcode-27.1-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain --destination <build-cache> --strip-bitcode --strip-bitcode-tool /Applications/Xcode-27.1-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/bitcode_strip --emit-dependency-info <build-cache> --filter-for-swift-os --back-deploy-swift-span
+CopySwiftLibs <TMP>/NegiPlayer-iOS-device/Build/Products/Debug-iphoneos/NegiPlayer.app (in target 'NegiPlayeriOS' from project 'NegiPlayeriOS')
+    cd <PROJECT>/iOS
+    builtin-swiftStdLibTool --copy --verbose --scan-executable <TMP>/NegiPlayer-iOS-device/Build/Products/Debug-iphoneos/NegiPlayer.app/NegiPlayer.debug.dylib --scan-folder <TMP>/NegiPlayer-iOS-device/Build/Products/Debug-iphoneos/NegiPlayer.app/Frameworks --scan-folder <TMP>/NegiPlayer-iOS-device/Build/Products/Debug-iphoneos/NegiPlayer.app/PlugIns --scan-folder <TMP>/NegiPlayer-iOS-device/Build/Products/Debug-iphoneos/NegiPlayer.app/SystemExtensions --scan-folder <TMP>/NegiPlayer-iOS-device/Build/Products/Debug-iphoneos/NegiPlayer.app/Extensions --platform iphoneos --toolchain /Applications/Xcode-27.1-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain --destination <TMP>/NegiPlayer-iOS-device/Build/Products/Debug-iphoneos/NegiPlayer.app/Frameworks --strip-bitcode --strip-bitcode-tool /Applications/Xcode-27.1-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/bitcode_strip --emit-dependency-info <TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/NegiPlayeriOS.build/Debug-iphoneos/NegiPlayeriOS.build/SwiftStdLibToolInputDependencies.dep --filter-for-swift-os --back-deploy-swift-span
 Ignoring --strip-bitcode because --sign was not passed
 
-PruneExplicitPrecompiledModules <build-cache>
+ExtractAppIntentsMetadata (in target 'NegiPlayeriOS' from project 'NegiPlayeriOS')
+    cd <PROJECT>/iOS
+    /Applications/Xcode-27.1-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/appintentsmetadataprocessor --toolchain-dir /Applications/Xcode-27.1-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain --module-name NegiPlayer --sdk-root /Applications/Xcode-27.1-beta.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS27.1.sdk --xcode-version 27A9269 --platform-family iOS --deployment-target 17.0 --bundle-identifier com.negiplayer.ios --output <TMP>/NegiPlayer-iOS-device/Build/Products/Debug-iphoneos/NegiPlayer.app --target-triple arm64-apple-ios17.0 --binary-file <TMP>/NegiPlayer-iOS-device/Build/Products/Debug-iphoneos/NegiPlayer.app/NegiPlayer --dependency-file <TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/NegiPlayeriOS.build/Debug-iphoneos/NegiPlayeriOS.build/Objects-normal/arm64/NegiPlayer_dependency_info.dat --stringsdata-file <TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/NegiPlayeriOS.build/Debug-iphoneos/NegiPlayeriOS.build/Objects-normal/arm64/ExtractedAppShortcutsMetadata.stringsdata --source-file-list <TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/NegiPlayeriOS.build/Debug-iphoneos/NegiPlayeriOS.build/Objects-normal/arm64/NegiPlayer.SwiftFileList --metadata-file-list <TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/NegiPlayeriOS.build/Debug-iphoneos/NegiPlayeriOS.build/NegiPlayer.DependencyMetadataFileList --static-metadata-file-list <TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/NegiPlayeriOS.build/Debug-iphoneos/NegiPlayeriOS.build/NegiPlayer.DependencyStaticMetadataFileList --swift-const-vals-list <TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/NegiPlayeriOS.build/Debug-iphoneos/NegiPlayeriOS.build/Objects-normal/arm64/NegiPlayer.SwiftConstValuesFileList --compile-time-extraction --deployment-aware-processing --no-app-shortcuts-localization
+2026-10-11 23:40:28.432 appintentsmetadataprocessor[89119:12388401] Starting appintentsmetadataprocessor export
+2026-10-11 23:40:28.433 appintentsmetadataprocessor[89119:12388401] warning: Metadata extraction skipped, no AppIntents.framework dependency found
 
-PruneExplicitPrecompiledModules <build-cache>
+AppIntentsSSUTraining (in target 'NegiPlayeriOS' from project 'NegiPlayeriOS')
+    cd <PROJECT>/iOS
+    /Applications/Xcode-27.1-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/appintentsnltrainingprocessor --infoplist-path <TMP>/NegiPlayer-iOS-device/Build/Products/Debug-iphoneos/NegiPlayer.app/Info.plist --temp-dir-path <TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/NegiPlayeriOS.build/Debug-iphoneos/NegiPlayeriOS.build/ssu --bundle-id com.negiplayer.ios --product-path <TMP>/NegiPlayer-iOS-device/Build/Products/Debug-iphoneos/NegiPlayer.app --extracted-metadata-path <TMP>/NegiPlayer-iOS-device/Build/Products/Debug-iphoneos/NegiPlayer.app/Metadata.appintents --metadata-file-list <TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/NegiPlayeriOS.build/Debug-iphoneos/NegiPlayeriOS.build/NegiPlayer.DependencyMetadataFileList --source-file <TMP>/NegiPlayer-iOS-device/Build/Products/Debug-iphoneos/NegiPlayer.app/Info.plist --archive-ssu-assets
+2026-10-11 23:40:28.464 appintentsnltrainingprocessor[89120:12388406] Parsing options for appintentsnltrainingprocessor
+2026-10-11 23:40:28.464 appintentsnltrainingprocessor[89120:12388406] Starting AppIntents SSU YAML Generation
+2026-10-11 23:40:28.466 appintentsnltrainingprocessor[89120:12388406] No AppShortcuts found - Skipping.
 
-PruneExplicitPrecompiledModules <build-cache>
+RegisterExecutionPolicyException <TMP>/NegiPlayer-iOS-device/Build/Products/Debug-iphoneos/NegiPlayer.app (in target 'NegiPlayeriOS' from project 'NegiPlayeriOS')
+    cd <PROJECT>/iOS
+    builtin-RegisterExecutionPolicyException <TMP>/NegiPlayer-iOS-device/Build/Products/Debug-iphoneos/NegiPlayer.app
+
+Validate <TMP>/NegiPlayer-iOS-device/Build/Products/Debug-iphoneos/NegiPlayer.app (in target 'NegiPlayeriOS' from project 'NegiPlayeriOS')
+    cd <PROJECT>/iOS
+    builtin-validationUtility <TMP>/NegiPlayer-iOS-device/Build/Products/Debug-iphoneos/NegiPlayer.app -shallow-bundle -infoplist-subpath Info.plist
+
+Touch <TMP>/NegiPlayer-iOS-device/Build/Products/Debug-iphoneos/NegiPlayer.app (in target 'NegiPlayeriOS' from project 'NegiPlayeriOS')
+    cd <PROJECT>/iOS
+    /usr/bin/touch -c <TMP>/NegiPlayer-iOS-device/Build/Products/Debug-iphoneos/NegiPlayer.app
+
+PruneExplicitPrecompiledModules <TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules
+
+PruneExplicitPrecompiledModules <TMP>/NegiPlayer-iOS-device/SDKExplicitPrecompiledModules
+
+PruneExplicitPrecompiledModules <TMP>/NegiPlayer-iOS-device/Build/Intermediates.noindex/ExplicitPrecompiledModules
 
 ** BUILD SUCCEEDED **
 

@@ -2,13 +2,13 @@
 
 macOS 本地音乐播放器与歌词工作室，开发预览 0.4.0。提供 Negi（Miku 青绿与少量粉色）、日间、夜间三套主题及中文／日文／英文界面，macOS 27 使用原生 SwiftUI Liquid Glass；减少透明度时使用实色背景。最低部署目标 macOS 14，当前验证架构为 Apple Silicon / arm64。
 
-本轮增加 iOS LAN 播放端、Mac 只读 HTTPS 曲库服务、三套主题／三种语言和两端共用图标，保留真实专辑封面、正在播放页面和自动 LRC 显示，延续本地 PCM 播放、曲库浏览、歌词编辑与聆听设置。它仍是开发预览，完整 DSD、标签管理与正式发布验收见 [ROADMAP.md](ROADMAP.md)。
+本轮增加 iOS LAN 播放端、Mac 只读 HTTPS 曲库服务、三套主题／三种语言和两端共用图标。两端专辑页面可切换封面网格与缩略图列表，选择在本机保存；使用真实内嵌／文件夹封面，保留正在播放页面和自动 LRC 显示，延续本地 PCM 播放、歌词编辑与聆听设置。它仍是开发预览，完整 DSD、标签管理与正式发布验收见 [ROADMAP.md](ROADMAP.md)。
 
 ## iOS 与 LAN
 
 Mac 的「iOS 连接」页面可手动开启服务、生成配对码、查看终端输出状态并撤销配对。iOS 原生工程位于 [iOS/NegiPlayeriOS.xcodeproj](iOS/NegiPlayeriOS.xcodeproj)；签名安装、配对步骤、音频与 MV 链路见 [iOS/README.md](iOS/README.md)。Mac 管理文件和索引，iOS 只读浏览分页 API，音频由 iOS EQ 与系统／USB 路由处理。Mac 不将自己的音量或 DSP 应用于传输流。
 
-0.4 已通过 macOS Release、iOS 设备 SDK 和模拟器构建，以及 41 项 XCTest。Device Hub 的 iPhone Duo iOS 27.1 模拟器完成 LAN 配对、曲库浏览、PCM 播放、封面／LRC、静音 MV、展开／闭合布局和主题／语言检查；Mac 的 E.S.combo USB 声卡完成 44.1／48／96 kHz 源采样率切换回读。iOS 实体 USB、硬件折叠、后台长时播放及断连恢复仍待真机验收，iOS 首版提供 Xcode 源码工程，需要自己的签名配置。详细证据和限制见 [VALIDATION.md](VALIDATION.md)。
+0.4 已通过 macOS Release、iOS 设备 SDK 和模拟器构建。Device Hub 的 iPhone Duo iOS 27.1 模拟器完成 LAN 配对、曲库浏览、PCM 播放、封面／LRC、静音 MV、展开／闭合布局和主题／语言检查；Mac 的 E.S.combo USB 声卡完成 44.1／48／96 kHz 回读，JadeAudio JA11 完成 44.1–384 kHz 的八档源采样率切换回读及 EQ／暂停恢复检查。iOS 实体 USB、硬件折叠、后台长时播放及断连恢复仍待真机验收，iOS 首版提供 Xcode 源码工程，需要自己的签名配置。详细证据和限制见 [VALIDATION.md](VALIDATION.md)。
 
 「外观与语言」可独立选择主题和界面语言；音乐标签和歌词保持原文。共用图标母版与设计说明见 [Resources/Brand](Resources/Brand)。
 

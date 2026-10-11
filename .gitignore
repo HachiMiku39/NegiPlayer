@@ -34,3 +34,5 @@ server-id.txt
 !validation/usb-output.json
 !validation/lan-readonly-summary.json
 !validation/lan-ui.json
+!validation/usb-ja11-output.json
+!validation/album-display-ui.json

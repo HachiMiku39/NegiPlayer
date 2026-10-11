@@ -6,7 +6,7 @@
 
 macOS Release 与 ad-hoc 签名、iOS 设备 SDK 未签名构建、模拟器本地签名构建均通过。iOS 模拟器使用默认的 Sign to Run Locally，以便正常使用 Keychain；设备 SDK 的未签名产物不能作为可安装 IPA。[Mac 日志](validation/lan-mac-build.log)、[iOS 设备编译日志](validation/lan-ios-device-build.log)、[模拟器日志](validation/lan-ios-simulator-build.log)均移除个人路径。
 
-**41 项 XCTest 通过，0 失败、0 跳过**：[测试日志](validation/lan-core-tests.log)。新增 LAN 检查包括有界 HTTP 报文／Range、私有 IPv4／IPv6、一次性配对与撤销、路径与符号链接边界、PCM 浮点交错／定位、MV 唯一同名匹配、Duo 窗口布局，以及真实 NWListener／URLSession HTTPS 配对、错误证书指纹拒绝、206 流与 LRC offset。设置测试确认新增可选采样率策略能读取 0.2／0.3 无该键的历史 JSON。选择真实曲库的两项集成方法由本机输入和原生报告支持；未设置这些本机输入时会明确跳过，不包含私人文件。
+**42 项 XCTest 通过，0 失败、0 跳过**：[测试日志](validation/lan-core-tests.log)。新增 LAN 检查包括有界 HTTP 报文／Range、私有 IPv4／IPv6、一次性配对与撤销、路径与符号链接边界、PCM 浮点交错／定位、MV 唯一同名匹配、Duo 窗口布局，以及真实 NWListener／URLSession HTTPS 配对、错误证书指纹拒绝、206 流与 LRC offset。大响应回归使用 14,000 首原创元数据、1,400 张专辑和 500 首分页，连续三轮完整核对数量；曾复现提前取消 TLS 导致连接中断，现使用最终消息并等待对端关闭／有界超时后清理。设置测试确认新增可选采样率策略能读取 0.2／0.3 无该键的历史 JSON。选择真实曲库的两项集成方法由本机输入和原生报告支持；未设置这些本机输入时会明确跳过，不包含私人文件。
 
 [原创 PCM 解码与 LAN 报告](validation/lan-native-codecs.json)由原生应用生成：WAV／MP3／FLAC／AAC／ALAC 各 4096 帧，LAN 浮点 PCM 与独立 AVAudioFile 解码逐样本相同，源大小／时间未变。DSF／raw DFF 仅探测，不宣称解码或移动播放。三个本机选定真实 PCM 文件同样核验 4096 帧，个人报告不发布。
 
@@ -32,6 +32,8 @@ xcodebuild -project iOS/NegiPlayeriOS.xcodeproj -scheme NegiPlayeriOS \
 
 参考本机 Audirvana 3.5.50 的 DAC 配置后，独立实现设备能力与源采样率策略。[USB 回读记录](validation/usb-output.json)：E.S.combo 驱动支持 44.1／48／96 kHz，立体声物理 16-bit PCM；客户端为 32-bit Float，分别显示而不混淆。开启跟随源采样率，停止输出、请求并回读，三档均确认后开始播放；88.2 kHz 源保留当前 96 kHz 并明确显示采样率转换。低电平原创信号、软件音量约 1.4%，完成 EQ 开启／旁路、播放／暂停，结束恢复 48 kHz。
 
+更换 DAC 后，[JadeAudio JA11 回读记录](validation/usb-ja11-output.json)确认 USB 设备列出的 44.1／48／88.2／96／176.4／192／352.8／384 kHz 八档均实际播放，源／客户端／设备采样率一致。原创 WAV 的 PCM16 峰值 600，软件音量 10%；384 kHz 下完成 EQ 开启／旁路和暂停／恢复。设备当前回报立体声 16-bit PCM，客户端 32 位格式；主音量显示固定／未提供。结束保持暂停，恢复原 352.8 kHz。
+
 这些是驱动／客户端状态验证，没有声学或硬件环回捕获。当前仍经系统混音和软件音量；独占、整数 HAL、逐比特、硬件音量、DoP、实际拔插／休眠及实体 iOS USB 未验收。
 
 ## iPhone Duo 模拟器与界面
@@ -39,6 +41,8 @@ xcodebuild -project iOS/NegiPlayeriOS.xcodeproj -scheme NegiPlayeriOS \
 Device Hub 内可用的 iPhone Duo iOS 27.1 模拟器完成 Bonjour 发现、完整指纹与一次性配对码连接、Keychain 配对恢复、只读分页曲库、原创 FLAC／WAV／ALAC PCM 播放、封面、混合语言 LRC、高亮与点击定位。人声 EQ 预设与开启状态保存，Mac 终端页回报 Speaker／44,100 Hz／EQ 开启／暂停。
 
 Day／Night／Negi 与英／日／中文界面已检查；标签和原歌词保持原文，切换后当前页面及暂停曲目保留。Duo 展开使用封面／控制与歌词双栏；闭合无 LRC 时居中封面，控制可滚动。修复迷你播放器遮住侧边设置入口的问题。模拟器窗口切换不代表实体折叠或后台验收。
+
+[专辑双模式记录](validation/album-display-ui.json)：Mac 与 Duo 原生界面显示原创 FLAC／MP3／ALAC 内嵌封面、WAV 文件夹图及无封面占位；封面网格与缩略图列表可切换，同一专辑进入对应曲目。Mac 重启保留列表选择，Duo 横向宽窗口显示专辑／曲目双栏。界面文案提供中／日／英翻译。重新搜索 Bonjour 等待浏览器停止后再启动，避免连续搜索时丢失搜索请求。
 
 原创 640×360 H.264 测试 MV 故意含 AAC 音轨；应用组成的播放项只插入视频轨道，并持续强制 mute／volume 0。屏幕可见视频帧、歌词叠加和歌曲进度；歌词定位 12.2 秒后视频帧时间 12.167 秒。默认仍是封面和歌词，只有同目录唯一同名视频才提供 MV 开关；损坏／不可加载时保留封面并提示。未对全部视频容器和实体 iOS 输出作验证。
 

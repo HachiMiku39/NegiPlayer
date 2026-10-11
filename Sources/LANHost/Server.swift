@@ -75,10 +75,15 @@ public actor LANServer {
                 }
                 let r=request!; let response=try await route(r,key:key)
                 try await send(c,response.bytes(head:r.method=="HEAD"))
+                // A send completion means the stack accepted the bytes, not that the peer received them.
+                // The final message closes our write side; keep the connection until the peer closes
+                // its side (or the existing bounded timeout fires) rather than cancelling buffered TLS.
+                _ = try? await receive(c)
             } catch {
                 let status:Int; if case LANError.status(let n)=error { status=n } else { status=500 }
                 // No local paths, pairing codes, tokens, or filesystem diagnostics in network errors.
                 try? await send(c,Reply(status:status,body:Data("{\"error\":\"request failed\"}".utf8)).bytes(head:false))
+                _ = try? await receive(c)
             }
         }
     }
@@ -86,7 +91,10 @@ public actor LANServer {
         try await withCheckedThrowingContinuation { cont in c.receive(minimumIncompleteLength:1,maximumLength:8192) { data,_,done,error in if let error { cont.resume(throwing:error) } else { cont.resume(returning:data ?? Data()) } } }
     }
     private func send(_ c:NWConnection,_ data:Data) async throws {
-        try await withCheckedThrowingContinuation { (cont:CheckedContinuation<Void,Error>) in c.send(content:data,completion:.contentProcessed { error in if let error { cont.resume(throwing:error) } else { cont.resume() } }) }
+        try await withCheckedThrowingContinuation { (cont:CheckedContinuation<Void,Error>) in
+            // Finish TLS/TCP after the complete response, including bodies larger than a send buffer.
+            c.send(content:data,contentContext:.finalMessage,isComplete:true,completion:.contentProcessed { error in if let error { cont.resume(throwing:error) } else { cont.resume() } })
+        }
     }
     private func json<T:Encodable>(_ value:T) throws -> Reply { .init(body:try JSONEncoder().encode(value)) }
     private func route(_ r:HTTPRequest,key:UUID) async throws -> Reply {

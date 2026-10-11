@@ -1,0 +1,42 @@
+{
+  "version": "0.4.0",
+  "date": "2026-10-11",
+  "method": "Native accessibility and rendered UI inspection using isolated Mac database and original assets",
+  "privateMusicPublished": false,
+  "macOS": {
+    "grid": true,
+    "thumbnailList": true,
+    "embeddedFLAC_MP3_ALAC": true,
+    "folderWAV": true,
+    "missingArtworkPlaceholder": true,
+    "selectMatchingAlbum": true,
+    "listRestoredAfterRelaunch": true
+  },
+  "iOS": {
+    "device": "Device Hub iPhone Duo iOS 27.1 simulator",
+    "connectedOriginalCatalogTracks": 12,
+    "albums": 5,
+    "grid": true,
+    "thumbnailList": true,
+    "embeddedFLAC_MP3_ALAC": true,
+    "folderWAV": true,
+    "missingArtworkPlaceholder": true,
+    "selectMatchingAlbum": true,
+    "portraitSingleColumn": true,
+    "landscapeLibrarySplit": true,
+    "modeRetainedAcrossRotation": true,
+    "coverLyricsPlayback": true,
+    "physicalDeviceTested": false
+  },
+  "localization": [
+    "zh",
+    "ja",
+    "en"
+  ],
+  "localizationEvidence": "Shared string catalog contains all new keys; Japanese native iOS and Chinese native Mac inspected",
+  "limits": [
+    "Physical folding and physical iOS USB not tested",
+    "iOS progress-slider automation does not reliably invoke touch edits; no added drag verification claim",
+    "No private music or screenshots included"
+  ]
+}

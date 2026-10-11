@@ -26,6 +26,7 @@ func uiAlbum(_ f:MediaFile)->String { f.album.isEmpty ? L("未标记专辑") : f
 struct ContentView: View {
     @ObservedObject var model: AppModel
     @ObservedObject var playback: PlaybackSession
+    @AppStorage("album-display-mode") private var albumDisplayMode="grid"
     var body: some View {
         VStack(spacing: 0) {
             HStack(spacing: 0) {
@@ -166,21 +167,58 @@ struct ContentView: View {
                 }
             } else {
                 let groups = model.albumGroups
-                ScrollView {
-                    LazyVGrid(columns: [GridItem(.adaptive(minimum: 180, maximum: 240), spacing: 24)], alignment: .leading, spacing: 26) {
-                        ForEach(groups, id: \.first!.releaseKey) { group in
-                            if let first = group.first {
-                                Button { model.selectedAlbum = first.releaseKey } label: {
-                                    VStack(alignment: .leading, spacing: 9) {
-                                        ArtworkView(model: model, media: first, cornerRadius: 10)
-                                        Text(uiAlbum(first)).font(.headline).lineLimit(1)
-                                        Text(first.albumArtist.isEmpty ? uiArtist(first) : first.albumArtist).font(.caption).foregroundStyle(.secondary).lineLimit(1)
-                                        Text(LF("%d 首 · %@",group.count,Set(group.map(\.codec)).sorted().joined(separator:" / "))).font(.caption2).foregroundStyle(accent.opacity(0.8)).lineLimit(1)
+                VStack(spacing:0) {
+                    HStack {
+                        Text(LF("%d 张专辑",groups.count)).font(.callout.weight(.medium)).foregroundStyle(.secondary)
+                        Spacer()
+                        AlbumDisplayPicker(mode:$albumDisplayMode).frame(width:270)
+                    }.padding(.horizontal,24).padding(.vertical,16)
+                    if groups.isEmpty {
+                        ContentUnavailableView(L("没有匹配的专辑"),systemImage:"magnifyingglass",description:Text(L("调整搜索或筛选条件")))
+                    } else {
+                        ScrollView {
+                            if albumDisplayMode == AlbumDisplayMode.list.rawValue {
+                                LazyVStack(spacing:0) {
+                                    ForEach(groups,id:\.first!.releaseKey) { group in
+                                        if let first=group.first {
+                                            Button { model.selectedAlbum=first.releaseKey } label: {
+                                                HStack(spacing:16) {
+                                                    ArtworkView(model:model,media:first,cornerRadius:8).frame(width:64,height:64)
+                                                    VStack(alignment:.leading,spacing:6) {
+                                                        Text(uiAlbum(first)).font(.system(size:16,weight:.semibold)).foregroundStyle(.primary).lineLimit(2)
+                                                        Text(first.albumArtist.isEmpty ? uiArtist(first) : first.albumArtist).font(.callout).foregroundStyle(.secondary).lineLimit(1)
+                                                    }
+                                                    Spacer(minLength:16)
+                                                    VStack(alignment:.trailing,spacing:6) {
+                                                        Text(LF("%d 首曲目",group.count)).font(.callout).foregroundStyle(.secondary)
+                                                        Text(Set(group.map(\.codec)).sorted().joined(separator:" / ")).font(.caption).foregroundStyle(.secondary).lineLimit(1)
+                                                    }.frame(maxWidth:180,alignment:.trailing)
+                                                    Image(systemName:"chevron.right").font(.caption.weight(.semibold)).foregroundStyle(.tertiary)
+                                                }.padding(.vertical,12).contentShape(Rectangle())
+                                            }.buttonStyle(.plain)
+                                            Divider().padding(.leading,80)
+                                        }
                                     }
-                                }.buttonStyle(.plain)
+                                }.padding(.horizontal,24)
+                            } else {
+                                LazyVGrid(columns:[GridItem(.adaptive(minimum:170,maximum:240),spacing:24)],alignment:.leading,spacing:26) {
+                                    ForEach(groups,id:\.first!.releaseKey) { group in
+                                        if let first=group.first {
+                                            Button { model.selectedAlbum=first.releaseKey } label: {
+                                                VStack(alignment:.leading,spacing:8) {
+                                                    ArtworkView(model:model,media:first,cornerRadius:8)
+                                                        .shadow(color:.black.opacity(0.12),radius:8,y:3)
+                                                    Text(uiAlbum(first)).font(.system(size:15,weight:.semibold)).foregroundStyle(.primary).lineLimit(2).frame(height:38,alignment:.topLeading)
+                                                    Text(first.albumArtist.isEmpty ? uiArtist(first) : first.albumArtist).font(.callout).foregroundStyle(.secondary).lineLimit(1)
+                                                    Text(LF("%d 首 · %@",group.count,Set(group.map(\.codec)).sorted().joined(separator:" / "))).font(.caption).foregroundStyle(.secondary).lineLimit(1)
+                                                }.contentShape(Rectangle())
+                                            }.buttonStyle(.plain)
+                                        }
+                                    }
+                                }.padding(.horizontal,24).padding(.top,4)
                             }
-                        }
-                    }.padding(24)
+                        }.padding(.bottom,24)
+                    }
                 }
             }
         }

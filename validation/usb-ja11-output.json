@@ -1,0 +1,110 @@
+{
+  "version": "0.4.0",
+  "date": "2026-10-11",
+  "method": "Native NegiPlayer accessibility observations and Core Audio readback, isolated database and original low-amplitude WAV signals",
+  "device": "JadeAudio JA11",
+  "transport": "USB",
+  "initialNominalRate": 352800,
+  "restoredNominalRate": 352800,
+  "endedPaused": true,
+  "sourceSampleBits": 16,
+  "channels": 2,
+  "signalPeakPCM16": 600,
+  "softwareVolume": 0.1,
+  "tests": [
+    {
+      "sourceRate": 44100,
+      "clientRate": 44100,
+      "clientBits": 32,
+      "driverRate": 44100,
+      "driverBits": 16,
+      "driverFormat": "PCM",
+      "followSourceConfirmed": true,
+      "playing": true
+    },
+    {
+      "sourceRate": 48000,
+      "clientRate": 48000,
+      "clientBits": 32,
+      "driverRate": 48000,
+      "driverBits": 16,
+      "driverFormat": "PCM",
+      "followSourceConfirmed": true,
+      "playing": true
+    },
+    {
+      "sourceRate": 88200,
+      "clientRate": 88200,
+      "clientBits": 32,
+      "driverRate": 88200,
+      "driverBits": 16,
+      "driverFormat": "PCM",
+      "followSourceConfirmed": true,
+      "playing": true
+    },
+    {
+      "sourceRate": 96000,
+      "clientRate": 96000,
+      "clientBits": 32,
+      "driverRate": 96000,
+      "driverBits": 16,
+      "driverFormat": "PCM",
+      "followSourceConfirmed": true,
+      "playing": true
+    },
+    {
+      "sourceRate": 176400,
+      "clientRate": 176400,
+      "clientBits": 32,
+      "driverRate": 176400,
+      "driverBits": 16,
+      "driverFormat": "PCM",
+      "followSourceConfirmed": true,
+      "playing": true
+    },
+    {
+      "sourceRate": 192000,
+      "clientRate": 192000,
+      "clientBits": 32,
+      "driverRate": 192000,
+      "driverBits": 16,
+      "driverFormat": "PCM",
+      "followSourceConfirmed": true,
+      "playing": true
+    },
+    {
+      "sourceRate": 352800,
+      "clientRate": 352800,
+      "clientBits": 32,
+      "driverRate": 352800,
+      "driverBits": 16,
+      "driverFormat": "PCM",
+      "followSourceConfirmed": true,
+      "playing": true
+    },
+    {
+      "sourceRate": 384000,
+      "clientRate": 384000,
+      "clientBits": 32,
+      "driverRate": 384000,
+      "driverBits": 16,
+      "driverFormat": "PCM",
+      "followSourceConfirmed": true,
+      "playing": true
+    }
+  ],
+  "eqAt384kHz": {
+    "enabled": true,
+    "bypassed": true,
+    "pause": true,
+    "resume": true
+  },
+  "driverVolume": "Fixed output or no main-volume property",
+  "limitations": [
+    "No acoustic or hardware loopback capture",
+    "No exclusive/integer HAL/bit-perfect/DoP verification",
+    "No physical iOS USB test",
+    "Other driver bit depths and hot unplug not tested"
+  ],
+  "privateMusicUsed": false
+}

@@ -9,6 +9,7 @@ struct MobileRoot:View {
     @ObservedObject var model:MobileModel
     @ObservedObject var audio:MobilePlayer
     @SceneStorage("selected-tab") private var tab=0
+    @AppStorage("album-display-mode") private var albumDisplayMode="grid"
     @State private var fullscreen=false
     var body:some View {
         TabView(selection:$tab) {
@@ -40,23 +41,58 @@ struct MobileRoot:View {
         GeometryReader { g in
             if !model.connected { disconnected }
             else if g.size.width>=780, g.size.height>=360 {
-                HStack(spacing:0) { albumGrid.frame(width:g.size.width*0.45); Divider(); trackContent }
-            } else { albumGrid }
+                HStack(spacing:0) { albumBrowser.frame(width:g.size.width*0.45); Divider(); trackContent }
+            } else { albumBrowser }
         }.navigationTitle(L("音乐库"))
         .toolbar { Button { Task { do { try await model.reloadAlbums() } catch { model.error=error.localizedDescription } } } label: { Image(systemName:"arrow.clockwise") }; Button { tab=3 } label: { Image(systemName:"network") } }
     }
     var disconnected:some View {
         ContentUnavailableView { Label(L("连接 Mac 曲库"),systemImage:"desktopcomputer") } description: { Text(L("音乐由 Mac 管理；此设备只读浏览，在本机处理音频。")) } actions: { Button(L("连接与配对")) { tab=3 } }
     }
-    var albumGrid:some View {
-        ScrollView {
-            LazyVGrid(columns:[GridItem(.adaptive(minimum:140,maximum:240))],spacing:20) {
-                ForEach(model.albums) { album in
-                    Button { model.select(album); tab=1 } label: {
-                        VStack(alignment:.leading,spacing:6) { RemoteArtwork(model:model,id:album.coverTrackID).aspectRatio(1,contentMode:.fit); Text(album.title.isEmpty ? L("未标记专辑") : album.title).font(.callout.bold()).lineLimit(2); Text(album.artist.isEmpty ? L("未知艺人") : album.artist).font(.caption).foregroundStyle(.secondary).lineLimit(1); Text("\(album.count)").font(.caption2).foregroundStyle(accent) }
-                    }.buttonStyle(.plain)
-                }
+    var albumBrowser:some View {
+        VStack(spacing:0) {
+            VStack(alignment:.leading,spacing:12) {
+                Text(LF("%d 张专辑",model.albums.count)).font(.subheadline.weight(.medium)).foregroundStyle(.secondary)
+                AlbumDisplayPicker(mode:$albumDisplayMode)
             }.padding(16)
+            if model.albums.isEmpty {
+                ContentUnavailableView(L("没有匹配的专辑"),systemImage:"square.stack",description:Text(L("从 Mac 导入音乐后刷新曲库")))
+            } else {
+                ScrollView {
+                    if albumDisplayMode == AlbumDisplayMode.list.rawValue {
+                        LazyVStack(spacing:0) {
+                            ForEach(model.albums) { album in
+                                Button { model.select(album); tab=1 } label: {
+                                    HStack(spacing:14) {
+                                        RemoteArtwork(model:model,id:album.coverTrackID,cornerRadius:8).frame(width:60,height:60)
+                                        VStack(alignment:.leading,spacing:5) {
+                                            Text(album.title.isEmpty ? L("未标记专辑") : album.title).font(.callout.weight(.semibold)).foregroundStyle(.primary).lineLimit(2)
+                                            Text(album.artist.isEmpty ? L("未知艺人") : album.artist).font(.subheadline).foregroundStyle(.secondary).lineLimit(1)
+                                            Text(LF("%d 首曲目",album.count)).font(.caption).foregroundStyle(.secondary)
+                                        }.frame(maxWidth:.infinity,alignment:.leading)
+                                        Image(systemName:"chevron.right").font(.caption.weight(.semibold)).foregroundStyle(.tertiary)
+                                    }.padding(.vertical,12).contentShape(Rectangle())
+                                }.buttonStyle(.plain)
+                                Divider().padding(.leading,74)
+                            }
+                        }.padding(.horizontal,16)
+                    } else {
+                        LazyVGrid(columns:[GridItem(.adaptive(minimum:140,maximum:240),spacing:20)],alignment:.leading,spacing:24) {
+                            ForEach(model.albums) { album in
+                                Button { model.select(album); tab=1 } label: {
+                                    VStack(alignment:.leading,spacing:7) {
+                                        RemoteArtwork(model:model,id:album.coverTrackID,cornerRadius:8).aspectRatio(1,contentMode:.fit)
+                                            .shadow(color:.black.opacity(0.12),radius:8,y:3)
+                                        Text(album.title.isEmpty ? L("未标记专辑") : album.title).font(.callout.weight(.semibold)).foregroundStyle(.primary).lineLimit(2).frame(height:40,alignment:.topLeading)
+                                        Text(album.artist.isEmpty ? L("未知艺人") : album.artist).font(.subheadline).foregroundStyle(.secondary).lineLimit(1)
+                                        Text(LF("%d 首曲目",album.count)).font(.caption).foregroundStyle(.secondary)
+                                    }.contentShape(Rectangle())
+                                }.buttonStyle(.plain)
+                            }
+                        }.padding(.horizontal,16).padding(.top,4)
+                    }
+                }.padding(.bottom,16)
+            }
         }.background(surface)
     }
     var trackList:some View { trackContent.navigationTitle(L("所有曲目")) }
@@ -85,8 +121,17 @@ func uiAlbum(_ track:RemoteTrack)->String { track.album.isEmpty ? L("未标记�
 func timeText(_ seconds:Double)->String { guard seconds.isFinite,seconds>=0 else { return "—" }; return String(format:"%d:%02d",Int(seconds)/60,Int(seconds)%60) }
 struct RemoteArtwork:View {
     @ObservedObject var model:MobileModel; let id:String
+    var cornerRadius:CGFloat=14
     @State private var image:UIImage?
-    var body:some View { ZStack { RoundedRectangle(cornerRadius:14).fill(accent.opacity(0.1)); if let image { Image(uiImage:image).resizable().scaledToFit() } else { Image(systemName:"opticaldisc").font(.system(size:48,weight:.ultraLight)).foregroundStyle(.secondary) } }.clipShape(RoundedRectangle(cornerRadius:14)).task(id:id) { let loaded=await model.image(for:id); if !Task.isCancelled { image=loaded } } }
+    var body:some View {
+        ZStack {
+            RoundedRectangle(cornerRadius:cornerRadius).fill(accent.opacity(0.1))
+            if let image { Image(uiImage:image).resizable().scaledToFit() }
+            else { GeometryReader { geometry in Image(systemName:"opticaldisc").resizable().scaledToFit().padding(min(geometry.size.width,geometry.size.height)*0.28).foregroundStyle(.secondary) } }
+        }.clipShape(RoundedRectangle(cornerRadius:cornerRadius))
+            .accessibilityLabel(L(image == nil ? "封面占位图" : "专辑封面"))
+            .task(id:id) { image=nil; let loaded=await model.image(for:id); if !Task.isCancelled { image=loaded } }
+    }
 }
 struct MobileNowPlaying:View {
     @ObservedObject var model:MobileModel; @ObservedObject var audio:MobilePlayer; @ObservedObject var mv:MutedMV

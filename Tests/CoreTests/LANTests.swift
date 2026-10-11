@@ -102,4 +102,31 @@ final class LANTests:XCTestCase {
         } catch { client.session.invalidateAndCancel();await server.stop();throw error }
         client.session.invalidateAndCancel();await server.stop()
     }
+    func testLargeCatalogHTTPSResponseCompletes() async throws {
+        let root=try folder();defer{try? FileManager.default.removeItem(at:root)}
+        let original=try fixture(root)
+        let entries=(0..<14000).map { index -> CatalogEntry in
+            var media=original.media
+            media.id="large-\(index)";media.releaseKey="album-\(index/10)"
+            media.album="Album \(index/10) "+String(repeating:"音楽",count:80)
+            return CatalogEntry(media:media,root:root,source:original.source)
+        }
+        let server=try LANServer(directory:root.appendingPathComponent("Server"),artwork:ArtworkRepository(cacheDirectory:root.appendingPathComponent("Artwork")))
+        await server.update(entries);try await server.start(port:0,advertise:false)
+        var state=await server.snapshot()
+        for _ in 0..<50 where !state.running { try await Task.sleep(nanoseconds:100_000_000);state=await server.snapshot() }
+        XCTAssertTrue(state.running);guard state.running else { await server.stop();return }
+        let client=try PinnedSession(baseURL:URL(string:"https://127.0.0.1:\(state.port)")!,fingerprint:state.fingerprint)
+        do {
+            let paired=try await client.pair(code:server.renewCode(),name:"Large catalog test")
+            for _ in 0..<3 {
+                let page=try await client.json("/v1/albums",as:AlbumPage.self,token:paired.token)
+                XCTAssertEqual(page.albums.count,1400)
+                XCTAssertEqual(page.albums.reduce(0){$0+$1.count},14000)
+                let tracks=try await client.json("/v1/tracks?offset=13500&limit=500",as:TrackPage.self,token:paired.token)
+                XCTAssertEqual(tracks.total,14000);XCTAssertEqual(tracks.tracks.count,500)
+            }
+        } catch { client.session.invalidateAndCancel();await server.stop();throw error }
+        client.session.invalidateAndCancel();await server.stop()
+    }
 }
