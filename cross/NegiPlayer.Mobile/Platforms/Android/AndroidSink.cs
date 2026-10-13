@@ -37,6 +37,8 @@ public sealed class AndroidSink : Java.Lang.Object, IAudioSink, AudioManager.IOn
             track = new AudioTrack.Builder().SetAudioAttributes(attributes).SetAudioFormat(audio)
                 .SetTransferMode(AudioTrackMode.Stream).SetBufferSizeInBytes(Math.Max(minimum * 2, (int)format.SampleRate * format.BytesPerFrame / 2)).Build();
             if (track.State != AudioTrackState.Initialized) throw new InvalidOperationException("AudioTrack initialization failed.");
+            // Streaming AudioTrack otherwise waits for a full buffer, including for very short files.
+            if (OperatingSystem.IsAndroidVersionAtLeast(31)) track.SetStartThresholdInFrames(1);
             chosenID = int.TryParse(preferredOutput, out var id) ? id : 0;
             if (chosenID != 0)
             {

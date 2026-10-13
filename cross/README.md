@@ -28,6 +28,6 @@ dotnet build cross/NegiPlayer.Mobile -f net10.0-android -c Debug -p:EmbedAssembl
 dotnet run --project cross/NegiPlayer.Conformance -c Release
 ```
 
-The Android development APK has an ephemeral CI debug signature; it is for testing, not a Play Store release. A new CI run can use a different debug key and require uninstalling the previous development APK. Stable release signing requires the owner's signing configuration. Windows ZIPs are portable, self-contained development builds without a publisher signature.
+The Android development APK has an ephemeral CI debug signature; it is for testing, not a Play Store release. A new CI run can use a different debug key and require uninstalling the previous development APK. Stable release signing requires the owner's signing configuration. Windows ZIPs are portable, self-contained development builds without a publisher signature. Extract the whole folder and launch `NegiPlayer.exe`; keep the adjacent runtime and DLL files.
 
 Compiled successfully does not mean that physical USB DACs, Bluetooth routing, long-duration/background playback, or every Media Foundation codec have been verified. See the workflow results and interoperability reports for the actual validation scope.

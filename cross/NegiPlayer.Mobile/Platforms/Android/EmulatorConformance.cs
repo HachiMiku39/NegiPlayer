@@ -22,11 +22,16 @@ internal static class EmulatorConformance
             var signal = model.Tracks.Single(t => t.Id == "signal-1");
             await model.PlayAsync(signal);
             for (int i = 0; i < 100 && model.Player.Position < 0.02 && model.Player.Error == null; i++) await Task.Delay(50);
-            if (model.Player.Error != null || model.Player.Position < 0.02) throw new InvalidDataException("AudioTrack did not advance.");
+            if (model.Player.Error != null || model.Player.Position < 0.02) {
+                report["playerPosition"] = model.Player.Position; report["buffering"] = model.Player.Buffering; report["playing"] = model.Player.Playing;
+                throw new InvalidDataException(model.Player.Error ?? "AudioTrack did not advance.");
+            }
             if (model.Cover == null || model.LyricLines.Count != 2) throw new InvalidDataException("Player assets did not load.");
             report["audioTrackVirtualOutput"] = true;
             report["endpointEqEnabled"] = model.Player.Settings.EqEnabled;
             report["playerArtworkAndLyrics"] = true;
+            await File.WriteAllTextAsync(Path.Combine(directory, "presentation-ready"), "synthetic fixture");
+            await Task.Delay(2500);
             await model.DisconnectAsync();
             report["readonlyEndpointDisconnected"] = true;
         }

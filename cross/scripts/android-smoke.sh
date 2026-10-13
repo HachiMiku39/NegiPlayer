@@ -14,6 +14,9 @@ task_code="$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1]))["co
 adb install -r ci-artifacts/NegiPlayer-0.5.0-Android-development.apk
 adb shell am start -n com.negiplayer.mobile/.MainActivity --ez negi_conformance true --es negi_address "$task_address" --es negi_fingerprint "$task_fp" --es negi_code "$task_code" >/dev/null
 for i in {1..120}; do
+  if test ! -f ci-artifacts/android-playing.png && adb shell run-as com.negiplayer.mobile test -f files/presentation-ready; then
+    adb exec-out screencap -p > ci-artifacts/android-playing.png
+  fi
   if adb shell run-as com.negiplayer.mobile cat files/conformance-result.json > "$task_temp/result.json" 2>/dev/null; then break; fi
   sleep 0.5
 done
