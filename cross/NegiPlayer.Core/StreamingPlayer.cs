@@ -32,6 +32,7 @@ public sealed class StreamingPlayer : IAsyncDisposable
     public double Position => info is null ? 0 : Math.Min(Duration, (startFrame + sink.PlayedFrames) / info.SampleRate);
     public string Output => sink.OutputDescription;
     public double ClientRate => sink.ClientRate;
+    public double SourceRate => info?.SampleRate ?? 0;
     public ListeningSettings Settings { get; private set; } = new();
     public IReadOnlyList<AudioOutput> Outputs => sink.Outputs;
     public event Action? Ended;

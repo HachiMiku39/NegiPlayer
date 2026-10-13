@@ -19,7 +19,7 @@ GitHub Actions builds the Windows portable application and a bundled Android dev
 
 ```powershell
 dotnet workload install maui-windows
-dotnet publish cross/NegiPlayer.Mobile -f net10.0-windows10.0.19041.0 -c Release -r win-x64 -p:TargetFrameworks=net10.0-windows10.0.19041.0 -p:WindowsPackageType=None -p:WindowsAppSDKSelfContained=true --self-contained true
+dotnet publish cross/NegiPlayer.Mobile -f net10.0-windows10.0.19041.0 -c Release -r win-x64 -p:NegiWindowsOnly=true -p:WindowsPackageType=None -p:WindowsAppSDKSelfContained=true --self-contained true
 ```
 
 ```sh

@@ -30,6 +30,8 @@ public sealed class MainPage : ContentPage
     private Color accent = Color.FromArgb("#37BFB5"), foreground = Colors.White, surface = Color.FromArgb("#202D33");
     private readonly Label hostSummary = new() { FontSize = 12, LineBreakMode = LineBreakMode.CharacterWrap };
     private int ticks;
+    private readonly Label softwareVolume = new() { FontSize = 12 };
+    private readonly List<WeakReference<Label>> lyricLabels = [];
     public MainPage(AppModel model)
     {
         this.model = model; controlsScroll = new ScrollView { Content = controls }; Content = root; Title = "NegiPlayer";
@@ -44,11 +46,12 @@ public sealed class MainPage : ContentPage
         transport.Add(B("◀", () => model.NextAsync(-1))); transport.Add(play); transport.Add(B("▶▶", () => model.NextAsync(1))); controls.Add(transport);
         var volume = new Slider { Minimum = 0, Maximum = 1, Value = model.Player.Settings.Volume, WidthRequest = 240 };
         volume.ValueChanged += (_, e) => model.ApplySettings(model.Player.Settings with { Volume = e.NewValue });
-        controls.Add(T("软件音量", 12)); controls.Add(volume); controls.Add(path);
+        controls.Add(softwareVolume); controls.Add(volume); controls.Add(path);
         lyrics.ItemTemplate = new DataTemplate(() =>
         {
             var label = new Label { FontSize = 23, Margin = new Thickness(8, 16), LineBreakMode = LineBreakMode.WordWrap };
             label.SetBinding(Label.TextProperty, nameof(LyricLine.Text));
+            lyricLabels.Add(new(label));
             label.TextColor = foreground;
             var tap = new TapGestureRecognizer(); tap.Tapped += async (_, _) => {
                 if (label.BindingContext is LyricLine { Time: { } at }) await Run(() => model.Player.SeekAsync(at)); };
@@ -173,7 +176,8 @@ public sealed class MainPage : ContentPage
             playerGrid.Add(controlsScroll);
             if (model.LyricLines.Count > 0) playerGrid.Add(lyrics, 0, 1);
         }
-        double limit = Math.Clamp(Math.Min(Width >= 720 ? Width * 0.38 : Width - 64, Height - 320), 120, 380);
+        double available = Width < 720 && lastLyricsPresent ? Height * 0.28 : Height - 320;
+        double limit = Math.Clamp(Math.Min(Width >= 720 ? Width * 0.38 : Width - 64, available), 120, 380);
         cover.WidthRequest = cover.HeightRequest = limit;
     }
     private View ConnectionView()
@@ -253,7 +257,8 @@ public sealed class MainPage : ContentPage
     {
         if (!MainThread.IsMainThread) { MainThread.BeginInvokeOnMainThread(Tick); return; }
         song.Text = model.Current?.Title ?? L("未选择曲目"); artist.Text = model.Current?.Artist ?? "";
-        path.Text = model.Player.Output + (model.Player.Settings.EqEnabled ? " · EQ" : "");
+        softwareVolume.Text = L("软件音量"); softwareVolume.TextColor = foreground;
+        path.Text = model.Current == null ? model.Player.Output : $"{model.Player.SourceRate:N0} Hz PCM → {(model.Player.Settings.EqEnabled ? "EQ · " : "")}{L("软件音量")} → {model.Player.Output}";
         status.Text = model.Player.Error ?? L(model.Status); play.Text = model.Player.Playing ? "Ⅱ" : "▶";
         if (!dragging) { progress.Maximum = Math.Max(0.01, model.Player.Duration); progress.Value = Math.Min(progress.Maximum, model.Player.Position); }
         static string Clock(double seconds) => $"{(int)Math.Max(0, seconds) / 60}:{(int)Math.Max(0, seconds) % 60:D2}";
@@ -262,6 +267,13 @@ public sealed class MainPage : ContentPage
             cover.Source = image == null ? "cover_placeholder.png" : ImageSource.FromStream(() => new MemoryStream(image)); }
         if (page == "playing" && lastLyricsPresent != (model.LyricLines.Count > 0)) LayoutPlayer();
         int next = Lyrics.Active(model.LyricLines, model.Player.Position);
+        int activeID = next >= 0 ? model.LyricLines[next].Id : -1;
+        lyricLabels.RemoveAll(reference => !reference.TryGetTarget(out _));
+        foreach (var reference in lyricLabels)
+            if (reference.TryGetTarget(out var label) && label.BindingContext is LyricLine line) {
+                label.TextColor = line.Id == activeID ? accent : foreground.WithAlpha(0.6f);
+                label.FontAttributes = line.Id == activeID ? FontAttributes.Bold : FontAttributes.None;
+            }
         if (follow && next >= 0 && next != activeLyric && page == "playing") { activeLyric = next; lyrics.ScrollTo(next, position: ScrollToPosition.Center, animate: true); }
 #if WINDOWS
         if (model.Host != null) hostSummary.Text = model.HostAddress + "\n" + model.Host.Fingerprint + "\n" + model.HostCode;

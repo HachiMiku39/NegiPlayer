@@ -36,7 +36,7 @@ public sealed class AndroidSink : Java.Lang.Object, IAudioSink, AudioManager.IOn
             var audio = new AudioFormat.Builder().SetEncoding(AudioEncoding.PcmFloat).SetSampleRate((int)format.SampleRate).SetChannelMask(channels).Build()!;
             track = new AudioTrack.Builder().SetAudioAttributes(attributes).SetAudioFormat(audio)
                 .SetTransferMode(AudioTrackMode.Stream).SetBufferSizeInBytes(Math.Max(minimum * 2, (int)format.SampleRate * format.BytesPerFrame / 2)).Build();
-            if (track.State != Android.Media.State.Initialized) throw new InvalidOperationException("AudioTrack initialization failed.");
+            if (track.State != AudioTrackState.Initialized) throw new InvalidOperationException("AudioTrack initialization failed.");
             chosenID = int.TryParse(preferredOutput, out var id) ? id : 0;
             if (chosenID != 0)
             {

@@ -30,7 +30,15 @@ internal static class EmulatorConformance
             await model.DisconnectAsync();
             report["readonlyEndpointDisconnected"] = true;
         }
-        catch (Exception e) { report["passed"] = false; report["errorType"] = e.GetType().Name; }
+        catch (Exception e) {
+            report["passed"] = false; report["errorType"] = e.GetType().Name;
+            string message = e.Message;
+            foreach (string key in new[] { "negi_address", "negi_fingerprint", "negi_code" }) {
+                string value = intent.GetStringExtra(key) ?? ""; if (value.Length > 0) message = message.Replace(value, "[fixture]");
+            }
+            if (AppModel.Shared.Client?.Credentials?.Token is { } token) message = message.Replace(token, "[fixture token]");
+            report["error"] = message[..Math.Min(message.Length, 500)];
+        }
         await File.WriteAllTextAsync(Path.Combine(directory, "conformance-result.json"), JsonSerializer.Serialize(report));
     }
 }

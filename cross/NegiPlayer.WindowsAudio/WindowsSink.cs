@@ -12,16 +12,20 @@ public sealed class WindowsSink : IAudioSink, IMMNotificationClient
     private readonly object gate = new();
     private WasapiOut? output; private BufferedWaveProvider? buffer;
     private StreamInfo? info; private MMDevice? device;
-    private long submitted; private double volume = 0.5; private bool removed;
+    private long submitted, lastPlayed; private double volume = 0.5; private bool removed;
+    private string deviceName = "", deviceID = ""; private int mixRate;
     public event Action? OutputRemoved;
     public WindowsSink() => devices.RegisterEndpointNotificationCallback(this);
     public IReadOnlyList<AudioOutput> Outputs => devices.EnumerateAudioEndPoints(DataFlow.Render, NativeDeviceState.Active)
         .Select(d => new AudioOutput(d.ID, d.FriendlyName)).ToArray();
-    public string OutputDescription => device == null ? "WASAPI shared" :
-        $"{device.FriendlyName} · WASAPI shared · mix {device.AudioClient.MixFormat.SampleRate} Hz";
-    public double ClientRate => info?.SampleRate ?? 0;
+    public string OutputDescription => deviceName.Length == 0 ? "WASAPI shared" :
+        $"{deviceName} · WASAPI shared · mix {mixRate} Hz";
+    public double ClientRate => output?.OutputWaveFormat.SampleRate ?? 0;
     public long PlayedFrames { get { lock (gate) { if (output == null || info == null) return 0;
-        return Math.Clamp((long)(output.GetPosition() * info.SampleRate / output.OutputWaveFormat.AverageBytesPerSecond), 0, submitted); } } }
+        if (removed) return lastPlayed;
+        try { lastPlayed = Math.Clamp((long)(output.GetPosition() * info.SampleRate / output.OutputWaveFormat.AverageBytesPerSecond), 0, submitted); }
+        catch (Exception e) when (e is System.Runtime.InteropServices.COMException or InvalidOperationException) { removed = true; OutputRemoved?.Invoke(); }
+        return lastPlayed; } } }
     public long QueuedFrames { get { lock (gate) return Math.Max(0, submitted - PlayedFrames); } }
     public void Configure(StreamInfo format, string preferredOutput)
     {
@@ -33,7 +37,8 @@ public sealed class WindowsSink : IAudioSink, IMMNotificationClient
             var wave = WaveFormat.CreateIeeeFloatWaveFormat((int)format.SampleRate, format.Channels);
             buffer = new BufferedWaveProvider(wave) { BufferDuration = TimeSpan.FromSeconds(4), DiscardOnBufferOverflow = false, ReadFully = true };
             output = new WasapiOut(device, AudioClientShareMode.Shared, true, 100);
-            output.Init(new VolumeProvider(buffer, () => volume)); submitted = 0;
+            output.Init(new VolumeProvider(buffer, () => volume)); submitted = lastPlayed = 0;
+            deviceName = device.FriendlyName; deviceID = device.ID; mixRate = device.AudioClient.MixFormat.SampleRate;
             output.PlaybackStopped += (_, e) => { if (e.Exception != null) { removed = true; OutputRemoved?.Invoke(); } };
         }
     }
@@ -45,11 +50,11 @@ public sealed class WindowsSink : IAudioSink, IMMNotificationClient
         return Task.CompletedTask;
     }
     public void Play() { lock (gate) { if (removed) throw new InvalidOperationException("Select an output after disconnecting."); if (output?.PlaybackState != PlaybackState.Playing) output?.Play(); } }
-    public void Pause() { lock (gate) output?.Pause(); }
+    public void Pause() { lock (gate) { try { output?.Pause(); } catch (System.Runtime.InteropServices.COMException) { removed = true; } } }
     public void Volume(double value) => volume = double.IsFinite(value) ? Math.Clamp(value, 0, 1) : 0;
     public void Dispose() { devices.UnregisterEndpointNotificationCallback(this); lock (gate) { output?.Dispose(); device?.Dispose(); devices.Dispose(); } }
-    public void OnDeviceStateChanged(string id, NativeDeviceState state) { if (id == device?.ID && state != NativeDeviceState.Active) { removed = true; OutputRemoved?.Invoke(); } }
-    public void OnDeviceRemoved(string id) { if (id == device?.ID) { removed = true; OutputRemoved?.Invoke(); } }
+    public void OnDeviceStateChanged(string id, NativeDeviceState state) { if (id == deviceID && state != NativeDeviceState.Active) { removed = true; OutputRemoved?.Invoke(); } }
+    public void OnDeviceRemoved(string id) { if (id == deviceID) { removed = true; OutputRemoved?.Invoke(); } }
     public void OnDefaultDeviceChanged(DataFlow flow, Role role, string id) { }
     public void OnDeviceAdded(string id) { }
     public void OnPropertyValueChanged(string id, PropertyKey key) { }

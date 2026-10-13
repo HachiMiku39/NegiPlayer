@@ -36,13 +36,13 @@ jobs:
         with:
           dotnet-version: '10.0.x'
       - name: Install Windows MAUI workload
-        run: dotnet workload install maui-windows
+        run: dotnet workload install maui-windows --skip-manifest-update
       - name: Read-only Windows decoder and PCM tests
         run: dotnet run --project cross/NegiPlayer.WindowsTests -c Release
       - name: Build portable Windows app
         run: >-
           dotnet publish cross/NegiPlayer.Mobile -f net10.0-windows10.0.19041.0 -c Release -r win-x64
-          -p:TargetFrameworks=net10.0-windows10.0.19041.0 -p:WindowsPackageType=None
+          -p:NegiWindowsOnly=true -p:WindowsPackageType=None
           -p:WindowsAppSDKSelfContained=true --self-contained true -o ci-artifacts/NegiPlayer-Windows-x64
       - name: Include licenses and checksums
         shell: pwsh

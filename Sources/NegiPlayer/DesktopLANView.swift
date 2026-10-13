@@ -49,6 +49,7 @@ private struct DesktopLANConnectedView:View {
     @ObservedObject var model:DesktopLANModel
     @ObservedObject var player:DesktopLANPlayer
     @State private var tab=0
+    @AppStorage("peer-album-layout") private var albumLayout="grid"
     var body:some View {
         VStack(spacing:12) {
             Picker(L("音乐库"),selection:$tab) {
@@ -65,7 +66,24 @@ private struct DesktopLANConnectedView:View {
         }.onChange(of:player.track?.id) { _ in if player.track != nil { tab=2 } }
     }
     var albums:some View {
-        ScrollView {
+        VStack(spacing:14) {
+            Picker(L("专辑显示方式"),selection:$albumLayout) { Text(L("封面网格")).tag("grid"); Text(L("缩略图列表")).tag("list") }
+                .pickerStyle(.segmented).frame(maxWidth:320).padding(.horizontal,24)
+            ScrollView {
+            if albumLayout=="grid" {
+                LazyVGrid(columns:[GridItem(.adaptive(minimum:180,maximum:240),spacing:22)],spacing:26) {
+                    ForEach(model.albums) { album in
+                        Button { model.select(album); tab=1 } label: {
+                            VStack(alignment:.leading,spacing:8) {
+                                DesktopLANAlbumCover(model:model,id:album.coverTrackID,size:160)
+                                Text(album.title.isEmpty ? L("未标记专辑") : album.title).font(.headline).lineLimit(2)
+                                Text(album.artist.isEmpty ? L("未知艺人") : album.artist).font(.caption).foregroundStyle(.secondary).lineLimit(1)
+                                Text(String(format:L("%d 首曲目"),album.count)).font(.caption).foregroundStyle(.secondary)
+                            }.frame(maxWidth:.infinity,alignment:.leading).contentShape(Rectangle())
+                        }.buttonStyle(.plain)
+                    }
+                }.padding(.horizontal,24)
+            } else {
             LazyVStack(alignment:.leading,spacing:0) {
                 ForEach(model.albums) { album in
                     Button { model.select(album); tab=1 } label: {
@@ -78,6 +96,8 @@ private struct DesktopLANConnectedView:View {
                     Divider().padding(.leading,66)
                 }
             }.padding(.horizontal,24)
+            }
+            }
         }
     }
     var tracks:some View {
@@ -129,10 +149,11 @@ private struct DesktopLANConnectedView:View {
 private struct DesktopLANAlbumCover:View {
     let model:DesktopLANModel
     let id:String
+    var size:CGFloat=52
     @State private var image:NSImage?
     var body:some View {
         Group { if let image { Image(nsImage:image).resizable().scaledToFill() } else { Image(systemName:"opticaldisc").font(.title2) } }
-            .frame(width:52,height:52).background(.quaternary).clipShape(RoundedRectangle(cornerRadius:8))
+            .frame(width:size,height:size).background(.quaternary).clipShape(RoundedRectangle(cornerRadius:8))
             .task(id:id) { image=await model.artwork(id) }
     }
 }
