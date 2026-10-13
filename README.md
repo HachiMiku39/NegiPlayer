@@ -1,8 +1,8 @@
 # NegiPlayer
 
-macOS 本地音乐播放器与歌词工作室，开发预览 0.4.0。提供 Negi（Miku 青绿与少量粉色）、日间、夜间三套主题及中文／日文／英文界面，macOS 27 使用原生 SwiftUI Liquid Glass；减少透明度时使用实色背景。最低部署目标 macOS 14，当前验证架构为 Apple Silicon / arm64。
+macOS 本地音乐播放器与歌词工作室，开发预览 0.5.0。提供 Negi（Miku 青绿与少量粉色）、日间、夜间三套主题及中文／日文／英文界面，macOS 27 使用原生 SwiftUI Liquid Glass；减少透明度时使用实色背景。最低部署目标 macOS 14，当前验证架构为 Apple Silicon / arm64。
 
-本轮增加 iOS LAN 播放端、Mac 只读 HTTPS 曲库服务、三套主题／三种语言和两端共用图标。两端专辑页面可切换封面网格与缩略图列表，选择在本机保存；使用真实内嵌／文件夹封面，保留正在播放页面和自动 LRC 显示，延续本地 PCM 播放、歌词编辑与聆听设置。它仍是开发预览，完整 DSD、标签管理与正式发布验收见 [ROADMAP.md](ROADMAP.md)。
+本轮增加原生 Windows 与 Android 端：Mac、Windows 都能管理只读曲库并互相作为播放端；iOS、Android 只读浏览，并在本机处理音频、EQ 与输出。四端共用 LAN v1、封面、LRC、Negi／日间／夜间主题及中／日／英语言目录。Windows 使用 WASAPI，Android 使用 AudioTrack。构建与连接说明见 [cross/README.md](cross/README.md)，Roon 功能参照见 [ROON_REFERENCE.md](ROON_REFERENCE.md)。完整 DSD、独占输出、同步多房间与正式发布验收仍见 [ROADMAP.md](ROADMAP.md)。
 
 ## iOS 与 LAN
 

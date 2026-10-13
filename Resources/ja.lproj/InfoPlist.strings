@@ -1,2 +1,2 @@
-"NSLocalNetworkUsageDescription" = "同じローカルネットワーク内の NegiPlayer Mac ライブラリに接続し、読み取り専用の音声、ジャケット、歌詞を転送します。";
+"NSLocalNetworkUsageDescription" = "同じ LAN の NegiPlayer に接続し、macOS または Windows のライブラリから音声、ジャケット、歌詞を読み取り専用で転送します。";
 "CFBundleDisplayName" = "NegiPlayer";

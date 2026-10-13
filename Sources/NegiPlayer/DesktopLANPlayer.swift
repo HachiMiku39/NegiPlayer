@@ -116,7 +116,7 @@ import AudioToolbox
         }
     }
     func pause() { if let info { position=Double(playedFrame())/info.sampleRate }; node.pause(); playing=false }
-    func resume() { guard info != nil else { return }; do { if !engine.isRunning { try engine.start() }; playing=true; if position>=duration { begin(at:0) } else { node.play() } } catch { fail(error) } }
+    func resume() { guard info != nil else { return }; do { if let uid=preferences.preferredDeviceUID { guard let selected=devices.first(where:{$0.uid==uid}),selected.id==outputDeviceID else { throw LANError.message("输出设备不可用，请重新选择设备") } }; if !engine.isRunning { try engine.start() }; playing=true; if position>=duration { begin(at:0) } else { node.play() } } catch { fail(error) } }
     func toggle() { playing ? pause() : resume() }
     func seek(_ seconds: Double) { guard seconds.isFinite, info != nil else { return }; begin(at:min(max(0,seconds),max(0,duration-0.01))) }
     func selectOutput(_ uid: String?) {

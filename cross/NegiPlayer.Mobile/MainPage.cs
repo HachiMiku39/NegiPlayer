@@ -260,7 +260,7 @@ public sealed class MainPage : ContentPage
         time.Text = Clock(model.Player.Position) + " / " + Clock(model.Player.Duration);
         if (displayedCover != model.Cover) { displayedCover = model.Cover; var image = displayedCover;
             cover.Source = image == null ? "cover_placeholder.png" : ImageSource.FromStream(() => new MemoryStream(image)); }
-        if (page == "playing" && model.LyricLines.Count > 0 && playerGrid.Children.Count < 2) LayoutPlayer();
+        if (page == "playing" && lastLyricsPresent != (model.LyricLines.Count > 0)) LayoutPlayer();
         int next = Lyrics.Active(model.LyricLines, model.Player.Position);
         if (follow && next >= 0 && next != activeLyric && page == "playing") { activeLyric = next; lyrics.ScrollTo(next, position: ScrollToPosition.Center, animate: true); }
 #if WINDOWS

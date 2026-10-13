@@ -1568,8 +1568,9 @@
     "ja": "Mac で音楽を追加してからライブラリを更新してください"
   },
   "LAN 连接": {
-    "en": "LAN Connections",
-    "ja": "LAN 接続"
+    "zh": "LAN 连接",
+    "ja": "LAN 接続",
+    "en": "LAN connection"
   },
   "局域网播放": {
     "en": "LAN Playback",
@@ -1698,5 +1699,10 @@
   "HTTPS 仅接受本地／私有网络连接。主机休眠、退出、外置盘离线或关闭服务会中断传输；播放终端不保存音乐副本或可写数据库。": {
     "en": "HTTPS accepts only local/private network connections. Host sleep, exit, offline disks or service shutdown interrupt streaming; playback endpoints store no music copy or writable database.",
     "ja": "HTTPS はローカル・プライベートネットワークのみ受け付けます。ホストのスリープ・終了・ディスクの切断・サービス停止で転送が途切れます。再生端末は音楽のコピーや書き込み可能なデータベースを保存しません。"
+  },
+  "本地优先 · 开发预览 0.5": {
+    "zh": "本地优先 · 开发预览 0.5",
+    "ja": "ローカル優先 · 開発プレビュー 0.5",
+    "en": "Local first · Development preview 0.5"
   }
 }

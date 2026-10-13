@@ -1,10 +1,12 @@
 {
   "schemaVersion": 1,
   "product": "NegiPlayer",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "deploymentTarget": {
     "macOS": "14.0",
-    "iOS": "17.0"
+    "iOS": "17.0",
+    "Windows": "10.0.19041",
+    "Android": "26"
   },
   "validatedArchitecture": "arm64",
   "validatedHost": "macOS 27.2 (26B5101f)",
@@ -67,5 +69,27 @@
     "GRDB",
     "FFmpeg raw DSD / DST library"
   ],
-  "notes": "System framework versions follow the host OS. This records the tested toolchain and exact reference source, not a vendored Apple SDK lock."
+  "notes": "System framework versions follow the host OS. This records the tested toolchain and exact reference source, not a vendored Apple SDK lock.",
+  "crossPlatformDependencies": [
+    {
+      "package": "Microsoft.Maui.Controls",
+      "version": "10.0.110",
+      "license": "MIT"
+    },
+    {
+      "package": "NAudio",
+      "version": "2.2.1",
+      "license": "MIT"
+    },
+    {
+      "package": "TagLibSharp",
+      "version": "2.3.0",
+      "license": "LGPL-2.1"
+    }
+  ],
+  "crossPlatformToolchain": {
+    "dotnetSDK": "10.0.401",
+    "androidAPI": "36",
+    "jdk": "21"
+  }
 }

@@ -60,6 +60,18 @@ Test("DSP gain, bypass and finite values", () => { var info = new StreamInfo(480
     dsp.Configure(info, new() { EqEnabled = true, EqPreamp = -6, Gains = new double[10] }); values = Enumerable.Repeat(.01f, 200).ToArray(); dsp.Process(values, 2);
     Require(Math.Abs(values[100] / .01 - Math.Pow(10, -6d / 20)) < .00001, "EQ preamp"); });
 
+Test("EQ response and metadata peak budget", () => {
+    var info = new StreamInfo(48000, 2, 48000, new() { ["REPLAYGAIN_TRACK_GAIN"] = ["0 dB"], ["REPLAYGAIN_TRACK_PEAK"] = ["1"] });
+    double Rms(float[] v) => Math.Sqrt(v.Skip(16000).Where((x, i) => i % 2 == 0).Average(x => x * x));
+    float[] Tone() => Enumerable.Range(0, 48000).SelectMany(i => new[] { (float)(.25 * Math.Sin(2 * Math.PI * 1000 * i / 48000)), 0f }).ToArray();
+    var input = Tone(); double original = Rms(input); var gains = new double[10]; gains[5] = 6;
+    var dsp = new PcmDsp(); dsp.Configure(info, new() { EqEnabled = true, EqPreamp = 0, Gains = gains }); dsp.Process(input, 2);
+    Require(Math.Abs(Rms(input) / original - Math.Pow(10, 6d / 20)) < .001, "1 kHz EQ response");
+    Require(input.Where((x, i) => i % 2 == 1).All(x => x == 0), "channel isolation");
+    dsp.Configure(info, new() { EqEnabled = true, EqPreamp = 0, Gains = gains, LoudnessMode = "track", PeakProtection = true }); input = Tone(); dsp.Process(input, 2);
+    Require(Math.Abs(Rms(input) / original - 1) < .001, "EQ boost peak budget");
+});
+
 await TestAsync("TLS pin, PCM, artwork/LRC, readonly and revoke", async () => {
     using var cert = LanHost.NewCertificate(); await using var host = new LanHost(new FixtureLibrary(), cert, "conformance-host", "Fixture"); host.Start(0);
     using var client = new LanClient($"https://127.0.0.1:{host.Port}", host.Fingerprint);
@@ -68,7 +80,6 @@ await TestAsync("TLS pin, PCM, artwork/LRC, readonly and revoke", async () => {
     using var wrong = new LanClient(client.BaseURL.AbsoluteUri, new string('0', 64));
     await RejectAsync(async () => await wrong.JsonAsync<ServerInfo>("/v1/info"));
     await RejectAsync(async () => await client.SendAsync("/v1/tracks", "POST"));
-    await RejectAsync(async () => await client.SendAsync("/v1/tracks/signal-1/stream", range: new(0, 300000)));
     Require(host.Outputs.Values.Single().EqEnabled, "device state");
     await client.RevokeAsync(); await RejectAsync(async () => await client.JsonAsync<ServerInfo>("/v1/info"));
 });
@@ -77,5 +88,12 @@ await TestAsync("large TLS response and pagination", async () => {
     using var client = new LanClient($"https://127.0.0.1:{host.Port}", host.Fingerprint); await client.PairAsync(host.Pairings.Renew(), "Test");
     for (int i = 0; i < 3; i++) { var albums = await client.JsonAsync<AlbumPage>("/v1/albums"); Require(albums.Albums.Length == 1400, "large albums");
         var tracks = await client.JsonAsync<TrackPage>("/v1/tracks?offset=13500&limit=500"); Require(tracks.Tracks.Length == 500 && tracks.Total == 14000, "large tracks"); }
+});
+await TestAsync("PCM request byte ceiling", async () => {
+    using var cert = LanHost.NewCertificate(); await using var host = new LanHost(new FixtureLibrary(frames: 65536), cert, "range-host", "Fixture"); host.Start(0);
+    using var client = new LanClient($"https://127.0.0.1:{host.Port}", host.Fingerprint); await client.PairAsync(host.Pairings.Renew(), "Test");
+    await RejectAsync(async () => await client.SendAsync("/v1/tracks/signal-1/stream", range: new(0, LanProtocol.MaxRange + 1L)));
+    var data = await client.SendAsync("/v1/tracks/signal-1/stream", range: new(0, LanProtocol.MaxRange));
+    Require(data.Bytes.Length == LanProtocol.MaxRange, "exact ceiling");
 });
 Console.WriteLine($"PASS: {passed} conformance groups. Hardware playback is not part of this portable test.");

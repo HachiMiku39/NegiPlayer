@@ -47,7 +47,10 @@ public sealed class PcmDsp
             var peak = album ? Tag(info.Tags, "REPLAYGAIN_ALBUM_PEAK") : null;
             peak ??= Tag(info.Tags, "REPLAYGAIN_TRACK_PEAK");
             if (settings.PeakProtection && peak is > 0)
-                gainDB = Math.Min(gainDB, -20 * Math.Log10(peak.Value));
+            {
+                double eqBudget = settings.EqEnabled ? settings.EqPreamp + settings.Gains.Where(g => g > 0).Sum() : 0;
+                gainDB = Math.Min(gainDB, -20 * Math.Log10(peak.Value) - eqBudget);
+            }
         }
         if (settings.EqEnabled) gainDB += settings.EqPreamp;
         lock (gate)

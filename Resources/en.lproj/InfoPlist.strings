@@ -1,2 +1,2 @@
-"NSLocalNetworkUsageDescription" = "Connect to a NegiPlayer Mac library on the same local network for read-only audio, artwork and lyrics.";
+"NSLocalNetworkUsageDescription" = "Connect to NegiPlayer on the same local network to browse read-only macOS or Windows libraries and transfer audio, artwork and lyrics.";
 "CFBundleDisplayName" = "NegiPlayer";
