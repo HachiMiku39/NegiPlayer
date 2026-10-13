@@ -43,6 +43,7 @@ internal static class EmulatorConformance
             }
             if (AppModel.Shared.Client?.Credentials?.Token is { } token) message = message.Replace(token, "[fixture token]");
             report["error"] = message[..Math.Min(message.Length, 500)];
+            report["stack"] = (e.StackTrace ?? "")[..Math.Min(e.StackTrace?.Length ?? 0, 1200)];
         }
         await File.WriteAllTextAsync(Path.Combine(directory, "conformance-result.json"), JsonSerializer.Serialize(report));
     }

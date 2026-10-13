@@ -65,7 +65,11 @@ public sealed class LanClient : IDisposable
     {
         await SendAsync("/v1/device", "DELETE", cancel: cancel); Credentials = null;
     }
-    public async Task<Response> SendAsync(string path, string method = "GET", byte[]? body = null,
+    public Task<Response> SendAsync(string path, string method = "GET", byte[]? body = null,
+        string? token = null, ByteRange? range = null, CancellationToken cancel = default) =>
+        Task.Run(() => SendOnWorkerAsync(path, method, body, token, range, cancel), cancel);
+    // Android's native response stream can perform synchronous work during read/close.
+    private async Task<Response> SendOnWorkerAsync(string path, string method, byte[]? body,
         string? token = null, ByteRange? range = null, CancellationToken cancel = default)
     {
         if (!path.StartsWith("/v1/") || path.Contains('#') || path.Any(c => c is '\r' or '\n'))
@@ -79,13 +83,13 @@ public sealed class LanClient : IDisposable
         if (token != null) request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
         if (body != null) { request.Content = new ByteArrayContent(body); request.Content.Headers.ContentType = new("application/json"); }
         if (range is { } r) request.Headers.Range = new RangeHeaderValue(r.Start, r.End);
-        using var response = await http.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, cancel);
+        using var response = await http.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, cancel).ConfigureAwait(false);
         if (!response.IsSuccessStatusCode) throw new HttpFailure((int)response.StatusCode);
         int maximum = range.HasValue ? LanProtocol.MaxRange : 8_000_000;
         if (response.Content.Headers.ContentLength > maximum) throw new InvalidDataException("Oversized response.");
-        await using var input = await response.Content.ReadAsStreamAsync(cancel);
+        await using var input = await response.Content.ReadAsStreamAsync(cancel).ConfigureAwait(false);
         using var output = new MemoryStream(); var buffer = new byte[16384];
-        for (;;) { int n = await input.ReadAsync(buffer, cancel); if (n == 0) break;
+        for (;;) { int n = await input.ReadAsync(buffer, cancel).ConfigureAwait(false); if (n == 0) break;
             if (output.Length + n > maximum) throw new InvalidDataException("Oversized response.");
             output.Write(buffer, 0, n); }
         return new((int)response.StatusCode, output.ToArray(), response.Content.Headers.ContentRange?.ToString());
