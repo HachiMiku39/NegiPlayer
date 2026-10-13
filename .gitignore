@@ -36,3 +36,10 @@ server-id.txt
 !validation/lan-ui.json
 !validation/usb-ja11-output.json
 !validation/album-display-ui.json
+
+cross/**/bin/
+cross/**/obj/
+cross/**/.vs/
+ci-artifacts/
+*.keystore
+*.pfx

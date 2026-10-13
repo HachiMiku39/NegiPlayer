@@ -45,6 +45,7 @@ import LANHost
     @Published var artworkRevision = 0
     let artworkRepository: ArtworkRepository
     let lan: LANController
+    let peer = DesktopLANModel()
     private var listeningTask: Task<Void,Never>?
     private var releaseMembers: [String:[MediaFile]] = [:]
     var discImages: [MediaFile] { files.filter(\.isDiscImage).sorted { $0.relativePath.localizedStandardCompare($1.relativePath) == .orderedAscending } }
@@ -259,6 +260,7 @@ import LANHost
         }
     }
     func play(_ media: MediaFile, replaceQueue: Bool = true) {
+        peer.player.pause()
         Task {
             do {
                 let url = try url(for: media)
@@ -267,7 +269,7 @@ import LANHost
             } catch is CancellationError { } catch { self.error = error.localizedDescription }
         }
     }
-    func toggle() { do { try playback.toggle() } catch { self.error = error.localizedDescription } }
+    func toggle() { peer.player.pause(); do { try playback.toggle() } catch { self.error = error.localizedDescription } }
     func enqueue(_ media: MediaFile, next: Bool) {
         if !next, playback.queue.contains(where: { $0.id == media.id }) {
             showQueue = true; notice = "队列中已有：\(media.title)"; return

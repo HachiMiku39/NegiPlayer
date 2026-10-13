@@ -1,0 +1,29 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFrameworks>net10.0-android</TargetFrameworks>
+    <TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">net10.0-android;net10.0-windows10.0.19041.0</TargetFrameworks>
+    <OutputType>Exe</OutputType><RootNamespace>NegiPlayer.Mobile</RootNamespace>
+    <UseMaui>true</UseMaui><SingleProject>true</SingleProject><ImplicitUsings>enable</ImplicitUsings><Nullable>enable</Nullable>
+    <ApplicationTitle>NegiPlayer</ApplicationTitle><ApplicationId>com.negiplayer.mobile</ApplicationId>
+    <ApplicationDisplayVersion>0.5.0</ApplicationDisplayVersion><ApplicationVersion>5</ApplicationVersion>
+    <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">26.0</SupportedOSPlatformVersion>
+    <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.19041.0</SupportedOSPlatformVersion>
+    <TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.19041.0</TargetPlatformMinVersion>
+    <WindowsPackageType>None</WindowsPackageType><WindowsAppSDKSelfContained>true</WindowsAppSDKSelfContained>
+    <AndroidPackageFormats>apk</AndroidPackageFormats><AndroidUseSharedRuntime>false</AndroidUseSharedRuntime>
+    <MauiVersion>10.0.110</MauiVersion>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
+    <ProjectReference Include="../NegiPlayer.Core/NegiPlayer.Core.csproj" />
+    <MauiIcon Include="Resources/appicon.png" Color="#101A20" />
+    <MauiSplashScreen Include="Resources/splash.svg" Color="#101A20" BaseSize="128,128" />
+    <MauiImage Include="Resources/cover_placeholder.svg" />
+    <MauiAsset Include="../../Resources/PlayerStrings.json" LogicalName="PlayerStrings.json" />
+    <MauiAsset Include="../licenses/*.txt" LogicalName="licenses/%(Filename)%(Extension)" />
+    <MauiAsset Include="../../THIRD_PARTY.md" LogicalName="THIRD_PARTY.md" />
+  </ItemGroup>
+  <ItemGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">
+    <ProjectReference Include="../NegiPlayer.WindowsAudio/NegiPlayer.WindowsAudio.csproj" />
+  </ItemGroup>
+</Project>

@@ -28,3 +28,9 @@ SFB Audio Engine、TagLib、GRDB 与 FFmpeg DST 库尚未作为工程依赖引�
 0.4 使用 Apple Network / Security 构建本地 HTTPS 与配对，并在本机首次开启服务时调用系统 LibreSSL/openssl 生成私有 TLS 身份；不打包 openssl，也不公开私钥或配对数据。iOS 同样使用系统 AVFoundation、UIKit、MediaPlayer、Security 与 SwiftUI。
 
 MV 模式只参考 [SEGA MikuFlick 的官方呈现](https://miku.sega.jp/flick/en/)中音乐与影像的组合方向，实际交互为独立的本地静音视频加歌词，不复制游戏界面、源码、角色、音乐或视频。中性共用图标由内置 ImageGen 生成；母版和设计说明见 [Resources/Brand/README.md](Resources/Brand/README.md)。
+# 0.5 Windows / Android additions
+
+The native Windows/Android frontends use Microsoft .NET MAUI 10.0.110 (MIT) and .NET 10 (MIT). Windows audio uses NAudio 2.2.1 (MIT); read-only metadata uses TagLibSharp 2.3.0 (LGPL-2.1). TagLibSharp is a separate, replaceable DLL in the portable Windows package; NegiPlayer's read-only file abstraction rejects tag writes. Corresponding library source: https://github.com/mono/taglib-sharp (version 2.3.0). License copies are in `cross/licenses/` and included in packages. Audio codecs use Windows Media Foundation/system components rather than bundled third-party decoders.
+
+The Windows/Android app icon copies the existing original NegiPlayer PNG unchanged. Roon is a functional reference only; no Roon code, installers, patches, RAAT implementation, graphics or branding is included.
+

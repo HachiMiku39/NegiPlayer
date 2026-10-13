@@ -1,0 +1,129 @@
+name: Cross-platform LAN build
+on:
+  push:
+    branches: [main, cross-platform-lan]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: cross-platform-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  protocol:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+      - uses: actions/setup-dotnet@26b0ec14cb23fa6904739307f278c14f94c95bf1 # v5
+        with:
+          dotnet-version: '10.0.x'
+      - name: Protocol, TLS and source PCM tests
+        run: |
+          mkdir -p ci-artifacts
+          dotnet run --project cross/NegiPlayer.Conformance -c Release | tee ci-artifacts/protocol.log
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+        with:
+          name: NegiPlayer-LAN-protocol
+          path: ci-artifacts/protocol.log
+          retention-days: 14
+  windows:
+    runs-on: windows-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+      - uses: actions/setup-dotnet@26b0ec14cb23fa6904739307f278c14f94c95bf1
+        with:
+          dotnet-version: '10.0.x'
+      - name: Install Windows MAUI workload
+        run: dotnet workload install maui-windows
+      - name: Read-only Windows decoder and PCM tests
+        run: dotnet run --project cross/NegiPlayer.WindowsTests -c Release
+      - name: Build portable Windows app
+        run: >-
+          dotnet publish cross/NegiPlayer.Mobile -f net10.0-windows10.0.19041.0 -c Release -r win-x64
+          -p:TargetFrameworks=net10.0-windows10.0.19041.0 -p:WindowsPackageType=None
+          -p:WindowsAppSDKSelfContained=true --self-contained true -o ci-artifacts/NegiPlayer-Windows-x64
+      - name: Include licenses and checksums
+        shell: pwsh
+        run: |
+          Copy-Item LICENSE ci-artifacts/NegiPlayer-Windows-x64/
+          Copy-Item THIRD_PARTY.md ci-artifacts/NegiPlayer-Windows-x64/
+          Copy-Item cross/README.md ci-artifacts/NegiPlayer-Windows-x64/README.md
+          Copy-Item cross/licenses ci-artifacts/NegiPlayer-Windows-x64/ -Recurse
+          Compress-Archive -Path ci-artifacts/NegiPlayer-Windows-x64 -DestinationPath ci-artifacts/NegiPlayer-0.5.0-Windows-x64.zip
+          $digest = (Get-FileHash ci-artifacts/NegiPlayer-0.5.0-Windows-x64.zip -Algorithm SHA256).Hash.ToLower()
+          "$digest  NegiPlayer-0.5.0-Windows-x64.zip" | Out-File -Encoding ascii ci-artifacts/Windows-SHA256SUMS.txt
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        with:
+          name: NegiPlayer-Windows-x64
+          path: |
+            ci-artifacts/NegiPlayer-0.5.0-Windows-x64.zip
+            ci-artifacts/Windows-SHA256SUMS.txt
+          retention-days: 14
+  android:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+      - uses: actions/setup-dotnet@26b0ec14cb23fa6904739307f278c14f94c95bf1
+        with:
+          dotnet-version: '10.0.x'
+      - uses: actions/setup-java@b6effb05e454b25005698d916606bdc6ffcbf961 # v5
+        with:
+          distribution: temurin
+          java-version: '21'
+      - name: Android MAUI and API 36
+        run: |
+          dotnet workload install maui-android
+          sdkmanager 'platforms;android-36' 'build-tools;36.0.0'
+      - name: Build bundled development APK
+        run: >-
+          dotnet build cross/NegiPlayer.Mobile -f net10.0-android -c Debug
+          -p:EmbedAssembliesIntoApk=true -p:AndroidUseSharedRuntime=false
+          '-p:RuntimeIdentifiers=android-arm64;android-x64'
+      - name: Package APK and checksums
+        run: |
+          mkdir -p ci-artifacts
+          cp cross/NegiPlayer.Mobile/bin/Debug/net10.0-android/com.negiplayer.mobile-Signed.apk ci-artifacts/NegiPlayer-0.5.0-Android-development.apk
+          cd ci-artifacts
+          sha256sum NegiPlayer-0.5.0-Android-development.apk > Android-SHA256SUMS.txt
+      - name: Enable emulator KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+      - name: Android synthetic LAN and AudioTrack smoke test
+        uses: ReactiveCircus/android-emulator-runner@a421e43855164a8197daf9d8d40fe71c6996bb0d # v2
+        with:
+          api-level: 35
+          arch: x86_64
+          target: google_apis
+          disable-animations: true
+          script: bash cross/scripts/android-smoke.sh
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        with:
+          name: NegiPlayer-Android-development
+          path: |
+            ci-artifacts/NegiPlayer-0.5.0-Android-development.apk
+            ci-artifacts/Android-SHA256SUMS.txt
+            ci-artifacts/android-emulator-conformance.json
+          retention-days: 14
+  apple-interop:
+    runs-on: macos-26
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+      - uses: actions/setup-dotnet@26b0ec14cb23fa6904739307f278c14f94c95bf1
+        with:
+          dotnet-version: '10.0.x'
+      - name: Build native Mac and iOS endpoints
+        run: |
+          swift build --disable-sandbox
+          xcodebuild -project iOS/NegiPlayeriOS.xcodeproj -scheme NegiPlayeriOS -sdk iphonesimulator -destination 'generic/platform=iOS Simulator' -derivedDataPath /tmp/NegiPlayer-iOS CODE_SIGNING_ALLOWED=NO build
+      - name: Bidirectional Swift and C# LAN interoperability
+        run: bash cross/scripts/apple-interop.sh
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        with:
+          name: NegiPlayer-Apple-Windows-LAN-interop
+          path: ci-artifacts/interop/*.json
+          retention-days: 14
