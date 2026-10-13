@@ -12,6 +12,7 @@
     <WindowsPackageType>None</WindowsPackageType><WindowsAppSDKSelfContained>true</WindowsAppSDKSelfContained>
     <AndroidPackageFormats>apk</AndroidPackageFormats><AndroidUseSharedRuntime>false</AndroidUseSharedRuntime>
     <MauiVersion>10.0.110</MauiVersion>
+    <RuntimeIdentifiers Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">android-arm64;android-x64</RuntimeIdentifiers>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />

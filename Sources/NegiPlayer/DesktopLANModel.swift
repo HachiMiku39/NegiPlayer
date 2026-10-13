@@ -72,7 +72,7 @@ private enum DesktopConnectionStore {
         do {
             let info=try await session.json("/v1/info",as:ServerInfo.self,token:saved.token)
             guard info.id==saved.serverID,info.protocolVersion==1 else { throw LANError.message("主机标识改变，请重新配对") }
-            connectionGeneration=UUID(); player.stop(); client?.session.invalidateAndCancel(); client=session; credentials=saved
+            connectionGeneration=UUID(); albumCovers.removeAllObjects(); assetTask?.cancel(); player.stop(); client?.session.invalidateAndCancel(); client=session; credentials=saved
             hostName=info.name; connected=true; selectedAlbum=nil; query=""; try await refresh()
             heartbeat?.cancel(); heartbeat=Task { [weak self] in while !Task.isCancelled { await self?.report(); do { try await Task.sleep(nanoseconds:10_000_000_000) } catch { break } } }
         } catch { session.session.invalidateAndCancel(); throw error }

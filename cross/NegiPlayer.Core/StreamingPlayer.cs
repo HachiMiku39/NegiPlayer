@@ -105,7 +105,17 @@ public sealed class StreamingPlayer : IAsyncDisposable
         return Task.CompletedTask;
     }
     public void Pause() { playing = false; sink.Pause(); Changed?.Invoke(); }
-    public void Resume() { if (info == null) return; playing = true; sink.Play(); Changed?.Invoke(); }
+    public void Resume()
+    {
+        if (info == null) return;
+        if (Position >= Duration - 0.001) { playing = true; _ = RestartAsync(); return; }
+        sink.Play(); playing = true; Changed?.Invoke();
+    }
+    private async Task RestartAsync()
+    {
+        try { await SeekAsync(0); }
+        catch (Exception e) { playing = false; Error = e.Message; Changed?.Invoke(); }
+    }
     public void Toggle() { if (playing) Pause(); else Resume(); }
     private async Task CancelPumpAsync()
     {

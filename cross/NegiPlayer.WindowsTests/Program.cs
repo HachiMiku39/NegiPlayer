@@ -29,7 +29,8 @@ try
     }
     var lyrics = await library.LyricsAsync(track.Id, default);
     if (lyrics.Lines[0].Time != 1.2 || lyrics.Lines[1].Text != "音楽 · Music · 🌱") throw new Exception("Windows LRC differs.");
-    if (!before.SequenceEqual(SHA256.HashData(await File.ReadAllBytesAsync(path)))) throw new Exception("Source file changed.");
+    byte[] after = SHA256.HashData(await File.ReadAllBytesAsync(path));
+    if (!before.SequenceEqual(after)) throw new Exception("Source file changed.");
     await File.WriteAllTextAsync(path, "changed");
     try { await library.InfoAsync(track.Id, default); throw new Exception("Changed source accepted."); }
     catch (HttpFailure e) when (e.Status == 503) { }
