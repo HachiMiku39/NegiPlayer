@@ -20,6 +20,10 @@ public sealed class MainPage : ContentPage
     private readonly Grid playerGrid = new() { ColumnSpacing = 30, RowSpacing = 24 };
     private readonly VerticalStackLayout controls = new() { Spacing = 14, HorizontalOptions = LayoutOptions.Center };
     private readonly ScrollView controlsScroll;
+    private readonly Grid compactHeader = new() { ColumnDefinitions = { new(68), new(GridLength.Star) }, RowDefinitions = { new(GridLength.Auto), new(GridLength.Auto) }, ColumnSpacing = 12 };
+    private readonly VerticalStackLayout compactFooter = new() { Spacing = 2 };
+    private readonly HorizontalStackLayout transport = new() { Spacing = 24, HorizontalOptions = LayoutOptions.Center };
+    private readonly Slider volume = new() { Minimum = 0, Maximum = 1, WidthRequest = 240, HorizontalOptions = LayoutOptions.Center };
     private CollectionView? albums, tracks;
     private bool initialized, dragging, follow = true;
     private int activeLyric = -1;
@@ -42,9 +46,8 @@ public sealed class MainPage : ContentPage
         progress.DragCompleted += async (_, _) => { dragging = false; await Run(() => model.Player.SeekAsync(progress.Value)); };
         play.Clicked += (_, _) => { try { model.Player.Toggle(); } catch (Exception e) { status.Text = e.Message; } };
         controls.Add(cover); controls.Add(song); controls.Add(artist); controls.Add(progress); controls.Add(time);
-        var transport = new HorizontalStackLayout { Spacing = 24, HorizontalOptions = LayoutOptions.Center };
         transport.Add(B("◀", () => model.NextAsync(-1))); transport.Add(play); transport.Add(B("▶▶", () => model.NextAsync(1))); controls.Add(transport);
-        var volume = new Slider { Minimum = 0, Maximum = 1, Value = model.Player.Settings.Volume, WidthRequest = 240 };
+        volume.Value = model.Player.Settings.Volume;
         volume.ValueChanged += (_, e) => model.ApplySettings(model.Player.Settings with { Volume = e.NewValue });
         controls.Add(softwareVolume); controls.Add(volume); controls.Add(path);
         lyrics.ItemTemplate = new DataTemplate(() =>
@@ -167,8 +170,22 @@ public sealed class MainPage : ContentPage
     private bool lastLyricsPresent;
     private void LayoutPlayer()
     {
+        controls.Clear(); compactHeader.Clear(); compactFooter.Clear();
         playerGrid.Clear(); playerGrid.ColumnDefinitions.Clear(); playerGrid.RowDefinitions.Clear();
         lastLyricsPresent = model.LyricLines.Count > 0;
+        Grid.SetRowSpan(cover, 1);
+        if (Width < 720 && lastLyricsPresent)
+        {
+            playerGrid.RowSpacing = 8;
+            playerGrid.RowDefinitions.Add(new(GridLength.Auto)); playerGrid.RowDefinitions.Add(new(GridLength.Star)); playerGrid.RowDefinitions.Add(new(GridLength.Auto));
+            cover.WidthRequest = cover.HeightRequest = 60;
+            compactHeader.Add(cover); Grid.SetRowSpan(cover, 2); compactHeader.Add(song, 1); compactHeader.Add(artist, 1, 1);
+            compactFooter.Add(progress); compactFooter.Add(time); compactFooter.Add(transport); compactFooter.Add(volume);
+            playerGrid.Add(compactHeader); playerGrid.Add(lyrics, 0, 1); playerGrid.Add(compactFooter, 0, 2);
+            return;
+        }
+        playerGrid.RowSpacing = 16;
+        foreach (var view in new View[] { cover, song, artist, progress, time, transport, softwareVolume, volume, path }) controls.Add(view);
         bool split = Width >= 720 && lastLyricsPresent;
         if (split) { playerGrid.ColumnDefinitions.Add(new(GridLength.Star)); playerGrid.ColumnDefinitions.Add(new(GridLength.Star)); playerGrid.Add(controlsScroll); playerGrid.Add(lyrics, 1); }
         else {
@@ -258,6 +275,8 @@ public sealed class MainPage : ContentPage
         if (!MainThread.IsMainThread) { MainThread.BeginInvokeOnMainThread(Tick); return; }
         song.Text = model.Current?.Title ?? L("未选择曲目"); artist.Text = model.Current?.Artist ?? "";
         softwareVolume.Text = L("软件音量"); softwareVolume.TextColor = foreground;
+        volume.Maximum = Math.Max(0.001, model.Player.Settings.VolumeLimit);
+        if (Math.Abs(volume.Value - model.Player.Settings.Volume) > 0.0001) volume.Value = model.Player.Settings.Volume;
         path.Text = model.Current == null ? model.Player.Output : $"{model.Player.SourceRate:N0} Hz PCM → {(model.Player.Settings.EqEnabled ? "EQ · " : "")}{L("软件音量")} → {model.Player.Output}";
         status.Text = model.Player.Error ?? L(model.Status); play.Text = model.Player.Playing ? "Ⅱ" : "▶";
         if (!dragging) { progress.Maximum = Math.Max(0.01, model.Player.Duration); progress.Value = Math.Min(progress.Maximum, model.Player.Position); }
