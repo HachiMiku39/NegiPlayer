@@ -1,2 +1,2 @@
-"NSLocalNetworkUsageDescription" = "连接同一局域网内的 NegiPlayer Mac 曲库，传输只读音频、封面和歌词。";
+"NSLocalNetworkUsageDescription" = "连接同一局域网内的 NegiPlayer，读取 macOS 或 Windows 曲库并传输音频、封面和歌词。";
 "CFBundleDisplayName" = "NegiPlayer";

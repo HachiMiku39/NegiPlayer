@@ -1,6 +1,6 @@
 # 来源与许可清单
 
-NegiPlayer 0.4 工作版本 的项目源码采用 [MIT](LICENSE) 许可。系统框架和参考项目各自保持原许可；未将 NegiFlick 原始 JavaScript 或其他组件重新标为 MIT。
+NegiPlayer 0.5 工作版本 的项目源码采用 [MIT](LICENSE) 许可。系统框架和参考项目各自保持原许可；未将 NegiFlick 原始 JavaScript 或其他组件重新标为 MIT。
 
 | 项目 | 实际用途 | 分发与许可状态 |
 | --- | --- | --- |
@@ -21,10 +21,16 @@ Negi 基线读取路径与 Git blob：
 
 参考 [上游固定提交](https://github.com/HachiMiku39/NegiFlick/tree/cf64f04900bf2429ee9a207b1bf7213feba6c2f9)。本仓库包含独立编写的 Swift 解析、时间与 Unicode 实现，不分发上述原始 JavaScript、上游测试文件或游戏资源。本项目 MIT 不授予复制或再分发未获授权上游源码的权利。
 
-SFB Audio Engine、TagLib、GRDB 与 FFmpeg DST 库尚未作为工程依赖引入；它们是规格中的候选后续组件，不列为已经集成的能力。未来接入需固定版本／commit、编译选项、补丁和真实链接方式，重新审核分发义务。
+SFB Audio Engine、原生 TagLib C++、GRDB 与 FFmpeg DST 库尚未作为工程依赖引入；它们是规格中的候选后续组件，不列为已经集成的能力。未来接入需固定版本／commit、编译选项、补丁和真实链接方式，重新审核分发义务。
 
 名称配色来自用户要求；界面只采用颜色和系统符号，未使用初音未来的官方角色图、Logo 或歌曲资源。测试信号由本项目脚本原创生成；用户外置盘音乐仅在本机只读测试，未复制或分发。
 
 0.4 使用 Apple Network / Security 构建本地 HTTPS 与配对，并在本机首次开启服务时调用系统 LibreSSL/openssl 生成私有 TLS 身份；不打包 openssl，也不公开私钥或配对数据。iOS 同样使用系统 AVFoundation、UIKit、MediaPlayer、Security 与 SwiftUI。
 
 MV 模式只参考 [SEGA MikuFlick 的官方呈现](https://miku.sega.jp/flick/en/)中音乐与影像的组合方向，实际交互为独立的本地静音视频加歌词，不复制游戏界面、源码、角色、音乐或视频。中性共用图标由内置 ImageGen 生成；母版和设计说明见 [Resources/Brand/README.md](Resources/Brand/README.md)。
+# 0.5 Windows / Android additions
+
+The native Windows/Android frontends use Microsoft .NET MAUI 10.0.110 (MIT) and .NET 10 (MIT). Windows audio uses NAudio 2.2.1 (MIT); read-only metadata uses TagLibSharp 2.3.0 (LGPL-2.1). TagLibSharp is a separate, replaceable DLL in the portable Windows package; NegiPlayer's read-only file abstraction rejects tag writes. Corresponding library source: https://github.com/mono/taglib-sharp/tree/b5ae84f2e84087bf160bb0471420200dd2b5d809 (TaglibSharp-2.3.0.0). The unmodified library source and build files are provided as `TagLibSharp-2.3.0-library-source.zip` alongside the Windows binary in the 0.5 release. License copies are in `cross/licenses/` and included in packages. Audio codecs use Windows Media Foundation/system components rather than bundled third-party decoders.
+
+The Windows/Android app icon copies the existing original NegiPlayer PNG unchanged. Roon is a functional reference only; no Roon code, installers, patches, RAAT implementation, graphics or branding is included.
+

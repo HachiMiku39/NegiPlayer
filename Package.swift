@@ -4,7 +4,7 @@ import PackageDescription
 let package = Package(
     name: "NegiPlayer",
     platforms: [.macOS(.v14), .iOS(.v17)],
-    products: [.executable(name: "NegiPlayer", targets: ["NegiPlayer"]), .library(name: "LANCore", targets: ["LANCore"])],
+    products: [.executable(name: "NegiPlayer", targets: ["NegiPlayer"]), .executable(name:"LANConformanceHost", targets:["LANConformanceHost"]), .library(name: "LANCore", targets: ["LANCore"])],
     targets: [
         .systemLibrary(name: "CSQLite", pkgConfig: "sqlite3"),
         .target(name: "LibraryDomain"),
@@ -16,6 +16,7 @@ let package = Package(
         .target(name: "MediaIO", dependencies: ["LibraryDomain", "LyricCore"]),
         .target(name: "FileOperations", dependencies: ["LibraryDomain"]),
         .executableTarget(name: "NegiPlayer", dependencies: ["LibraryDomain", "LibraryStore", "MediaIO", "AudioCore", "LyricCore", "LANHost", "LANCore"]),
+        .executableTarget(name:"LANConformanceHost", dependencies:["LANCore","LANHost","MediaIO","LibraryDomain"]),
         .testTarget(name: "CoreTests", dependencies: ["LyricCore", "LibraryDomain", "LibraryStore", "MediaIO", "AudioCore", "FileOperations", "LANCore", "LANHost"])
     ],
     swiftLanguageModes: [.v5]

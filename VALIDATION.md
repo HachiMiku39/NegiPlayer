@@ -1,3 +1,17 @@
+# 0.5 跨平台云构建验收
+
+[GitHub Actions #7](https://github.com/HachiMiku39/NegiPlayer/actions/runs/38436183041) 对提交 `ddf0ab382f21dda87bb42681827806fb8aad9f03` 的四项作业全部通过。记录见 [validation/cross-platform-0.5.json](validation/cross-platform-0.5.json)。Windows ZIP、Android APK 和更新后的 Mac ZIP 均由云端生成；下载后核对了 Actions artifact 摘要和包内 SHA-256。
+
+- 14 组 C# 协议／TLS／DSP 检查：包括错误证书指纹、只读接口、撤销配对、范围上限、1.4 万条合成曲库、EQ 响应和峰值标签余量。
+- Swift 42 项测试：云端 39 项通过、3 项依赖本机样本而跳过；本机原生 7 个原创格式样本和 DSP 报告使 40 项通过，2 项私有曲库测试跳过。
+- Swift 客户端／C# 主机与 C# 客户端／Swift 主机：每个方向验证 3 个精确 PCM 范围、48 kHz 立体声、封面、LRC 偏移／Unicode、设备状态与撤销。
+- Windows：真实 WAV 系统解码、未对齐 PCM、源摘要不变、源变化拒绝；解压式应用原生窗口已在云端启动。
+- Android API 35 模拟器：原生 APK、证书固定与配对、源 PCM、EQ、AudioTrack 播放时钟、封面／歌词与断开；播放截图已检查，竖屏歌词可见。
+
+Windows／Android 物理 USB DAC、长时间后台播放、所有系统解码器仍需真机测试。模拟器不证明 DAC 的实际声音或硬件采样时钟；新端点不宣称独占、ASIO、原生 DSD 或多房间同步。iOS 为模拟器编译与源码交付，真机安装需开发者签名。Android 包使用 CI 开发签名，重建后的签名可能变化。
+
+以下保留 0.4 与此前原生 Mac 验证记录。
+
 # NegiPlayer 0.4.0 验证记录
 
 2026-10-11，Apple Silicon arm64、macOS 27.2、Xcode 27.1 beta、macOS SDK 27.0／iOS SDK 27.1、Swift 6.4（语言模式 5）。最低 macOS 14／iOS 17；低版本及 Intel 真机未验收。下文 0.3 记录保留为历史证据。

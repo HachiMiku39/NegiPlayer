@@ -1566,5 +1566,143 @@
   "从 Mac 导入音乐后刷新曲库": {
     "en": "Import music on Mac, then refresh the library",
     "ja": "Mac で音楽を追加してからライブラリを更新してください"
+  },
+  "LAN 连接": {
+    "zh": "LAN 连接",
+    "ja": "LAN 接続",
+    "en": "LAN connection"
+  },
+  "局域网播放": {
+    "en": "LAN Playback",
+    "ja": "LAN 再生"
+  },
+  "连接音乐主机": {
+    "en": "Connect to a music host",
+    "ja": "音楽ホストに接続"
+  },
+  "连接 macOS 或 Windows 曲库主机，文件由主机管理，此 Mac 只读播放。": {
+    "en": "Connect to a macOS or Windows library host. Files stay on the host; this Mac is a read-only playback endpoint.",
+    "ja": "macOS または Windows の音楽ホストに接続します。ファイルはホストが管理し、この Mac は読み取り専用の再生端末です。"
+  },
+  "已核对主机完整证书指纹": {
+    "en": "I matched the full certificate fingerprint shown on the host",
+    "ja": "ホストの証明書フィンガープリント全体の一致を確認しました"
+  },
+  "请核对完整证书指纹": {
+    "en": "Match the full certificate fingerprint first",
+    "ja": "証明書フィンガープリント全体を確認してください"
+  },
+  "曲库只读 · 音频在本机处理": {
+    "en": "Read-only library · audio processed on this device",
+    "ja": "読み取り専用ライブラリ · 音声はこの端末で処理"
+  },
+  "此电脑的曲库服务": {
+    "en": "This computer's library service",
+    "ja": "このコンピューターの音楽サービス"
+  },
+  "只读引用音乐，保留原文件": {
+    "en": "Reference music read-only, keeping source files in place",
+    "ja": "元のファイルを保持して音楽を読み取り専用で参照"
+  },
+  "只读扫描音乐文件夹": {
+    "en": "Scanning music folders read-only",
+    "ja": "音楽フォルダーを読み取り専用でスキャン"
+  },
+  "浏览本机曲库": {
+    "en": "Browse this computer",
+    "ja": "このコンピューターのライブラリ"
+  },
+  "复制连接地址": {
+    "en": "Copy host address",
+    "ja": "接続アドレスをコピー"
+  },
+  "复制完整指纹": {
+    "en": "Copy full fingerprint",
+    "ja": "指紋全体をコピー"
+  },
+  "断开并撤销配对": {
+    "en": "Disconnect and revoke pairing",
+    "ja": "接続とペアリングを解除"
+  },
+  "系统默认输出": {
+    "en": "System default output",
+    "ja": "システムの標準出力"
+  },
+  "采样率转换由系统处理，不宣称独占或逐比特输出": {
+    "en": "The system handles sample-rate conversion. Exclusive/bit-perfect output is not claimed.",
+    "ja": "サンプルレート変換はシステムが処理します。排他・ビットパーフェクト出力は保証しません。"
+  },
+  "重置 EQ": {
+    "en": "Reset EQ",
+    "ja": "EQ をリセット"
+  },
+  "全部专辑": {
+    "en": "All Albums",
+    "ja": "すべてのアルバム"
+  },
+  "没有可播放曲目": {
+    "en": "No playable tracks",
+    "ja": "再生可能な曲がありません"
+  },
+  "主机返回的音频流范围不一致": {
+    "en": "The host returned a different audio range",
+    "ja": "ホストの音声範囲が一致しません"
+  },
+  "音频配置改变，请重新载入曲目": {
+    "en": "Audio configuration changed; reload the track",
+    "ja": "音声設定が変更されました。曲を読み込み直してください"
+  },
+  "输出设备已断开，请重新选择": {
+    "en": "Audio output disconnected; select it again",
+    "ja": "出力デバイスが切断されました。選び直してください"
+  },
+  "连接主机曲库": {
+    "en": "Connect to a host library",
+    "ja": "ホストのライブラリに接続"
+  },
+  "音乐由主机管理；此设备只读浏览，在本机处理音频。": {
+    "en": "The host manages music. This device browses read-only and processes its audio locally.",
+    "ja": "音楽はホストが管理します。この端末は読み取り専用で閲覧し、音声を端末内で処理します。"
+  },
+  "从主机导入音乐后刷新曲库": {
+    "en": "Import music on the host, then refresh the library",
+    "ja": "ホストで音楽を追加してからライブラリを更新してください"
+  },
+  "曲库只读 · 文件管理在主机": {
+    "en": "Read-only library · file management on the host",
+    "ja": "ライブラリは読み取り専用 · ファイル管理はホスト"
+  },
+  "搜索音乐主机": {
+    "en": "Find music hosts",
+    "ja": "音楽ホストを検索"
+  },
+  "主机 HTTPS 地址": {
+    "en": "Host HTTPS address",
+    "ja": "ホストの HTTPS アドレス"
+  },
+  "已与主机显示的完整指纹核对一致": {
+    "en": "I matched the full fingerprint shown on the host",
+    "ja": "ホストに表示された指紋全体の一致を確認しました"
+  },
+  "LAN 播放终端": {
+    "en": "LAN Playback Endpoints",
+    "ja": "LAN 再生端末"
+  },
+  "在 iOS、Android、Windows 或 macOS 的 NegiPlayer 中输入以下地址和完整指纹。两端需处于同一局域网。": {
+    "en": "Enter this address and the full fingerprint in NegiPlayer on iOS, Android, Windows or macOS. Both devices must share a LAN.",
+    "ja": "iOS・Android・Windows・macOS の NegiPlayer にアドレスと指紋全体を入力してください。同じ LAN に接続する必要があります。"
+  },
+  "Mac 管理文件和索引，只提供音频流、封面、LRC 与同名本地 MV。已配对的播放终端只读浏览曲库，在本机处理 EQ 与音频输出。Mac 的音量、EQ 和输出设备不会作用于 LAN 音频流。": {
+    "en": "Mac manages files and the index, serving only audio, artwork, LRC and matching local MV. Paired endpoints browse read-only and process EQ/output locally. Mac volume, EQ and output do not affect LAN audio.",
+    "ja": "Mac はファイルと索引を管理し、音声・ジャケット・LRC・同名のローカル MV を提供します。ペアリング済み端末は読み取り専用で閲覧し、EQ と出力を端末で処理します。Mac の音量・EQ・出力設定は LAN 音声に作用しません。"
+  },
+  "HTTPS 仅接受本地／私有网络连接。主机休眠、退出、外置盘离线或关闭服务会中断传输；播放终端不保存音乐副本或可写数据库。": {
+    "en": "HTTPS accepts only local/private network connections. Host sleep, exit, offline disks or service shutdown interrupt streaming; playback endpoints store no music copy or writable database.",
+    "ja": "HTTPS はローカル・プライベートネットワークのみ受け付けます。ホストのスリープ・終了・ディスクの切断・サービス停止で転送が途切れます。再生端末は音楽のコピーや書き込み可能なデータベースを保存しません。"
+  },
+  "本地优先 · 开发预览 0.5": {
+    "zh": "本地优先 · 开发预览 0.5",
+    "ja": "ローカル優先 · 開発プレビュー 0.5",
+    "en": "Local first · Development preview 0.5"
   }
 }

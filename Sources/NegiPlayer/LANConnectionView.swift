@@ -38,18 +38,18 @@ struct LANConnectionView: View {
             VStack(alignment:.leading,spacing:24) {
                 HStack {
                     VStack(alignment:.leading,spacing:6) {
-                        Label(L("iOS 播放终端"),systemImage:"iphone.and.arrow.forward").font(.title2.bold())
+                        Label(L("LAN 播放终端"),systemImage:"iphone.and.arrow.forward").font(.title2.bold())
                         Text(L(host.state.message)).foregroundStyle(.secondary)
                     }
                     Spacer()
                     Button(L(host.state.running ? "关闭服务" : "开启局域网服务")) { host.toggle() }.disabled(host.busy || host.server==nil)
                 }
-                Text(L("Mac 管理文件和索引，只提供音频流、封面、LRC 与同名本地 MV。iOS 只读浏览曲库，在本机处理 EQ 与音频输出。Mac 的音量、EQ 和输出设备不会作用于 iOS 音频流。"))
+                Text(L("Mac 管理文件和索引，只提供音频流、封面、LRC 与同名本地 MV。已配对的播放终端只读浏览曲库，在本机处理 EQ 与音频输出。Mac 的音量、EQ 和输出设备不会作用于 LAN 音频流。"))
                     .foregroundStyle(.secondary)
                 if host.state.running {
                     VStack(alignment:.leading,spacing:12) { Text(L("连接与配对")).font(.headline)
                         VStack(alignment:.leading,spacing:12) {
-                            Text(L("在 iPhone／iPad 的 NegiPlayer 中选择这台 Mac，或输入以下地址。两端需处于同一局域网。")).font(.callout)
+                            Text(L("在 iOS、Android、Windows 或 macOS 的 NegiPlayer 中输入以下地址和完整指纹。两端需处于同一局域网。")).font(.callout)
                             Text(host.address).font(.system(.body,design:.monospaced)).textSelection(.enabled)
                             Text(L("证书 SHA-256 指纹")).font(.caption).foregroundStyle(.secondary)
                             Text(host.state.fingerprint).font(.system(.caption,design:.monospaced)).textSelection(.enabled)
@@ -80,7 +80,7 @@ struct LANConnectionView: View {
                     }.padding(10).frame(maxWidth:.infinity,alignment:.leading)
                 }
                 if let error=host.error { Text(L(error)).foregroundStyle(.pink) }
-                Text(L("HTTPS 仅接受本地／私有网络连接。Mac 休眠、退出、外置盘离线或关闭服务会中断传输；iOS 不保存音乐副本或可写数据库。")).font(.caption).foregroundStyle(.secondary)
+                Text(L("HTTPS 仅接受本地／私有网络连接。主机休眠、退出、外置盘离线或关闭服务会中断传输；播放终端不保存音乐副本或可写数据库。")).font(.caption).foregroundStyle(.secondary)
             }.padding(24)
         }.task { while !Task.isCancelled { await host.refresh(); do { try await Task.sleep(nanoseconds:2_000_000_000) } catch { break } } }
     }

@@ -32,7 +32,7 @@ struct ContentView: View {
             HStack(spacing: 0) {
                 sidebar.frame(width: 210)
                 VStack(spacing: 0) {
-                    if model.page != "playing" { header; Divider() }
+                    if model.page != "playing" && model.page != "peer" { header; Divider() }
                     Group {
                         switch model.page {
                         case "playing": NowPlayingView(model: model, playback: playback)
@@ -40,6 +40,7 @@ struct ContentView: View {
                         case "lyrics": LyricsView(model: model, playback: playback)
                         case "output": outputView
                         case "lan": LANConnectionView(host:model.lan)
+                        case "peer": DesktopLANView(model:model.peer,onPlay:{playback.pause()})
                         case "appearance": VStack(alignment:.leading,spacing:20) { Text(L("外观与语言")).font(.title2.bold()); AppearanceControls(); Spacer() }.padding(24)
                         case "roots": rootsView
                         case "database": databaseView
@@ -51,7 +52,7 @@ struct ContentView: View {
                 }
                 if model.showQueue { Divider(); queueView.frame(width: 260) }
             }
-            if model.page != "playing" { playerBar }
+            if model.page != "playing" && model.page != "peer" { playerBar }
         }
         .background(NegiBackground())
         .tint(accent)
@@ -77,7 +78,8 @@ struct ContentView: View {
             nav("tracks", "所有曲目", "music.note.list")
             nav("roots", "文件夹", "folder")
             nav("images", "光盘镜像", "opticaldisc")
-            nav("lan", "iOS 连接", "iphone.and.arrow.forward")
+            nav("lan", "LAN 连接", "iphone.and.arrow.forward")
+            nav("peer", "局域网播放", "network")
             Text(L("工作室")).font(.caption).foregroundStyle(.secondary).padding(.horizontal, 20).padding(.top, 20)
             nav("lyrics", "歌词与时间轴", "text.alignleft")
             nav("output", "输出与均衡器", "slider.horizontal.3")
@@ -86,7 +88,7 @@ struct ContentView: View {
             } }.scrollIndicators(.hidden)
             VStack(alignment: .leading, spacing: 8) {
                 Text(String(format:L("%d 首曲目"),model.musicFileCount)).font(.callout)
-                Text(L("本地优先 · 开发预览 0.4")).font(.caption).foregroundStyle(.secondary)
+                Text(L("本地优先 · 开发预览 0.5")).font(.caption).foregroundStyle(.secondary)
             }.padding(20)
         }.negiGlass(22).padding(12)
     }
@@ -99,7 +101,7 @@ struct ContentView: View {
         }.buttonStyle(.plain).padding(.horizontal, 10)
     }
     var title: String {
-        ["albums": "专辑", "artists": "艺人", "tracks": "所有曲目", "roots": "音乐文件夹", "images": "光盘镜像", "lyrics": "歌词工作室", "output": "输出与均衡器", "lan": "iOS 连接", "appearance": "外观与语言", "database": "曲库管理"][model.page] ?? "音乐库"
+        ["albums": "专辑", "artists": "艺人", "tracks": "所有曲目", "roots": "音乐文件夹", "images": "光盘镜像", "lyrics": "歌词工作室", "output": "输出与均衡器", "lan": "LAN 连接", "appearance": "外观与语言", "database": "曲库管理"][model.page] ?? "音乐库"
     }
     var header: some View {
         VStack(alignment: .leading, spacing: 8) {

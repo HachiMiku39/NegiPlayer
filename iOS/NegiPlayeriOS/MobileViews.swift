@@ -47,7 +47,7 @@ struct MobileRoot:View {
         .toolbar { Button { Task { do { try await model.reloadAlbums() } catch { model.error=error.localizedDescription } } } label: { Image(systemName:"arrow.clockwise") }; Button { tab=3 } label: { Image(systemName:"network") } }
     }
     var disconnected:some View {
-        ContentUnavailableView { Label(L("连接 Mac 曲库"),systemImage:"desktopcomputer") } description: { Text(L("音乐由 Mac 管理；此设备只读浏览，在本机处理音频。")) } actions: { Button(L("连接与配对")) { tab=3 } }
+        ContentUnavailableView { Label(L("连接主机曲库"),systemImage:"desktopcomputer") } description: { Text(L("音乐由主机管理；此设备只读浏览，在本机处理音频。")) } actions: { Button(L("连接与配对")) { tab=3 } }
     }
     var albumBrowser:some View {
         VStack(spacing:0) {
@@ -56,7 +56,7 @@ struct MobileRoot:View {
                 AlbumDisplayPicker(mode:$albumDisplayMode)
             }.padding(16)
             if model.albums.isEmpty {
-                ContentUnavailableView(L("没有匹配的专辑"),systemImage:"square.stack",description:Text(L("从 Mac 导入音乐后刷新曲库")))
+                ContentUnavailableView(L("没有匹配的专辑"),systemImage:"square.stack",description:Text(L("从主机导入音乐后刷新曲库")))
             } else {
                 ScrollView {
                     if albumDisplayMode == AlbumDisplayMode.list.rawValue {
@@ -223,13 +223,13 @@ struct MobileSettings:View {
         Form {
             Section(L("外观与语言")) { AppearanceControls() }
             Section(L("连接与配对")) {
-                if model.connected { Text(model.serverName); Text(L("曲库只读 · 文件管理在 Mac")); Button(L("断开并移除配对"),role:.destructive) { Task { await model.disconnect() } } }
+                if model.connected { Text(model.serverName); Text(L("曲库只读 · 文件管理在主机")); Button(L("断开并移除配对"),role:.destructive) { Task { await model.disconnect() } } }
                 else {
-                    Button(L("搜索 Mac")) { discovery.start() }; Text(L(discovery.status)).font(.caption)
+                    Button(L("搜索音乐主机")) { discovery.start() }; Text(L(discovery.status)).font(.caption)
                     ForEach(discovery.servers) { server in Button(server.name) { address=server.url.absoluteString; fingerprint=server.fingerprint; expectedID=server.id; confirmed=false } }
-                    TextField(L("Mac HTTPS 地址"),text:$address).textInputAutocapitalization(.never).autocorrectionDisabled().keyboardType(.URL)
+                    TextField(L("主机 HTTPS 地址"),text:$address).textInputAutocapitalization(.never).autocorrectionDisabled().keyboardType(.URL)
                     TextField(L("证书 SHA-256 指纹"),text:$fingerprint,axis:.vertical).font(.caption.monospaced()).textInputAutocapitalization(.never).autocorrectionDisabled()
-                    Toggle(L("已与 Mac 显示的完整指纹核对一致"),isOn:$confirmed)
+                    Toggle(L("已与主机显示的完整指纹核对一致"),isOn:$confirmed)
                     TextField(L("8 位配对码"),text:$code).keyboardType(.numberPad)
                     Button(L("配对并连接")) { Task { await model.pair(url:address,fingerprint:fingerprint,code:code,expectedServerID:discovery.servers.first(where:{$0.url.absoluteString==address && $0.fingerprint==fingerprint})?.id) } }.disabled(!confirmed || code.count != 8 || !NegiLAN.validFingerprint(fingerprint.lowercased()) || model.loading)
                 }

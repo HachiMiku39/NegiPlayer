@@ -1,0 +1,56 @@
+{
+  "version": "0.5.0",
+  "sourceCommit": "ddf0ab382f21dda87bb42681827806fb8aad9f03",
+  "workflowRun": "https://github.com/HachiMiku39/NegiPlayer/actions/runs/38436183041",
+  "cloudJobs": {
+    "protocol": "success",
+    "windows": "success",
+    "android": "success",
+    "appleInterop": "success"
+  },
+  "protocolGroups": 14,
+  "swiftTests": {
+    "total": 42,
+    "cloudPassed": 39,
+    "cloudSkipped": 3,
+    "localPassed": 40,
+    "localSkipped": 2
+  },
+  "interop": {
+    "directions": [
+      "Swift client / C# host",
+      "C# client / Swift host"
+    ],
+    "exactPcmRangesPerDirection": 3,
+    "sourceRate": 48000,
+    "channels": 2,
+    "frames": 4096,
+    "artwork": true,
+    "lrcOffsetAndUnicode": true,
+    "stateReport": true
+  },
+  "windows": {
+    "wavDecoder": true,
+    "unalignedPcm": true,
+    "readOnlySource": true,
+    "staleSourceRejected": true,
+    "nativeWindowInitialized": true,
+    "hardwareAudioTested": false
+  },
+  "android": {
+    "nativeApkBuilt": true,
+    "api35Emulator": true,
+    "exactPcm": true,
+    "endpointEq": true,
+    "audioTrackClockAdvanced": true,
+    "artworkAndLyrics": true,
+    "portraitScreenshotReviewed": true,
+    "hardwareAudioTested": false
+  },
+  "sourcePrivacy": "Original synthetic signals only; no private library, audio files, bookmarks or credentials uploaded.",
+  "limitations": [
+    "Physical Windows / Android USB DAC playback, hotplug and long-duration background behavior require device testing.",
+    "New endpoints use system PCM output; exclusive, ASIO, native DSD and synchronized multiroom are not claimed.",
+    "Android uses an ephemeral CI development signature; iOS device installation requires developer signing."
+  ]
+}
