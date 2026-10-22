@@ -2,14 +2,14 @@ import Foundation
 
 public enum DoPError: Error { case channelMismatch, unevenChannels, invalidMarker, incompleteFrame }
 
-/// Pure transport packaging. This module is deliberately not connected to a device output.
+/// Pure reference packer; the HAL transport implements the same byte layout.
 public struct DoPPacker {
     public let channels: Int
     private var marker: UInt8 = 0x05
     private var pending: [[UInt8]]
     public init(channels: Int) { precondition(channels > 0); self.channels = channels; pending = Array(repeating: [], count: channels) }
     public mutating func resetAfterSeek() { marker = 0x05; pending = Array(repeating: [], count: channels) }
-    /// Input: planar, canonical DSD bytes. Output: interleaved little-endian 24-bit DoP words.
+    /// Input: chronological MSB-first DSD bytes per channel. Output: little-endian 24-bit DoP.
     public mutating func pack(_ dsd: [[UInt8]], finish: Bool = false, silence: UInt8 = 0x69) throws -> Data {
         guard dsd.count == channels else { throw DoPError.channelMismatch }
         guard Set(dsd.map(\.count)).count == 1 else { throw DoPError.unevenChannels }
@@ -18,7 +18,7 @@ public struct DoPPacker {
         let frames = pending[0].count / 2
         var out = Data(); out.reserveCapacity(frames * channels * 3)
         for frame in 0..<frames {
-            for c in 0..<channels { out.append(pending[c][frame*2]); out.append(pending[c][frame*2+1]); out.append(marker) }
+            for c in 0..<channels { out.append(pending[c][frame*2+1]); out.append(pending[c][frame*2]); out.append(marker) }
             marker = marker == 0x05 ? 0xFA : 0x05
         }
         for c in 0..<channels { pending[c].removeFirst(frames*2) }

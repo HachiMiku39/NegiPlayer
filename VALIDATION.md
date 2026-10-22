@@ -1,3 +1,60 @@
+# 0.7.0 macOS 补充验证（2026-10-22）
+
+DoP128 真实音乐 → WM1A USB DAC 已通过主机格式回读与用户现场显示／听感确认；原生界面暂停、定位、恢复和 DSP 控件旁路通过。细节与限制见 [DOP.md](DOP.md)。本机完整测试在可访问 CoreAudio 与本机 HTTPS 的宿主环境中执行：73 项，66 通过、7 个显式可选集成测试未配置而跳过、0 失败。7 个跳过项涉及外部引擎、额外编解码语料和私有选曲，不代表该功能失效；上一版原引擎集成结果保留在下方历史记录。
+
+以下为先前版本的历史验证，不代表本轮新增验收。
+
+# macOS 0.6.1 完整专辑字段与可选封面验收
+
+2026-10-22，Release 构建与严格 ad-hoc 签名验证通过。Swift 回归 69 项：66 通过、3 项旧的可选曲库／编解码语料检查未提供输入而跳过、0 失败；其中 Enrichment 15 项全部通过，包括真实 SDK 查询和 HTTPS 封面下载。另有 Python 专辑 XML 解析回归 3 项全部通过。见 [Swift 日志](validation/album-tests-0.6.1.log)、[桥接测试](validation/album-bridge-tests-0.6.1.log)、[构建](validation/album-build-0.6.1.log)。
+
+真实 Media Go 授权查询 `Billie Jean / Michael Jackson / Thriller` 返回 10 个发行候选。选定第一个发行版并经原 GDO 查询完整数据后，返回年份 1982、厂牌 Epic、曲号 6／总曲数 9、碟号／总碟数、流派、语言及艺人描述字段；其 720 × 720 JPEG 经 HTTPS 下载成功，为 54,198 字节。字段随具体发行版、服务和曲目而异。未宣称每个专辑均有作曲、ISRC、条形码或封面，也不以缺失值推断这些字段。
+
+原生界面在独立数据库中引用两首原创生成的 MP3 / FLAC。完成发行版选择、完整字段显示、720 像素封面预览，取消其他字段，仅采用年份与厂牌及封面。SQLite 和缓存回读证明只保存 DATE=1982、LABEL=Epic，标题／艺人／专辑等未勾选字段保留；专辑页显示已选 Gracenote 封面，原文件完整 SHA-256 与查询前一致。未操作用户真实曲库的采用功能。见 [界面与持久化结果](validation/album-ui-0.6.1.json)。
+
+MP3 ID3v2.3 / 2.4 与 FLAC 测试覆盖扩展字段、曲号与总曲数合并、正面封面替换、旧 0.6.0 元数据兼容、只采用选中字段、图像大小／类型与内容域名限制。真实生成的 40 秒 MP3 / FLAC 写入中文标签、扩展信息、PNG 封面及 SMFMF 后，封面可回读，格式／时长及音频载荷保持，源文件摘要不变。原有 Sony 分析、Walkman 发现与传输回归同轮通过。
+
+封面缓存与修改只在本机应用数据或新传输副本中；应用包／源码包不附带封面、用户凭据、注册字符串、语言表或兼容环境。本轮没有向两个真实存储卷复制用户歌曲；设备端显示与 SenseMe 频道播放沿用待验收范围。
+
+---
+
+# macOS 0.6.0 SensMe / Gracenote 验收
+
+2026-10-22，Apple Silicon 本机 Release 构建、ad-hoc 严格签名验证通过。完整回归 64 项：61 项通过、3 项旧的可选曲库／编解码语料测试未提供输入而跳过，失败 0。新增 Enrichment 测试 10 项全部通过，包含真实 Sony DLL、真实 Gracenote 服务和生成 MP3/FLAC 的集成测试；最终补充原始来源校验后重跑 Walkman 12 项全部通过。见 [测试日志](validation/enrichment-tests-0.6.0.log) 与 [构建日志](validation/enrichment-build-0.6.0.log)。需要本机音频及回环服务的检查在受限沙盒外执行。
+
+原创 40 秒、120 BPM、48 kHz 单声道 WAV 经应用实际转换为 44.1 kHz 双声道 PCM，调用 Sony MMLib11.dll 1.1.2.640，返回 119.988693 BPM 和 1,438 字节完整 SMFMF。生成的 MP3 / FLAC 标签副本均可回读中文／日文标题，格式、采样率、40 秒时长及音频载荷 SHA-256 一致，源文件完整 SHA-256 不变。容器测试覆盖未知 ID3 / Vorbis 字段、ReplayGain 保留、旧 SensMe 替换、损坏长度、特殊 ID3 标志、旧缓存拒绝与取消／超时。
+
+使用用户提供的 Media Go 3.2 Build 191 应用授权，Gracenote GNSDK 3.07.2.3083 在线注册并查询公开文字 `Billie Jean / Michael Jackson`，返回 9 个发行候选（含 Thriller）。应用原生界面重复查询成功。未上传音频，日志不记录授权或注册字符串。
+
+原生界面从现有曲库选择一首曲目完成 SensMe，显示 138.00 BPM 和 6 个分析分块；原文件只读，结果写到本机缓存。Walkman 页识别 WALKMAN / SDCARD，并显示默认启用的「携带 SensMe 与补全标签（MP3/FLAC）」。未在本轮界面测试中采用用户音乐候选或复制用户音乐。见 [界面记录](validation/enrichment-ui-0.6.0.json)。
+
+补全结果持久化与重新扫描的测试证明本机显示覆盖不污染源标签快照；传输前校验原始来源、完整 SHA-256，再验证新标签副本载荷。沿用 0.5.1 已验收的两个卷传输流程。未验收断开 USB 后播放器对新 SMFMF 的曲库重建或 SensMe 频道播放；目前展示 BPM 与完整分析数据，不宣称重建 Sony 全部分类界面。
+
+本轮只更新 macOS；Windows、Android、iOS 未重新构建。源码与应用 ZIP 不包含 Media Go / Sony / Gracenote 二进制、兼容环境、提取授权或注册用户数据。本机引擎另置于应用旁的 NegiPlayer-Engines。
+
+---
+
+# macOS 0.5.1 Walkman 传输验收
+
+2026-10-22，本机 Release 构建、ad-hoc 签名校验通过。完整回归共 54 项：51 项通过、3 项可选真实曲库／编解码语料测试未提供输入而跳过，失败 0；其中新增 Walkman 传输测试 12 项全部通过。需要本机音频服务和回环 HTTPS 的旧测试在沙盒外运行复核通过，见 [测试日志](validation/walkman-tests-0.5.1.log)。
+
+实机识别 NW-WM1Z/WM1A 的 WALKMAN（INTERNAL）与 SDCARD（CARD）。使用自行生成的 17,684 字节、0.2 秒静音 WAV，两个卷均验证复制、SHA-256 回读、同名跳过与自动编号保留两份。修复 Sony FAT/exFAT 不支持 RENAME_EXCL 时的兼容提交，见 [硬件结果](validation/walkman-hardware-0.5.1.json)。所有独立测试目录均已删除。
+
+交付的 NegiPlayer.app 已通过原生界面分别向两个卷传输同一静音 WAV，均显示 1/1、100%、1 首已复制；独立回读 SHA-256 一致并清理副本和 macOS 自动生成的 AppleDouble provenance 侧文件，见 [界面结果](validation/walkman-ui-0.5.1.json)。真实 13,848 首曲库完成多选两首与待传输列表检查，未复制这些用户音乐。界面测试队列已清空。
+
+验证取消保留已完成文件并清理当前部分文件、模拟断开不重建挂载路径、空间不足、源文件改变、校验失败、路径穿越和符号链接拒绝、中文与长文件名。同盘目录模拟的断开与取消测试不代表真实热拔插或突然断电的持久性验收。仅验证字节传输，未验收断开 USB 后在播放器上重建曲库和实际播放。
+
+设备发现已移到后台并设等待超时；可使用「选择存储…」通过原生文件选择器选定存储卷。中／日／英新字符串已加入同一语言目录。Windows、iOS、Android 本轮未变更，未重新构建。构建见 [日志](validation/walkman-build-0.5.1.log)。
+
+如需主动复现实机写入测试（只写生成的静音，按唯一目录清理），先检查已连接的卷，再执行：
+
+```sh
+xcrun swiftc -parse-as-library Sources/FileOperations/WalkmanTransfer.swift scripts/verify-walkman-hardware.swift -o /tmp/negi-walkman-probe
+/tmp/negi-walkman-probe --write-generated-fixtures
+```
+
+---
+
 # 0.5 跨平台云构建验收
 
 [GitHub Actions #7](https://github.com/HachiMiku39/NegiPlayer/actions/runs/38436183041) 对提交 `ddf0ab382f21dda87bb42681827806fb8aad9f03` 的四项作业全部通过。记录见 [validation/cross-platform-0.5.json](validation/cross-platform-0.5.json)。Windows ZIP、Android APK 和更新后的 Mac ZIP 均由云端生成；下载后核对了 Actions artifact 摘要和包内 SHA-256。

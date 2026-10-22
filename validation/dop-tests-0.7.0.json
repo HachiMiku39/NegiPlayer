@@ -1,0 +1,10 @@
+{
+  "suite": "CoreTests",
+  "tests": 73,
+  "passed": 66,
+  "skipped": 7,
+  "failures": 0,
+  "environment": "host CoreAudio and local HTTPS available",
+  "skippedOptional": "external enrichment engines, generated corpus, private selected music",
+  "newDSDTransportTests": 4
+}

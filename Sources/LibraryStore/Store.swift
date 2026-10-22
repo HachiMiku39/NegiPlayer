@@ -74,16 +74,21 @@ public actor LibraryDatabase {
     public func save(root: LibraryRoot) throws {
         try execute("INSERT INTO library_roots(id,path,document) VALUES(?,?,?) ON CONFLICT(id) DO UPDATE SET path=excluded.path,document=excluded.document", [root.id, root.path, try json(root)])
     }
-    public func files(rootID: String? = nil) throws -> [MediaFile] {
+    public func files(rootID: String? = nil, applyingOverrides: Bool = true) throws -> [MediaFile] {
         let rows = try rootID.map { try query("SELECT document,available FROM media_files WHERE root_id=? ORDER BY path", [$0]) } ?? query("SELECT document,available FROM media_files ORDER BY path")
-        return try rows.map { var f = try decoder.decode(MediaFile.self, from: Data($0[0].utf8)); f.available = $0[1] == "1"; return f }
+        let overrides: [String: MetadataPatch] = applyingOverrides ? try Dictionary(uniqueKeysWithValues: query("SELECT media_id,document FROM user_overrides WHERE field='gracenote'").map { ($0[0], try decoder.decode(MetadataPatch.self, from: Data($0[1].utf8))) }) : [:]
+        return try rows.map { var f = try decoder.decode(MediaFile.self, from: Data($0[0].utf8)); f.available = $0[1] == "1"; return overrides[f.id]?.applying(to: f) ?? f }
+    }
+    public func saveMetadataOverride(_ patch: MetadataPatch, mediaID: String) throws {
+        guard try !query("SELECT id FROM media_files WHERE id=?", [mediaID]).isEmpty else { throw StoreError(message: "曲目不在音乐库中") }
+        try execute("INSERT INTO user_overrides(media_id,field,document) VALUES(?,'gracenote',?) ON CONFLICT(media_id,field) DO UPDATE SET document=excluded.document", [mediaID, try json(patch)])
     }
     /// A completed enumeration is required; partial/cancelled scans never mark files missing.
     public func commitScan(rootID: String, files: [MediaFile]) throws {
         try execute("BEGIN IMMEDIATE")
         do {
             try execute("UPDATE media_files SET available=0 WHERE root_id=?", [rootID])
-            let stored = Dictionary(uniqueKeysWithValues: try self.files(rootID: rootID).map { ($0.id, $0) })
+            let stored = Dictionary(uniqueKeysWithValues: try self.files(rootID: rootID, applyingOverrides: false).map { ($0.id, $0) })
             for item in files {
                 var f = item
                 if f.audioIdentity == nil, let existing = stored[f.id], existing.size == f.size, existing.modified == f.modified {

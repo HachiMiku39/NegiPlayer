@@ -15,11 +15,13 @@ import AppKit
                 .id(theme+language)
                 .onAppear { NSApp.activate(ignoringOtherApps: true) }
                 .task { await NativeVerification.runOnceIfRequested() }
+                .onReceive(NotificationCenter.default.publisher(for:NSApplication.willTerminateNotification)) { _ in model.playback.stop() }
         }
         .defaultSize(width: 1280, height: 820)
         .commands {
             CommandGroup(replacing: .appSettings) { Button(L("聆听设置…")) { model.page = "output" }.keyboardShortcut(",") }
             CommandMenu(L("外观与语言")) { Button(L("外观与语言…")) { model.page="appearance" } }
+            CommandMenu("Walkman") { Button(L("Walkman 传输")) { model.page = "walkman" }.keyboardShortcut("t", modifiers: [.command, .shift]) }
             CommandGroup(after: .newItem) { Button(L("导入音乐文件夹…")) { model.importFolder() }.keyboardShortcut("o") }
             CommandMenu(L("播放")) {
                 Button(L("展开正在播放")) { model.page = "playing" }.keyboardShortcut("p",modifiers:[.command,.shift])

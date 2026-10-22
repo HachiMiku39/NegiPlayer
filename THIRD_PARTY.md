@@ -1,6 +1,6 @@
 # 来源与许可清单
 
-NegiPlayer 0.5 工作版本 的项目源码采用 [MIT](LICENSE) 许可。系统框架和参考项目各自保持原许可；未将 NegiFlick 原始 JavaScript 或其他组件重新标为 MIT。
+NegiPlayer 0.6.1 macOS 工作版本 的项目源码采用 [MIT](LICENSE) 许可。系统框架和参考项目各自保持原许可；未将 NegiFlick 原始 JavaScript 或其他组件重新标为 MIT。
 
 | 项目 | 实际用途 | 分发与许可状态 |
 | --- | --- | --- |
@@ -34,3 +34,18 @@ The native Windows/Android frontends use Microsoft .NET MAUI 10.0.110 (MIT) and 
 
 The Windows/Android app icon copies the existing original NegiPlayer PNG unchanged. Roon is a functional reference only; no Roon code, installers, patches, RAAT implementation, graphics or branding is included.
 
+
+## 0.6 本机 Sony / Gracenote 兼容环境
+
+NegiPlayer 的 Swift 和 Python ctypes 桥接代码独立编写。源码包与应用包不包含 Sony / Gracenote 二进制、提取出的应用授权、注册用户数据或 WinePrefix。用户提供的 Media Go 3.2 Build 191（MediaGo.exe SHA-256 `e6abbd21a861d2a5d96619b40f5a4c0435500280ac9ec1297eddc3e3f5f32ddc`）及其原组件保留于本机独立引擎目录，项目 MIT 许可不涵盖这些组件。本次未上传它们到公开仓库。
+
+| 本机组件 | 核对版本与来源 | 使用方式 |
+| --- | --- | --- |
+| Sony MMLib11.dll | 1.1.2.640；用户提供的 Media Go 安装包 | 原 DLL 分析独立 PCM，生成完整 SMFMF |
+| Gracenote GNSDK | 3.07.2.3083；同一 Media Go 包 | 原 SDK 注册和文字查询；授权只在本机恢复和保存 |
+| Wine Devel | [Gcenx macOS Wine 11.18](https://github.com/Gcenx/macOS_Wine_builds/releases/tag/11.18)；下载归档 SHA-256 `aa0ea4c82e636ae7bca2076387cb0a5affa26509ad13f119ecd0d62bd7ba6f82` | 独立、可替换的便携运行时，未链接 NegiPlayer；Wine 为 LGPL-2.1-or-later，原项目及其依赖保持原许可 |
+| Python Win32 embeddable | [CPython 3.12.10 官方发行](https://www.python.org/downloads/release/python-31210/) | 独立、可替换的 Python；许可文本保留于引擎的 `python-win32/LICENSE.txt` |
+
+兼容环境未作为开源源码的一部分分发。公开分发前需要另行核对每个运行时及专有组件的分发条款；本机调用成功不等于获得通用 Gracenote 开发者许可。分析字段目前只解释 BPM 和分块结构，未复制 Sony 的频道分类界面或宣称重建其完整分类算法。
+
+0.6.1 使用同一原 SDK 的完整专辑查询和内容地址获取用户选择的封面。源码与应用包不附带 Gracenote 返回的专辑图片、语言表或查询缓存；图片只在用户请求预览后下载到本机，并在手动采用后用于曲库显示与传输副本。

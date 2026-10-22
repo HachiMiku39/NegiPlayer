@@ -77,9 +77,10 @@ struct NowPlayingView: View {
             }.buttonStyle(.plain)
             HStack(spacing:12) {
                 Button { playback.isMuted.toggle() } label: { Image(systemName:playback.isMuted ? "speaker.slash.fill" : "speaker.wave.1.fill") }.buttonStyle(.plain).accessibilityLabel(L(playback.isMuted ? "取消静音" : "静音"))
-                Slider(value:$playback.volume,in:0...max(0.001,playback.volumeLimit))
+                Slider(value:$playback.volume,in:0...max(0.001,playback.volumeLimit)).disabled(playback.isDoP)
                 Image(systemName:"speaker.wave.3.fill").foregroundStyle(.secondary)
             }
+            if playback.isDoP { Text("DoP · 使用 DAC 本机音量").font(.caption).foregroundStyle(.secondary) }
         }
     }
     private func lyricPane(_ document: LyricDocument) -> some View {

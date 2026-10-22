@@ -8,6 +8,8 @@ import AudioCore
 import LyricCore
 import UniformTypeIdentifiers
 import LANHost
+import FileOperations
+import MusicEnrichment
 
 @MainActor final class AppModel: ObservableObject {
     @Published var roots: [LibraryRoot] = []
@@ -46,6 +48,8 @@ import LANHost
     let artworkRepository: ArtworkRepository
     let lan: LANController
     let peer = DesktopLANModel()
+    let walkman = WalkmanTransferModel()
+    let enrichment: MusicEnrichmentModel
     private var listeningTask: Task<Void,Never>?
     private var releaseMembers: [String:[MediaFile]] = [:]
     var discImages: [MediaFile] { files.filter(\.isDiscImage).sorted { $0.relativePath.localizedStandardCompare($1.relativePath) == .orderedAscending } }
@@ -106,6 +110,7 @@ import LANHost
         if let p = ProcessInfo.processInfo.environment["LMP_DATA_DIR"] ?? NativeVerification.developmentRequest?.dataDirectory { folder = URL(fileURLWithPath: p) }
         else { folder = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0].appendingPathComponent("NegiPlayer") }
         databaseURL = folder.appendingPathComponent("Library.sqlite")
+        enrichment = MusicEnrichmentModel(directory: folder.appendingPathComponent("Enrichment"))
         artworkRepository = ArtworkRepository(cacheDirectory:folder.appendingPathComponent("Caches/Artwork"))
         lan = LANController(directory:folder.appendingPathComponent("LAN"),artwork:artworkRepository)
         let settingsStore = PlaybackPreferencesStore(url: folder.appendingPathComponent("PlaybackSettings.json"))
@@ -124,6 +129,7 @@ import LANHost
             }
         }
         systemMediaControls = SystemMediaControls(playback: playback)
+        walkman.enrichmentProvider = { [weak enrichment] items in enrichment?.transferEnrichments(items) ?? [:] }
         playback.onTrackChanged = { [weak self] media in self?.loadDraft(media); self?.loadListeningLyrics(media) }
         playback.onNext = { [weak self] media in self?.play(media, replaceQueue: false) }
         keyboardMonitor = NSEvent.addLocalMonitorForEvents(matching: .keyDown) { [weak self] event in
@@ -199,7 +205,7 @@ import LANHost
         guard let database else { return }
         scanning = true; scanMessage = "正在扫描 \(url.lastPathComponent)"; defer { scanning = false; scanTask = nil }
         do {
-            let previous = try await database.files(rootID: root.id)
+            let previous = try await database.files(rootID: root.id, applyingOverrides: false)
             let task = Task.detached(priority: .utility) { [self] in
                 try await LibraryScanner.scan(root: root, url: url, previous: previous) { n, path in
                     await reportScanProgress(n, path)
@@ -222,6 +228,44 @@ import LANHost
         }
     }
     func cancelScan() { scanTask?.cancel() }
+    func openEnrichment(_ media: MediaFile) { enrichment.select(media); enrichment.selectedIDs = [media.id]; page = "enrichment" }
+    func analyzeSelectedMusic() {
+        let ids = enrichment.selectedIDs.isEmpty ? Set([enrichment.focusedID].compactMap { $0 }) : enrichment.selectedIDs
+        do { enrichment.analyze(try files.filter { ids.contains($0.id) && $0.available && !$0.isDiscImage }.map { ($0, try url(for: $0)) }) }
+        catch { enrichment.error = error.localizedDescription }
+    }
+    func queryGracenote(probe: Bool = false) {
+        let media = files.first { $0.id == enrichment.focusedID && $0.available }
+        do { enrichment.query(media: probe ? nil : media, source: probe ? nil : try media.map { try url(for: $0) }, probe: probe) }
+        catch { enrichment.error = error.localizedDescription }
+    }
+    func applyGracenote(_ candidate: GracenoteCandidate) {
+        guard !enrichment.busy, let database, let media = files.first(where: { $0.id == enrichment.candidateMediaID }) else { return }
+        let selected = candidate.metadata.selecting(enrichment.selectedFields)
+        let patch = enrichment.records[media.id]?.approvedMetadata?.merging(selected) ?? selected
+        let cover = enrichment.useSelectedCover && enrichment.previewAssetID == enrichment.selectedCoverID ? enrichment.coverPreview : nil
+        guard !selected.isEmpty || cover != nil else { return }
+        Task {
+            do {
+                guard let expected = enrichment.records[media.id]?.sourceSHA256 else { return }
+                let source = try url(for: media)
+                let actual = try await Task.detached(priority: .utility) { try SourceDigest.sha256(source) }.value
+                guard actual == expected else { throw EnrichmentError("源文件已改变，请重新查询后采用候选") }
+                try await database.saveMetadataOverride(patch, mediaID: media.id)
+                try enrichment.approve(candidate, for: media, metadata: patch, artwork: cover)
+                files = try await database.files(); artworkRevision += 1
+            } catch { enrichment.error = error.localizedDescription }
+        }
+    }
+    func addToWalkman(_ media: [MediaFile]) {
+        guard !walkman.busy, !walkman.adding else { return }
+        do {
+            let items = try media.filter { $0.available && !$0.isDiscImage }.map {
+                try MusicTransferItem(source: url(for: $0), relativePath: $0.relativePath)
+            }
+            walkman.add(items); page = "walkman"
+        } catch { self.error = error.localizedDescription }
+    }
     private func reportScanProgress(_ n: Int, _ path: String) { scanMessage = "已读取 \(n) 个文件 · \(path)" }
     func url(for media: MediaFile) throws -> URL {
         guard let root = access[media.rootID]?.0 else { throw NSError(domain: "Access", code: 2, userInfo: [NSLocalizedDescriptionKey: "请重新授权曲目所在目录"]) }
@@ -232,6 +276,7 @@ import LANHost
         return media.id+"|\(artworkRevision)|"+(access[media.rootID]?.0.path ?? "")+group.map { $0.id+"|\($0.modified)" }.joined(separator:"|")
     }
     func artwork(for media: MediaFile) async -> ArtworkResult? {
+        if let chosen = enrichment.artwork(for: media.id) { return ArtworkResult(data: chosen.data, source: "Gracenote · 已选封面") }
         guard let root = access[media.rootID]?.0 else { return nil }
         let group = releaseMembers[media.releaseKey] ?? [media]
         let members = [media]+group.filter { $0.id != media.id && $0.rootID == media.rootID }

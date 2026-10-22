@@ -7,6 +7,7 @@ import CryptoKit
 public struct ArtworkResult: Sendable {
     public let data: Data
     public let source: String
+    public init(data: Data, source: String) { self.data = data; self.source = source }
 }
 
 /// Bounded, read-only embedded picture readers. No tag editor or network service is required.

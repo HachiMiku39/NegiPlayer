@@ -1,8 +1,34 @@
 # NegiPlayer
 
-macOS 本地音乐播放器与歌词工作室，开发预览 0.5.0。提供 Negi（Miku 青绿与少量粉色）、日间、夜间三套主题及中文／日文／英文界面，macOS 27 使用原生 SwiftUI Liquid Glass；减少透明度时使用实色背景。最低部署目标 macOS 14，当前验证架构为 Apple Silicon / arm64。
+macOS 本地音乐播放器与歌词工作室，开发预览 0.7.0。提供 Negi（Miku 青绿与少量粉色）、日间、夜间三套主题及中文／日文／英文界面，macOS 27 使用原生 SwiftUI Liquid Glass；减少透明度时使用实色背景。最低部署目标 macOS 14，当前验证架构为 Apple Silicon / arm64。
 
-本轮增加原生 Windows 与 Android 端：Mac、Windows 都能管理只读曲库并互相作为播放端；iOS、Android 只读浏览，并在本机处理音频、EQ 与输出。四端共用 LAN v1、封面、LRC、Negi／日间／夜间主题及中／日／英语言目录。Windows 使用 WASAPI，Android 使用 AudioTrack。构建与连接说明见 [cross/README.md](cross/README.md)，Roon 功能参照见 [ROON_REFERENCE.md](ROON_REFERENCE.md)。完整 DSD、独占输出、同步多房间与正式发布验收仍见 [ROADMAP.md](ROADMAP.md)。
+0.5 已增加原生 Windows 与 Android 端：Mac、Windows 都能管理只读曲库并互相作为播放端；iOS、Android 只读浏览，并在本机处理音频、EQ 与输出。四端共用 LAN v1、封面、LRC、Negi／日间／夜间主题及中／日／英语言目录。Windows 使用 WASAPI，Android 使用 AudioTrack。构建与连接说明见 [cross/README.md](cross/README.md)，Roon 功能参照见 [ROON_REFERENCE.md](ROON_REFERENCE.md)。原始 DSD／DoP 已在 macOS 首次接通；DST、更多设备、同步多房间与正式发布验收仍见 [ROADMAP.md](ROADMAP.md)。
+
+## SensMe 与 Gracenote（macOS 0.6.1）
+
+侧栏「SensMe 与补全」可搜索曲库、多选曲目并运行 Sony 原版 `MMLib11.dll`。音频经独立 AVAudioFile / AVAudioConverter 通路转换为 44.1 kHz、16-bit 双声道 PCM，不经过播放 EQ、音量或 ReplayGain。完整 SMFMF 分析数据与 BPM 保存在本机缓存，支持取消并保留已完成曲目。至少需要约 10 秒音频；DSD 等系统无法解码的格式会报错。
+
+Gracenote 通过用户提供的 Media Go 3.2 Build 191 的原 SDK 和应用授权进行文字查询。可选择本地曲目或直接输入标题、艺人及可选专辑；只提交这些文字，不上传音频。候选按发行版本列出。点击「选择发行版」加载该版本的完整信息，再逐项勾选标题、艺人、专辑艺人、年份、曲号／总曲数、碟号／总碟数、流派、唱片公司、语言、合辑及服务返回的其他字段。作曲、作词、指挥、ISRC、条形码、发行编号等仅在服务提供时显示；未返回的信息不推测。未勾选的字段保留当前值。
+
+同一发行版可选择服务提供的封面尺寸（本机例子为 75、170、300、450、720、1080 像素）。点击「预览封面」才下载，预览后可取消「采用这张封面」以保留现有封面。点击「采用所选标签与封面」才更新本机曲库显示；封面按 SHA-256 去重存储在本机。仅接受 SDK 内容域名的 HTTPS 地址，限制 8 MiB、JPEG / PNG 和图像尺寸，重定向也检查内容域名。无封面／下载失败时可继续只采用标签。
+
+扫描仍保留源标签快照，采用候选不会写回原文件。本版未实现音频指纹识别或全库自动补全。选择只应用到当前曲目；不自动覆盖同专辑其他曲目。
+
+在「Walkman 传输」保留「携带 SensMe 与补全标签（MP3/FLAC）」时，已分析／已采用的曲目会先在本机生成带标签副本，再复制到选定 `MUSIC` 目录。MP3 使用 ID3 GEOB `USR_SMFMF`，FLAC 使用 APPLICATION `SMFM`；补全字段写入副本的 ID3 / Vorbis 标签；所选封面写入 MP3 APIC 或 FLAC PICTURE，并替换副本的正面封面，保留其他封面。源 SHA-256 必须与分析记录一致，并验证副本音频载荷不变。其他容器仍复制原文件；特殊 ID3 标志及损坏标签会拒绝改写副本，可以关闭该选项传输原文件。未分析、未采用的曲目不改标签。
+
+本机引擎位于应用旁的 `NegiPlayer-Engines`，包含便携 Wine、32 位 Python、Sony 分析 DLL、Gracenote SDK 和用户提供的 MediaGo.exe。移动应用后，可在「引擎设置…」重新选择此文件夹。首次启动兼容环境可能需要约 1–3 分钟；后续使用本机独立 WinePrefix。Media Go 授权和注册用户数据只保存在 `~/Library/Application Support/NegiPlayer/Enrichment/Gracenote`，不写入应用包或源码包。此版本只自动识别已核对 SHA-256 的 MediaGo.exe。
+
+实际完成 Sony DLL 分析、Gracenote 在线查询、MP3/FLAC 标签回读与音频完整性测试；断开 USB 后 Walkman 对新增 SensMe 数据的曲库重建及频道播放仍需设备端验收。引擎来源见 [THIRD_PARTY.md](THIRD_PARTY.md)。本轮只更新 macOS，其他端保持 0.5.0。
+
+## Walkman USB 传输（始于 macOS 0.5.1）
+
+侧栏「Walkman 传输」（⌘⇧T）自动识别已挂载且带 Sony Walkman 设备描述文件的存储卷，分别显示机身存储与 SD 卡及可用空间。若自动识别等待或 macOS 尚未授予外置盘访问，可点击「选择存储…」选择对应卷的根目录。选择目标后，可从曲库勾选多首音乐，也可添加本地文件／文件夹；曲目右键菜单可直接加入传输列表。只在点击「开始传输」后写入选定存储的 `MUSIC`。
+
+曲库文件保留相对于音乐根目录的结构；单独添加的文件置于来源文件夹名下，整文件夹则保留该文件夹及内部结构。文件名中 FAT/exFAT 不支持的字符替换为下划线。未携带分析或补全时，文件保持原字节；携带时只调整 MP3/FLAC 副本标签，音频载荷不转码。macOS 可能自动附带 `._` 属性侧文件。只传输选中的音频文件，同目录独立封面、LRC 和播放列表目前不随传输。格式兼容性按设备描述中的扩展名筛选，编码细节以播放器实际支持为准。
+
+同名文件默认跳过（不会比较内容），也可选择自动编号保留两份；已有文件均不覆盖。默认启用复制后 SHA-256 回读校验。传输先写隐藏临时文件，校验通过后以同盘重命名提交（支持时使用排他重命名；Sony FAT/exFAT 使用拒绝覆盖的 FileManager move）。取消保留已完成的曲目并清理当前临时文件；断开时停止写入且不重建挂载路径，设备突然断开可能留下隐藏 `.negi-*.part`。显示完成后请在 Finder 中弹出两个存储卷。
+
+此功能由用户单独发起，不改变导入与扫描对源曲库的只读规则。已引用的目标 MUSIC 仍可作为明确选择的传输目的地；源文件位于目标 MUSIC 内时拒绝自复制。
 
 ## iOS 与 LAN
 
@@ -38,7 +64,7 @@ Mac 的「iOS 连接」页面可手动开启服务、生成配对码、查看终
 | MP3 / FLAC / WAV | AVAudioFile 真正解码与 PCM 兼容播放；WAV 按整数／浮点实际编码识别 |
 | M4A | 分别识别 AAC 与 ALAC；均实际解码 |
 | AIFF | 扩展格式实际解码，识别整数 PCM；不代表所有 AIFF 变体已验收 |
-| DSF / DFF | 识别 DSD 参数，区分 raw DSD 与 DST；原始 DSD 解码、DoP 设备输出尚未接通 |
+| DSF / DFF | 双声道 raw DSD64／128 使用 USB DAC 独占 DoP；支持 DSF LSB／MSB 位序及未压缩 DFF；DST、DSD256 与多声道暂不支持 |
 | 封面 | FLAC PICTURE、ID3 APIC/PIC（MP3／WAV／DSF）、M4A covr；缺失时读取同目录图片，缓存仅写本机应用数据 |
 | 正在播放 | 居中封面或封面／歌词双栏；同目录 LRC 只读匹配、offset、高亮滚动与点击定位 |
 | ISO 专区 | 单独收录、识别 SACD 主目录／ISO 9660／无效头；不进入音频队列，镜像播放未接通 |
@@ -52,7 +78,7 @@ Mac 的「iOS 连接」页面可手动开启服务、生成配对码、查看终
 | SQLite | WAL、原子扫描提交、草稿与修订、完整性检查、Online Backup 一致备份 |
 | 歌词 | 精确到纳秒，0 与未打点分开，100 分钟以上，正负 offset，UTF-16 与完整字素簇边界 |
 
-Mac USB PCM 设备与采样率回读已验证；没有完成独占、PCM bit-perfect、实体 iOS USB 或 DoP 接收端验收。DoP 封装器只有纯数据测试，未连接输出设备。DSD 文件会明确提示未接通，禁止冒用直通状态。
+macOS DoP128 已用真实 DSF 音乐连接 WM1A USB DAC 验证：主机物理／客户端格式均为 24 位、352.8 kHz、非混音整数，用户确认 WM1A 显示 DSD 5.6 MHz 且声音正常。暂停、定位与恢复通过；纯数据测试覆盖 DoP64／128 所用的封装及文件读取。DoP64 实体接收端、更多 DAC、长时间播放、PCM bit-perfect 和实体 iOS USB 仍待验收。详见 [DOP.md](DOP.md)。
 
 AVFoundation 的标签读取覆盖随容器而异，当前不是完整 mp3tag 替代品。原生多值字段全覆盖、批量标签编辑、播放列表、自动监听、无缝播放、库切换与恢复向导仍待完成。
 
@@ -97,7 +123,7 @@ NEGI_NATIVE_REPORT=/tmp/NegiPlayer-native-codecs.json \
 NEGI_NATIVE_DSP_REPORT=/tmp/NegiPlayer-native-codecs.dsp.json zsh scripts/swift.sh test
 ```
 
-原生验证命令还会生成同名 `.dsp.json`，记录原创 PCM 经真实增益节点的离线渲染结果。实际命令、41 项测试（含本机选择的只读集成样本）、外置盘测试和界面检查见 [VALIDATION.md](VALIDATION.md)。WAV 标签验证器只对生成样本的新副本写入 ASCII RIFF INFO，保留未知 chunk 并验证载荷不变；未接入应用，也不会对用户音乐调用。
+原生验证命令还会生成同名 `.dsp.json`，记录原创 PCM 经真实增益节点的离线渲染结果。最新 69 项测试（66 通过、3 可选旧语料测试跳过）、外置盘测试和界面检查见 [VALIDATION.md](VALIDATION.md)。WAV 标签验证器只对生成样本的新副本写入 ASCII RIFF INFO，保留未知 chunk 并验证载荷不变；未接入应用，也不会对用户音乐调用。
 
 现代 Hi-Fi 功能与已实现／后续范围见 [MODERN_HIFI.md](MODERN_HIFI.md)。
 
@@ -107,8 +133,9 @@ NEGI_NATIVE_DSP_REPORT=/tmp/NegiPlayer-native-codecs.dsp.json zsh scripts/swift.
 
 - `LibraryDomain`：曲目、目录、只读引用策略；`LibraryStore`：系统 SQLite。
 - `MediaIO`：只读扫描、格式探测、载荷摘要、独立 PCM 波形分析、只读封面／侧文件歌词与 ISO 头部识别。
-- `AudioCore`：一个 AVAudioEngine 播放会话、Core Audio 设备、EQ、时钟与独立 DoP 数据封装器。
+- `AudioCore`：AVAudioEngine PCM 会话、Core Audio 设备、EQ、时钟，以及独立 HAL 整数 DoP 会话与 C 实时缓冲。
 - `LyricCore`：文档、解析、Unicode、时间、Negi 适配；`FileOperations`：生成 WAV 副本验证工具。
+- `MusicEnrichment`：Sony / Gracenote 本机适配、SMFMF 校验与 MP3/FLAC 标签副本；Python ctypes 桥接脚本位于 `Resources/Enrichment`。
 - `NegiPlayer`：SwiftUI / AppKit 界面、MediaPlayer 系统控制与文件选择授权。
 - Apple [Swift](https://www.swift.org/)、[AVFoundation](https://developer.apple.com/documentation/avfoundation)、[Core Audio](https://developer.apple.com/documentation/coreaudio)、[Liquid Glass](https://developer.apple.com/documentation/SwiftUI/Applying-Liquid-Glass-to-custom-views)。
 - [SQLite Online Backup](https://sqlite.org/backup.html)；[FFmpeg](https://ffmpeg.org/) 只用于本机样本生成。

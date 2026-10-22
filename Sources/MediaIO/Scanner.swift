@@ -119,7 +119,7 @@ public enum LibraryScanner {
                     f.discNumber = Int(f.tags["discNumber"]?.first?.components(separatedBy: "/").first ?? "") ?? 1
                     // Import is a metadata scan. Full payload hashes are computed only for a selected
                     // lyric binding, so a large reference library is never copied or read end-to-end.
-                    if f.isDSD { f.issue = f.codec == "DST" ? "DST 原始 DSD 解码尚未接通" : "DSD／DoP 输出尚未接通" }
+                    if f.isDSD { f.issue = f.codec == "DST" ? "DST 原始 DSD 解码尚未接通" : "需支持 DoP 的 USB DAC；双声道 DSD64／128 可播放" }
                     if f.isDiscImage { f.issue = try DiscImageProbe.inspect(file).detail }
                 } catch { f.codec = "未识别"; f.issue = error.localizedDescription }
                 // Folder and root separate editions conservatively; do not merge solely by title/artist.

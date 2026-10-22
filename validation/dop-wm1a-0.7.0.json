@@ -1,0 +1,37 @@
+{
+  "version": "0.7.0",
+  "date": "2026-10-22",
+  "platform": "macOS 27.2 / Apple Silicon",
+  "device": "Sony WM1A USB DAC",
+  "source": "real library DSF / stereo DSD128",
+  "host": {
+    "physicalFormat": "352800 Hz · 24-bit · 2 ch · 6 bytes/frame · flags 76",
+    "virtualFormat": "352800 Hz · 24-bit · 2 ch · 6 bytes/frame · flags 76",
+    "exclusive": true,
+    "testWallSeconds": 20,
+    "pauseSeekResume": true,
+    "underrunFrames": 0,
+    "formatFaults": false
+  },
+  "receiver": {
+    "verification": "user observed physical device display and listened",
+    "display": "DSD 5.6 MHz / DSD128",
+    "musicNormal": true
+  },
+  "nativeAppUI": {
+    "realDSFPlayback": true,
+    "pauseSeekResume": true,
+    "softwareVolumeAndDSPDisabled": true,
+    "restoredNominalRateOnDeviceSelection": 44100
+  },
+  "sourceStatUnchanged": true,
+  "notVerified": [
+    "DSD64 physical receiver",
+    "DFF music on hardware",
+    "DSD256",
+    "DST",
+    "multichannel",
+    "other DACs",
+    "long-duration playback"
+  ]
+}

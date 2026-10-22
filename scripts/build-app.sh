@@ -18,6 +18,7 @@ cp "$LMP_BIN/NegiPlayer" "$LMP_APP/Contents/MacOS/NegiPlayer"
 cp "$LMP_PROJECT/Resources/Info.plist" "$LMP_APP/Contents/Info.plist"
 if [[ -n "${NEGI_BUNDLE_ID:-}" ]]; then /usr/libexec/PlistBuddy -c "Set :CFBundleIdentifier $NEGI_BUNDLE_ID" "$LMP_APP/Contents/Info.plist"; fi
 cp "$LMP_PROJECT/Resources/PlayerStrings.json" "$LMP_APP/Contents/Resources/PlayerStrings.json"
+if [[ -d "$LMP_PROJECT/Resources/Enrichment" ]]; then ditto --norsrc --noextattr "$LMP_PROJECT/Resources/Enrichment" "$LMP_APP/Contents/Resources/Enrichment"; fi
 for LMP_LOCALIZATION in "$LMP_PROJECT"/Resources/*.lproj; do ditto --norsrc --noextattr "$LMP_LOCALIZATION" "$LMP_APP/Contents/Resources/${LMP_LOCALIZATION:t}"; done
 if [[ -f "$LMP_PROJECT/Resources/AppIcon.icns" ]]; then cp "$LMP_PROJECT/Resources/AppIcon.icns" "$LMP_APP/Contents/Resources/AppIcon.icns"; fi
 rm -f "$LMP_APP/Contents/Resources/VerificationRequest.json"

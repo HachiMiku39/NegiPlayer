@@ -14,6 +14,7 @@ func uiAlbum(_ f:MediaFile)->String { f.album.isEmpty ? L("未标记专辑") : f
 
 @MainActor func audioPath(_ p:PlaybackSession)->String {
     guard let current=p.current else { return L("选择本地音乐开始播放") }
+    if current.isDSD { return p.pathDescription }
     let device=p.devices.first{$0.id==p.actualDeviceID}?.name ?? L("设备待确认")
     var path=current.codec+(current.sampleRate>0 ? " "+String(Int(current.sampleRate))+" Hz" : "")+" → PCM"
     if abs(p.loudness.gainDB)>0.0001 { path+=LF(" · 增益 %+.1f dB",p.loudness.gainDB) }
@@ -41,6 +42,8 @@ struct ContentView: View {
                         case "output": outputView
                         case "lan": LANConnectionView(host:model.lan)
                         case "peer": DesktopLANView(model:model.peer,onPlay:{playback.pause()})
+                        case "walkman": WalkmanTransferView(transfer: model.walkman, library: model)
+                        case "enrichment": MusicEnrichmentView(model: model.enrichment, library: model)
                         case "appearance": VStack(alignment:.leading,spacing:20) { Text(L("外观与语言")).font(.title2.bold()); AppearanceControls(); Spacer() }.padding(24)
                         case "roots": rootsView
                         case "database": databaseView
@@ -78,17 +81,19 @@ struct ContentView: View {
             nav("tracks", "所有曲目", "music.note.list")
             nav("roots", "文件夹", "folder")
             nav("images", "光盘镜像", "opticaldisc")
+            nav("walkman", "Walkman 传输", "arrow.down.to.line")
             nav("lan", "LAN 连接", "iphone.and.arrow.forward")
             nav("peer", "局域网播放", "network")
             Text(L("工作室")).font(.caption).foregroundStyle(.secondary).padding(.horizontal, 20).padding(.top, 20)
             nav("lyrics", "歌词与时间轴", "text.alignleft")
+            nav("enrichment", "SensMe 与补全", "wand.and.stars")
             nav("output", "输出与均衡器", "slider.horizontal.3")
             nav("database", "曲库管理", "externaldrive")
             nav("appearance", "外观与语言", "paintpalette")
             } }.scrollIndicators(.hidden)
             VStack(alignment: .leading, spacing: 8) {
                 Text(String(format:L("%d 首曲目"),model.musicFileCount)).font(.callout)
-                Text(L("本地优先 · 开发预览 0.5")).font(.caption).foregroundStyle(.secondary)
+                Text(L("本地优先 · 开发预览 0.7.0")).font(.caption).foregroundStyle(.secondary)
             }.padding(20)
         }.negiGlass(22).padding(12)
     }
@@ -101,7 +106,7 @@ struct ContentView: View {
         }.buttonStyle(.plain).padding(.horizontal, 10)
     }
     var title: String {
-        ["albums": "专辑", "artists": "艺人", "tracks": "所有曲目", "roots": "音乐文件夹", "images": "光盘镜像", "lyrics": "歌词工作室", "output": "输出与均衡器", "lan": "LAN 连接", "appearance": "外观与语言", "database": "曲库管理"][model.page] ?? "音乐库"
+        ["albums": "专辑", "artists": "艺人", "tracks": "所有曲目", "roots": "音乐文件夹", "images": "光盘镜像", "lyrics": "歌词工作室", "output": "输出与均衡器", "lan": "LAN 连接", "walkman": "Walkman 传输", "enrichment": "SensMe 与 Gracenote", "appearance": "外观与语言", "database": "曲库管理"][model.page] ?? "音乐库"
     }
     var header: some View {
         VStack(alignment: .leading, spacing: 8) {
@@ -156,7 +161,7 @@ struct ContentView: View {
             Text(L("让收藏成为音乐库")).font(.title2.weight(.medium))
             Text(L("选择本地或已挂载的音乐文件夹。\n音乐仍留在原处，曲库与歌词草稿保存在本机。")).multilineTextAlignment(.center).foregroundStyle(.secondary)
             Button(L("选择音乐文件夹…")) { model.importFolder() }.negiProminentButton().padding(.top, 8)
-            Text(L("MP3 · WAV · FLAC · AAC / ALAC\nDSF / DFF 可识别，DSD 播放正在开发")).font(.caption).foregroundStyle(.secondary).multilineTextAlignment(.center)
+            Text(L("MP3 · WAV · FLAC · AAC / ALAC\nDSF / DFF · 双声道 DoP64 / 128")).font(.caption).foregroundStyle(.secondary).multilineTextAlignment(.center)
         }.frame(maxWidth: .infinity, maxHeight: .infinity)
     }
     var albumsView: some View {
@@ -266,7 +271,7 @@ struct ContentView: View {
                                 VStack(alignment: .leading, spacing: 5) {
                                     Text(f.title).font(.system(size: 14, weight: .medium)).foregroundStyle(f.available ? Color.primary : .gray)
                                     Text("\(uiArtist(f)) · \(uiAlbum(f))").font(.caption).foregroundStyle(.secondary)
-                                    if let issue = f.issue { Text(L(issue)).font(.caption2).foregroundStyle(.orange) }
+                                    if let issue = f.issue { Text(L(f.isDSD && issue == "DSD／DoP 输出尚未接通" ? "双声道 DSD64／128 可使用 USB DAC 的 DoP 输出" : issue)).font(.caption2).foregroundStyle(.orange) }
                                     if !f.available { Text(L("文件离线或需要重新授权")).font(.caption2).foregroundStyle(.orange) }
                                 }
                                 Spacer(minLength: 8)
@@ -275,6 +280,9 @@ struct ContentView: View {
                             }.padding(16).background(playback.current?.id == f.id ? accent.opacity(0.06) : .clear)
                                 .contentShape(Rectangle()).onTapGesture(count: 2) { model.play(f) }
                                 .contextMenu {
+                                    Button(L("传输到 Walkman…")) { model.addToWalkman([f]) }.disabled(!f.available)
+                                    Button(L("SensMe 与 Gracenote…")) { model.openEnrichment(f) }.disabled(!f.available)
+                                    Divider()
                                     Button(L("播放")) { model.play(f) }
                                     Button(L("下一首播放")) { model.enqueue(f, next: true) }.disabled(playback.current?.id == f.id)
                                     Button(L("加入队列")) { model.enqueue(f, next: false) }
@@ -352,13 +360,14 @@ struct ContentView: View {
             VStack(alignment: .leading, spacing: 20) {
                 Text(L("实际播放链路")).font(.title2)
                 Text(audioPath(playback)).padding(18).frame(maxWidth: .infinity, alignment: .leading).background(accent.opacity(0.08), in: RoundedRectangle(cornerRadius: 10))
-                Text(L("PCM 兼容模式使用系统音频图与软件音量。尚未完成独占／逐比特验证，DSD DoP 不会发送到任何设备。")).font(.callout).foregroundStyle(.secondary)
+                Text(L("DSF／未压缩 DFF 的双声道 DSD64／128 使用独占 DoP 输出。请先选择支持 DoP 的 USB DAC，再播放 DSD。DoP 旁路软件音量、音量上限、EQ、响度与重采样；请调低 DAC 本机音量。设备是否识别 DSD 需查看 DAC 屏幕。")).font(.callout).foregroundStyle(.secondary)
                 HStack(spacing: 16) {
                     VStack(alignment: .leading, spacing: 5) { Text(L("设备回读")).font(.headline); Text(L(playback.confirmedOutputFormat)).font(.caption) }
                     Spacer()
-                    Text(LF("输出呈现延迟 %.1f ms",playback.latency*1000)).font(.caption.monospacedDigit()).foregroundStyle(.secondary)
+                    Text(playback.isDoP ? "DoP 回调时钟 · DAC 延迟未测" : LF("输出呈现延迟 %.1f ms",playback.latency*1000)).font(.caption.monospacedDigit()).foregroundStyle(.secondary)
                 }
                 Divider()
+                Group {
                 Text(L("响度与数字余量")).font(.title2)
                 Picker(L("响度统一"), selection: $playback.loudnessMode) {
                     ForEach(LoudnessMode.allCases, id: \.self) { Text(L($0.rawValue)).tag($0) }
@@ -370,13 +379,14 @@ struct ContentView: View {
                 Text(L("读取已有 ReplayGain 标签，不修改音乐。专辑标签缺失时使用逐曲标签；没有有效标签时保留原响度。峰值标签不等于实时 true-peak 测量。")).font(.caption).foregroundStyle(.secondary)
                 HStack { Text(L("实际预增益")); Text(String(format: "%+.2f dB", abs(playback.loudness.gainDB) < 0.0001 ? 0 : playback.loudness.gainDB)).font(.callout.monospacedDigit()).foregroundStyle(accent) }
                 Divider()
-                Text(L("聆听偏好")).font(.title2)
-                HStack { Text(L("软件音量上限")); Slider(value: $playback.volumeLimit, in: 0...1, step: 0.01).frame(width: 240); Text("\(Int((playback.volumeLimit * 100).rounded()))%").monospacedDigit() }
+                }.disabled(playback.isDoP)
+                Text(L(playback.isDoP ? "DoP 使用 DAC 本机音量，以下 PCM 音量设置已旁路" : "聆听偏好")).font(.title2)
+                HStack { Text(L("软件音量上限")); Slider(value: $playback.volumeLimit, in: 0...1, step: 0.01).frame(width: 240); Text("\(Int((playback.volumeLimit * 100).rounded()))%").monospacedDigit() }.disabled(playback.isDoP)
                 Toggle(L("macOS 正在播放与媒体键"), isOn: $playback.mediaControls)
                 Text(L("音量上限、响度、EQ 和所选设备保存在本机。恢复设备按 UID 匹配；设备离线时暂停，等待重新选择。")).font(.caption).foregroundStyle(.secondary)
                 Divider()
                 HStack { Text(L("输出设备")).font(.headline); Spacer(); Button(L("刷新")) { playback.refreshDevices() } }
-                Toggle(L("跟随歌曲源采样率（下次载入生效）"), isOn: $playback.followSourceSampleRate).disabled(playback.preparingOutput)
+                Toggle(L("跟随歌曲源采样率（下次载入生效）"), isOn: $playback.followSourceSampleRate).disabled(playback.preparingOutput || playback.isDoP)
                 Text(L(playback.sampleRateStatus)).font(.callout).foregroundStyle(accent)
                 Text(L("切换前停止输出，确认设备采样率后恢复。此设置会改变所选设备的系统格式；不支持时保留当前格式并转换。仅匹配采样率不代表独占或逐比特输出。")).font(.caption).foregroundStyle(.secondary)
                 ForEach(playback.devices) { device in
@@ -396,10 +406,10 @@ struct ContentView: View {
                 HStack {
                     Text(L("10 段均衡器")).font(.title2)
                     Spacer()
-                    Toggle(L("启用 EQ"), isOn: Binding(get: { playback.eqEnabled }, set: { v in do { try playback.setEQ(v) } catch { model.error = error.localizedDescription } }))
+                    Toggle(L("启用 EQ"), isOn: Binding(get: { playback.eqEnabled }, set: { v in do { try playback.setEQ(v) } catch { model.error = error.localizedDescription } })).disabled(playback.isDoP)
                 }
                 Text(L("EQ 仅处理 PCM；关闭时绕过 EQ 节点。软件音量仍属于兼容播放链路。")).font(.caption).foregroundStyle(.secondary)
-                HStack { Text(L("前级增益")); Slider(value: $playback.preamp, in: -24...0).frame(width: 240); Text("\(playback.preamp, specifier: "%.1f") dB").monospacedDigit() }
+                HStack { Text(L("前级增益")); Slider(value: $playback.preamp, in: -24...0).frame(width: 240); Text("\(playback.preamp, specifier: "%.1f") dB").monospacedDigit() }.disabled(playback.isDoP)
                 HStack(spacing: 10) {
                     ForEach(0..<10, id: \.self) { i in
                         VStack(spacing: 10) {
@@ -408,9 +418,9 @@ struct ContentView: View {
                             Text(playback.frequencies[i] >= 1000 ? "\(Int(playback.frequencies[i]/1000))k" : "\(Int(playback.frequencies[i]))").font(.caption)
                         }
                     }
-                }.padding(.vertical, 12).disabled(!playback.eqEnabled)
+                }.padding(.vertical, 12).disabled(!playback.eqEnabled || playback.isDoP)
                 HStack {
-                    Menu(L("EQ 预设：")+L(playback.presetName)) { ForEach(EQPreset.builtIn) { preset in Button(L(preset.name)) { playback.applyPreset(preset) } } }
+                    Menu(L("EQ 预设：")+L(playback.presetName)) { ForEach(EQPreset.builtIn) { preset in Button(L(preset.name)) { playback.applyPreset(preset) } } }.disabled(playback.isDoP)
                     Text(L("手动调整后标记为自定义")).font(.caption).foregroundStyle(.secondary)
                 }
                 Text(L("预设是轻度音色调整，不是耳机测量校正。EQ 可旁路比较；实时削波计量和 DAC 硬件音量后续接入。")).font(.caption).foregroundStyle(.secondary)
@@ -455,7 +465,7 @@ struct ContentView: View {
                 Slider(value: Binding(get: { playback.position }, set: { model.seek($0) }), in: 0...max(1,playback.duration)).disabled(playback.current == nil)
                 Text(durationText(playback.duration)).font(.caption.monospacedDigit()).foregroundStyle(.secondary).frame(width: 48)
                 Button { playback.isMuted.toggle() } label: { Image(systemName: playback.isMuted ? "speaker.slash.fill" : "speaker.wave.2.fill") }.buttonStyle(.plain).accessibilityLabel(L(playback.isMuted ? "取消静音" : "静音"))
-                VStack(spacing: 3) { Text(L("软件音量")).font(.caption2).foregroundStyle(.secondary); Slider(value: $playback.volume, in: 0...max(0.001,playback.volumeLimit)).frame(width: 90) }
+                VStack(spacing: 3) { Text(L(playback.isDoP ? "DAC 本机音量" : "软件音量")).font(.caption2).foregroundStyle(.secondary); Slider(value: $playback.volume, in: 0...max(0.001,playback.volumeLimit)).frame(width: 90).disabled(playback.isDoP) }
                 Button { model.showQueue.toggle() } label: { Image(systemName: "list.bullet") }.buttonStyle(.plain)
             }
             HStack { Text(audioPath(playback)).lineLimit(1); Spacer(); Text(L(playback.status)) }.font(.caption2).foregroundStyle(.secondary)

@@ -2,6 +2,7 @@ import Foundation
 import AVFoundation
 import Combine
 import LibraryDomain
+import MediaIO
 
 @MainActor public final class PlaybackSession: ObservableObject {
     @Published public private(set) var current: MediaFile?
@@ -14,6 +15,7 @@ import LibraryDomain
     @Published public private(set) var actualDeviceID: UInt32?
     @Published public private(set) var outputRate = 0.0
     @Published public private(set) var preparingOutput = false
+    @Published public private(set) var isDoP = false
     @Published public private(set) var sampleRateStatus = "保持设备当前采样率"
     @Published public var followSourceSampleRate = false { didSet { persistSettings() } }
     @Published public var volume: Float = 0.5 { didSet {
@@ -26,7 +28,10 @@ import LibraryDomain
         if volumeLimit != safe { volumeLimit = safe }
         if volume > safe { volume = safe }; persistSettings()
     } }
-    @Published public var isMuted = false { didSet { engine.mainMixerNode.outputVolume = isMuted ? 0 : volume } }
+    @Published public var isMuted = false { didSet {
+        engine.mainMixerNode.outputVolume = isMuted ? 0 : volume
+        if isDoP, isMuted { pause() }
+    } }
     @Published public var loudnessMode: LoudnessMode = .off { didSet { applyLoudness(); persistSettings() } }
     @Published public var loudnessPreampDB: Float = 0 { didSet { applyLoudness(); persistSettings() } }
     @Published public var preventPeakOverload = true { didSet { applyLoudness(); persistSettings() } }
@@ -49,6 +54,9 @@ import LibraryDomain
     private let eq = AVAudioUnitEQ(numberOfBands: 10)
     private let gainUnit = AVAudioUnitEQ(numberOfBands: 1)
     private var file: AVAudioFile?
+    private var dop: DoPOutput?
+    private var dopDrainedAt: Double?
+    public var dopDiagnostics: DoPDiagnostics? { dop?.diagnostics }
     private var baseFrame: AVAudioFramePosition = 0
     private var generation = 0
     private var timer: Timer?
@@ -83,9 +91,11 @@ import LibraryDomain
         }
     }
     deinit { timer?.invalidate(); if let observer { NotificationCenter.default.removeObserver(observer) } }
-    public var latency: Double { engine.outputNode.presentationLatency }
+    public var latency: Double { isDoP ? 0 : engine.outputNode.presentationLatency }
     public var pathDescription: String {
         guard let current else { return "选择本地音乐开始播放" }
+        if isDoP { return "\(current.codec) · DSD\(Int(current.sampleRate/44_100)) → DoP · 24-bit integer / \(Int(outputRate)) Hz → \(dop?.deviceName ?? "USB DAC")（独占；设备 DSD 锁定待确认）" }
+        if current.isDSD { return "\(current.codec) · DoP 输出已停止；重新载入曲目可再次播放" }
         let device = devices.first { $0.id == actualDeviceID }?.name ?? "设备待确认"
         let rate = current.sampleRate > 0 ? " \(Int(current.sampleRate)) Hz" : ""
         let conversion = outputRate > 0 && abs(current.sampleRate-outputRate) > 1 ? " · 采样率转换" : ""
@@ -104,6 +114,7 @@ import LibraryDomain
         gainUnit.globalGain = loudness.gainDB; gainUnit.bypass = abs(loudness.gainDB) < 0.0001
     }
     public var confirmedOutputFormat: String {
+        if let dop { return dop.diagnostics.physicalFormat+" · 物理／客户端格式均已回读 · 独占" }
         guard current != nil, outputRate > 0 else { return "播放后回读输出格式" }
         let f = engine.outputNode.outputFormat(forBus: 0)
         return "\(Int(f.sampleRate)) Hz · \(f.channelCount) 声道 · \(f.streamDescription.pointee.mBitsPerChannel) 位客户端格式"
@@ -126,8 +137,9 @@ import LibraryDomain
     public func load(_ media: MediaFile, url: URL, autoplay: Bool) async throws {
         guard media.available else { throw NSError(domain: "Playback", code: 1, userInfo: [NSLocalizedDescriptionKey: "文件暂不可用，请重新扫描或授权目录"]) }
         guard !media.isDiscImage else { throw NSError(domain: "Playback", code: 5, userInfo: [NSLocalizedDescriptionKey: media.issue ?? "镜像播放尚未接通"]) }
-        guard !media.isDSD else { throw NSError(domain: "Playback", code: 2, userInfo: [NSLocalizedDescriptionKey: "\(media.codec) 已识别；原始 DSD 解码与 DoP 输出尚未接通，未转为 PCM 播放"]) }
+        if media.isDSD { try loadDoP(media,url:url,autoplay:autoplay); return }
         let audio = try AVAudioFile(forReading: url)
+        closeDoP()
         generation += 1; player.stop(); engine.stop(); freeze(at: 0)
         let version = generation
         preparingOutput = true
@@ -175,6 +187,28 @@ import LibraryDomain
         if autoplay { try start() } else { freeze(at: 0); status = "已载入" }
         onTrackChanged?(media)
     }
+    private func closeDoP() { if dop != nil { dop?.close(); outputRate=0 }; dop=nil; isDoP=false; dopDrainedAt=nil }
+    public func stop() { player.stop(); engine.stop(); closeDoP(); file=nil; freeze(at:position); status="已停止" }
+    private func loadDoP(_ media: MediaFile, url: URL, autoplay: Bool) throws {
+        refreshDevices()
+        guard let uid=preferredDeviceUID, let device=devices.first(where:{$0.uid==uid}), device.isUSB else {
+            throw NSError(domain:"Playback",code:8,userInfo:[NSLocalizedDescriptionKey:"请先在输出设置中选择支持 DoP 的 USB DAC（WALKMAN）"])
+        }
+        _ = try DSDStreamReader(url:url)
+        generation+=1; preparingOutput=true
+        defer { preparingOutput=false }
+        player.stop(); engine.stop(); file=nil; closeDoP(); freeze(at:0)
+        current=media; position=0; outputRate=0
+        do {
+            let output=try DoPOutput.open(url:url,device:device)
+            dop=output; isDoP=true; duration=output.info.duration; actualDeviceID=device.id; outputRate=output.info.carrierRate
+            sampleRateStatus="DoP 载波采样率与物理／客户端整数格式均已回读确认"
+            status="DoP 已载入；请使用 DAC 本机音量，软件音量与 DSP 已旁路"
+            if autoplay && !isMuted { try output.start(); isPlaying=true; status="播放中 · DoP（设备 DSD 锁定待确认）" }
+            anchor = .init(mediaSeconds:0,eventUptime:ProcessInfo.processInfo.systemUptime,running:isPlaying)
+            refreshDevices(); onTrackChanged?(media)
+        } catch { closeDoP(); status=error.localizedDescription; throw error }
+    }
     private func configureGraph(_ format: AVAudioFormat) {
         engine.disconnectNodeOutput(player); engine.disconnectNodeOutput(eq); engine.disconnectNodeOutput(gainUnit)
         engine.connect(player, to: gainUnit, format: format)
@@ -193,6 +227,13 @@ import LibraryDomain
         }
     }
     public func start() throws {
+        if let dop {
+            guard !preparingOutput else { return }
+            if position>=duration { try dop.seek(to:0,resume:false); position=0; dopDrainedAt=nil }
+            if isMuted { isMuted=false }
+            try dop.start(); isPlaying=true; status="播放中 · DoP（设备 DSD 锁定待确认）"; return
+        }
+        if current?.isDSD == true { throw NSError(domain:"Playback",code:9,userInfo:[NSLocalizedDescriptionKey:"DoP 输出已关闭，请重新载入曲目"]) }
         guard file != nil, !preparingOutput else { return }
         if position >= duration { try seek(to: 0) }
         if !engine.isRunning { try engine.start() }
@@ -201,10 +242,18 @@ import LibraryDomain
         outputRate = engine.outputNode.outputFormat(forBus: 0).sampleRate
         anchor = .init(mediaSeconds: position, eventUptime: ProcessInfo.processInfo.systemUptime, running: true)
     }
-    public func pause() { refresh(); player.pause(); freeze(at: position); status = "已暂停" }
+    public func pause() {
+        if let dop { dop.pause(); position=dop.position; freeze(at:position); status="DoP 已暂停 · 发送 DSD 静音"; return }
+        refresh(); player.pause(); freeze(at: position); status = "已暂停"
+    }
     private func freeze(at time: Double) { isPlaying = false; anchor = .init(mediaSeconds: time, eventUptime: ProcessInfo.processInfo.systemUptime, running: false) }
     public func toggle() throws { if isPlaying { pause() } else { try start() } }
     public func seek(to time: Double) throws {
+        if let dop {
+            let playing=isPlaying
+            try dop.seek(to:time,resume:playing); position=dop.position; dopDrainedAt=nil
+            anchor = .init(mediaSeconds:position,eventUptime:ProcessInfo.processInfo.systemUptime,running:playing); return
+        }
         guard let file else { return }; let playing = isPlaying
         generation += 1; player.stop()
         let target = min(max(time, 0), duration)
@@ -217,6 +266,24 @@ import LibraryDomain
         refresh(); return min(duration, max(0, anchor.mediaTime(at: uptime)))
     }
     public func refresh() {
+        if let dop {
+            position=dop.position
+            anchor = .init(mediaSeconds:position,eventUptime:ProcessInfo.processInfo.systemUptime,running:isPlaying)
+            let uptime=ProcessInfo.processInfo.systemUptime
+            if let failure=dop.failure {
+                closeDoP(); freeze(at:position); status=failure; refreshDevices(); return
+            }
+            if uptime-lastDeviceCheck>1 {
+                lastDeviceCheck=uptime; refreshDevices()
+                if !devices.contains(where:{$0.id==dop.deviceID}) { closeDoP(); freeze(at:position); status="USB DAC 已断开；请重新选择设备并载入"; return }
+            }
+            if isPlaying && dop.finished {
+                if let end=dopDrainedAt, uptime-end>=0.15 {
+                    position=duration; closeDoP(); freeze(at:duration); status="DoP 播放完成"; advance()
+                } else if dopDrainedAt==nil { dopDrainedAt=uptime }
+            }
+            return
+        }
         if isPlaying, let file, let render = player.lastRenderTime, let played = player.playerTime(forNodeTime: render) {
             let rendered = Double(baseFrame)/file.processingFormat.sampleRate + Double(played.sampleTime)/played.sampleRate
             let present = min(duration, max(Double(baseFrame)/file.processingFormat.sampleRate, rendered-latency))
@@ -237,7 +304,7 @@ import LibraryDomain
         }
     }
     public func chooseDevice(_ id: UInt32) throws {
-        pause(); engine.stop(); refreshDevices()
+        pause(); closeDoP(); engine.stop(); refreshDevices()
         guard devices.contains(where: { $0.id == id }), let unit = engine.outputNode.audioUnit else { throw NSError(domain: "Playback", code: 3, userInfo: [NSLocalizedDescriptionKey: "输出设备不可用"]) }
         var device = id
         let statusCode = AudioUnitSetProperty(unit, kAudioOutputUnitProperty_CurrentDevice, kAudioUnitScope_Global, 0, &device, UInt32(MemoryLayout<UInt32>.size))
@@ -247,6 +314,7 @@ import LibraryDomain
         status = "设备已切换，播放已暂停"
     }
     public func setEQ(_ enabled: Bool) throws {
+        if isDoP { return }
         let playing = isPlaying; pause(); engine.stop(); eqEnabled = enabled
         applyLoudness()
         if let file { configureGraph(file.processingFormat); try seek(to: position); if playing { try start() } }
@@ -278,6 +346,7 @@ import LibraryDomain
     public func advance() { if let next = nextItem { onNext?(next) } }
     private func handleConfigurationChange() {
         if preparingOutput { return }
+        if isDoP || current?.isDSD == true { return }
         if let expected = expectedRateChange,
            ProcessInfo.processInfo.systemUptime < expected.deadline,
            AudioDevices.current(engine.outputNode.audioUnit) == expected.device,

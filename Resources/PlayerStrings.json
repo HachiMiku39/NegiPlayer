@@ -296,8 +296,8 @@
     "ja": "自動追従を再開"
   },
   "专辑封面": {
-    "en": "Album artwork",
-    "ja": "アルバムジャケット"
+    "en": "Album cover",
+    "ja": "アルバム画像"
   },
   "封面占位图": {
     "en": "Artwork placeholder",
@@ -1704,5 +1704,593 @@
     "zh": "本地优先 · 开发预览 0.5",
     "ja": "ローカル優先 · 開発プレビュー 0.5",
     "en": "Local first · Development preview 0.5"
+  },
+  "Walkman 传输": {
+    "en": "Walkman Transfer",
+    "ja": "Walkman 転送"
+  },
+  "传输到 Walkman…": {
+    "en": "Transfer to Walkman…",
+    "ja": "Walkman に転送…"
+  },
+  "本地优先 · 开发预览 0.5.1": {
+    "en": "Local first · Preview 0.5.1",
+    "ja": "ローカル優先 · プレビュー 0.5.1"
+  },
+  "添加音乐": {
+    "en": "Add Music",
+    "ja": "音楽を追加"
+  },
+  "选择音乐文件或文件夹；文件夹会递归添加音频，并保留内部目录结构。": {
+    "en": "Select music files or folders. Folders include audio in subfolders and preserve their structure.",
+    "ja": "音楽ファイルまたはフォルダを選択します。サブフォルダの音声も追加し、構成を保持します。"
+  },
+  "正在添加音乐…": {
+    "en": "Adding music…",
+    "ja": "音楽を追加中…"
+  },
+  "未找到可传输的音频文件": {
+    "en": "No audio files found",
+    "ja": "転送可能な音声ファイルがありません"
+  },
+  "无法读取所选文件夹": {
+    "en": "Cannot read the selected folder",
+    "ja": "選択したフォルダを読み込めません"
+  },
+  "设备未声明支持部分所选格式，请移除对应文件后重试": {
+    "en": "Some selected formats are not listed by the device. Remove those files and try again.",
+    "ja": "機器が対応を示していない形式があります。該当ファイルを削除して再試行してください。"
+  },
+  "准备传输…": {
+    "en": "Preparing transfer…",
+    "ja": "転送を準備中…"
+  },
+  "传输完成：%d 首已复制，%d 首同名跳过": {
+    "en": "Transfer complete: %d copied, %d same-name files skipped",
+    "ja": "転送完了：%d 曲コピー、同名 %d 曲スキップ"
+  },
+  "已取消：保留 %d 首已完成的音乐": {
+    "en": "Cancelled: %d completed tracks kept",
+    "ja": "キャンセル済み：完了した %d 曲を保持"
+  },
+  "传输中断：保留 %d 首已完成的音乐": {
+    "en": "Transfer interrupted: %d completed tracks kept",
+    "ja": "転送中断：完了した %d 曲を保持"
+  },
+  "添加文件或文件夹…": {
+    "en": "Add Files or Folders…",
+    "ja": "ファイルまたはフォルダを追加…"
+  },
+  "从曲库选择…": {
+    "en": "Choose from Library…",
+    "ja": "ライブラリから選択…"
+  },
+  "同名文件": {
+    "en": "Same-name files",
+    "ja": "同名ファイル"
+  },
+  "跳过同名文件": {
+    "en": "Skip same-name files",
+    "ja": "同名ファイルをスキップ"
+  },
+  "保留两份（自动编号）": {
+    "en": "Keep both (number automatically)",
+    "ja": "両方を保持（自動採番）"
+  },
+  "复制后校验 SHA-256": {
+    "en": "Verify SHA-256 after copying",
+    "ja": "コピー後に SHA-256 を検証"
+  },
+  "%d 首的格式未获设备声明支持，请移除后传输": {
+    "en": "%d tracks use formats not listed by the device. Remove them to continue.",
+    "ja": "機器が対応を示していない形式が %d 曲あります。削除して続行してください。"
+  },
+  "复制到 MUSIC，保留目录与标签。完成后请在 Finder 中弹出两个存储卷。": {
+    "en": "Copy to MUSIC, preserving folders and tags. Eject both volumes in Finder when finished.",
+    "ja": "フォルダとタグを保持して MUSIC にコピーします。完了後は Finder で両方のボリュームを取り出してください。"
+  },
+  "正在取消…": {
+    "en": "Cancelling…",
+    "ja": "キャンセル中…"
+  },
+  "取消传输": {
+    "en": "Cancel Transfer",
+    "ja": "転送をキャンセル"
+  },
+  "开始传输": {
+    "en": "Start Transfer",
+    "ja": "転送を開始"
+  },
+  "目标存储": {
+    "en": "Destination Storage",
+    "ja": "転送先ストレージ"
+  },
+  "刷新设备": {
+    "en": "Refresh Devices",
+    "ja": "機器を更新"
+  },
+  "在 Finder 中打开": {
+    "en": "Open in Finder",
+    "ja": "Finder で開く"
+  },
+  "未发现 Walkman，请连接设备并开启 USB 存储模式": {
+    "en": "No Walkman found. Connect it in USB storage mode.",
+    "ja": "Walkman が見つかりません。USB ストレージモードで接続してください。"
+  },
+  "SD 卡": {
+    "en": "SD Card",
+    "ja": "SD カード"
+  },
+  "机身存储": {
+    "en": "Internal Storage",
+    "ja": "本体ストレージ"
+  },
+  "可用 %@": {
+    "en": "%@ available",
+    "ja": "空き %@"
+  },
+  "原目标已断开，请重新选择存储": {
+    "en": "The previous destination is disconnected. Select storage again.",
+    "ja": "元の転送先が切断されました。ストレージを選び直してください。"
+  },
+  "选择要带走的音乐": {
+    "en": "Choose Music to Take Along",
+    "ja": "持ち歩く音楽を選択"
+  },
+  "从曲库勾选曲目，或添加本地音乐文件与文件夹。": {
+    "en": "Select tracks from your library, or add local music files and folders.",
+    "ja": "ライブラリの曲を選ぶか、ローカルの音楽ファイルとフォルダを追加します。"
+  },
+  "设备未声明支持此格式": {
+    "en": "This format is not listed by the device",
+    "ja": "機器が対応を示していない形式です"
+  },
+  "校验中": {
+    "en": "Verifying",
+    "ja": "検証中"
+  },
+  "复制中": {
+    "en": "Copying",
+    "ja": "コピー中"
+  },
+  "已处理": {
+    "en": "Processed",
+    "ja": "処理済み"
+  },
+  "从曲库选择音乐": {
+    "en": "Choose Music from Library",
+    "ja": "ライブラリから音楽を選択"
+  },
+  "全选搜索结果": {
+    "en": "Select Search Results",
+    "ja": "検索結果をすべて選択"
+  },
+  "取消选择": {
+    "en": "Deselect All",
+    "ja": "選択を解除"
+  },
+  "已选 %d 首": {
+    "en": "%d tracks selected",
+    "ja": "%d 曲を選択"
+  },
+  "添加到传输列表": {
+    "en": "Add to Transfer List",
+    "ja": "転送リストに追加"
+  },
+  "目标剩余空间不足，请减少曲目或更换存储": {
+    "en": "Not enough free space. Select fewer tracks or another storage volume.",
+    "ja": "空き容量が不足しています。曲を減らすか、別のストレージを選択してください。"
+  },
+  "目标存储已断开或变为只读，请重新选择": {
+    "en": "The destination is disconnected or read-only. Select it again.",
+    "ja": "転送先が切断されたか読み取り専用になりました。選び直してください。"
+  },
+  "目标已卸载，请重新连接 Walkman": {
+    "en": "The destination is unmounted. Reconnect Walkman.",
+    "ja": "転送先がアンマウントされました。Walkman を再接続してください。"
+  },
+  "目标存储已断开": {
+    "en": "The destination is disconnected",
+    "ja": "転送先が切断されました"
+  },
+  "目标相对路径无效": {
+    "en": "Invalid destination relative path",
+    "ja": "転送先の相対パスが無効です"
+  },
+  "所选音乐已在目标 MUSIC 文件夹内，请选择其他来源或存储": {
+    "en": "The selected music is already in the destination MUSIC folder. Choose another source or storage volume.",
+    "ja": "選択した音楽は転送先の MUSIC 内にあります。別の転送元かストレージを選択してください。"
+  },
+  "源文件已改变，请重新添加：%@": {
+    "en": "Source file changed. Add it again: %@",
+    "ja": "転送元ファイルが変更されました。追加し直してください：%@"
+  },
+  "复制时源文件改变：%@": {
+    "en": "Source file changed during copying: %@",
+    "ja": "コピー中に転送元ファイルが変更されました：%@"
+  },
+  "复制校验失败：%@": {
+    "en": "Copy verification failed: %@",
+    "ja": "コピーの検証に失敗しました：%@"
+  },
+  "目标目录包含符号链接或同名文件：%@": {
+    "en": "Destination folder contains a symbolic link or same-name file: %@",
+    "ja": "転送先にシンボリックリンクまたは同名ファイルがあります：%@"
+  },
+  "目标路径越界": {
+    "en": "Destination path is outside the selected folder",
+    "ja": "転送先が選択したフォルダの外にあります"
+  },
+  "同名文件过多，请整理目标目录": {
+    "en": "Too many same-name files. Organize the destination folder.",
+    "ja": "同名ファイルが多すぎます。転送先を整理してください。"
+  },
+  "请先选择音乐": {
+    "en": "Select music first",
+    "ja": "先に音楽を選択してください"
+  },
+  "正在查找 Walkman…": {
+    "en": "Looking for Walkman…",
+    "ja": "Walkman を検索中…"
+  },
+  "选择存储": {
+    "en": "Choose Storage",
+    "ja": "ストレージを選択"
+  },
+  "选择存储…": {
+    "en": "Choose Storage…",
+    "ja": "ストレージを選択…"
+  },
+  "请选择 Walkman 机身存储或 SD 卡存储卷的根目录。": {
+    "en": "Select the root folder of the Walkman internal storage or SD card volume.",
+    "ja": "Walkman 本体または SD カードのボリューム直下を選択してください。"
+  },
+  "自动识别未完成，可点击「选择存储…」选择存储卷": {
+    "en": "Automatic detection did not finish. Use Choose Storage… to select the volume.",
+    "ja": "自動検出が完了しませんでした。「ストレージを選択…」でボリュームを選んでください。"
+  },
+  "本地优先 · 开发预览 0.6.0": {
+    "en": "Local first · Preview 0.6.0",
+    "ja": "ローカル優先 · プレビュー 0.6.0"
+  },
+  "SensMe 与补全": {
+    "en": "SensMe & Metadata",
+    "ja": "SensMe とタグ補完"
+  },
+  "SensMe 与 Gracenote": {
+    "en": "SensMe & Gracenote",
+    "ja": "SensMe と Gracenote"
+  },
+  "SensMe 与 Gracenote…": {
+    "en": "SensMe & Gracenote…",
+    "ja": "SensMe と Gracenote…"
+  },
+  "SensMe 引擎可用": {
+    "en": "SensMe engine ready",
+    "ja": "SensMe エンジン準備完了"
+  },
+  "SensMe 需要本机引擎": {
+    "en": "SensMe requires a local engine",
+    "ja": "SensMe のローカルエンジンが必要です"
+  },
+  "Media Go 授权已导入": {
+    "en": "Media Go authorization imported",
+    "ja": "Media Go 認証情報を読み込み済み"
+  },
+  "Gracenote 需要本机授权": {
+    "en": "Gracenote authorization required",
+    "ja": "Gracenote の認証情報が必要です"
+  },
+  "引擎设置…": {
+    "en": "Engine Settings…",
+    "ja": "エンジン設定…"
+  },
+  "结果保存在本机。采用候选只更新曲库显示；传到 Walkman 时可写入 MP3/FLAC 副本，原文件保留。": {
+    "en": "Results stay local. Applying a candidate updates the library; transfer can write tags to MP3/FLAC copies while preserving originals.",
+    "ja": "結果は本機に保存します。候補の採用はライブラリ表示を更新し、転送時に MP3/FLAC のコピーへ書き込みます。元ファイルは保持します。"
+  },
+  "搜索待分析的音乐": {
+    "en": "Search music to analyze",
+    "ja": "分析する音楽を検索"
+  },
+  "已采用补全": {
+    "en": "Metadata applied",
+    "ja": "タグ補完を採用済み"
+  },
+  "分析所选音乐": {
+    "en": "Analyze Selected Music",
+    "ja": "選択した音楽を分析"
+  },
+  "节奏未确定": {
+    "en": "Tempo undetermined",
+    "ja": "テンポ未確定"
+  },
+  "%d 个分析分块": {
+    "en": "%d analysis chunks",
+    "ja": "分析チャンク %d 個"
+  },
+  "尚未分析此曲目": {
+    "en": "This track has not been analyzed",
+    "ja": "この曲は未分析です"
+  },
+  "选择曲目可查看分析结果。也可直接输入文字测试 Gracenote 查询。": {
+    "en": "Select a track to view results, or enter text to try a Gracenote search.",
+    "ja": "曲を選択すると分析結果を表示します。文字を入力して Gracenote 検索も試せます。"
+  },
+  "使用 Sony 原分析引擎；分析音频独立转换为 44.1 kHz / 16-bit 双声道，不经过播放 EQ。": {
+    "en": "Uses Sony’s original engine with a separate 44.1 kHz, 16-bit stereo decode, independent of playback EQ.",
+    "ja": "Sony 純正エンジンを使用します。再生 EQ と独立して 44.1 kHz・16-bit ステレオに変換します。"
+  },
+  "Gracenote 标签补全": {
+    "en": "Gracenote Metadata",
+    "ja": "Gracenote タグ補完"
+  },
+  "歌曲标题": {
+    "en": "Track Title",
+    "ja": "曲名"
+  },
+  "专辑（可留空）": {
+    "en": "Album (optional)",
+    "ja": "アルバム（任意）"
+  },
+  "查询候选": {
+    "en": "Find Candidates",
+    "ja": "候補を検索"
+  },
+  "检测 SDK": {
+    "en": "Check SDK",
+    "ja": "SDK を確認"
+  },
+  "仅发送标题、艺人与专辑文字，不上传本地音频。候选需手动核对，版本与重发行信息可能不同。": {
+    "en": "Sends only title, artist and album text. Review candidates for edition and reissue differences. No audio is uploaded.",
+    "ja": "送信するのは曲名・アーティスト・アルバム名のみです。音声は送信しません。候補の版や再発情報をご確認ください。"
+  },
+  "当前专辑": {
+    "en": "Current Album",
+    "ja": "現在のアルバム"
+  },
+  "采用此候选": {
+    "en": "Apply Candidate",
+    "ja": "この候補を採用"
+  },
+  "已采用": {
+    "en": "Applied",
+    "ja": "採用済み"
+  },
+  "本机分析引擎": {
+    "en": "Local Analysis Engine",
+    "ja": "ローカル分析エンジン"
+  },
+  "选择引擎文件夹": {
+    "en": "Choose Engine Folder",
+    "ja": "エンジンフォルダを選択"
+  },
+  "选择引擎文件夹…": {
+    "en": "Choose Engine Folder…",
+    "ja": "エンジンフォルダを選択…"
+  },
+  "引擎文件夹包含便携 Wine、32 位 Python、Sony MMLib11.dll 与 Gracenote SDK。不会自动开启网络查询。": {
+    "en": "The engine folder contains portable Wine, 32-bit Python, Sony MMLib11.dll and Gracenote SDK. Online queries start only on request.",
+    "ja": "エンジンフォルダには Wine・32-bit Python・Sony MMLib11.dll・Gracenote SDK が含まれます。オンライン検索は操作時のみ開始します。"
+  },
+  "导入 Media Go 本机授权…": {
+    "en": "Import Media Go Authorization…",
+    "ja": "Media Go の認証情報を読み込み…"
+  },
+  "授权和注册用户信息仅保存到本机应用数据，源码包不包含这些凭据。": {
+    "en": "Authorization and user registration stay in local app data and are excluded from the source archive.",
+    "ja": "認証情報と登録ユーザー情報は本機のアプリデータにのみ保存され、ソース配布には含まれません。"
+  },
+  "选择已核对的 Media Go 3.2 Build 191 的 MediaGo.exe。授权只保存在本机。": {
+    "en": "Choose MediaGo.exe from the verified Media Go 3.2 Build 191. Authorization stays local.",
+    "ja": "確認済みの Media Go 3.2 Build 191 の MediaGo.exe を選択します。認証情報は本機にのみ保存します。"
+  },
+  "携带 SensMe 与补全标签（MP3/FLAC）": {
+    "en": "Include SensMe and metadata (MP3/FLAC)",
+    "ja": "SensMe と補完タグを含める（MP3/FLAC）"
+  },
+  "正在准备带分析标签的副本…": {
+    "en": "Preparing tagged copies…",
+    "ja": "タグ付きコピーを準備中…"
+  },
+  "正在准备 SensMe 分析…": {
+    "en": "Preparing SensMe analysis…",
+    "ja": "SensMe 分析を準備中…"
+  },
+  "正在分析 %d/%d：%@": {
+    "en": "Analyzing %d/%d: %@",
+    "ja": "分析中 %d/%d：%@"
+  },
+  "SensMe 分析完成：%d 首": {
+    "en": "SensMe analysis complete: %d tracks",
+    "ja": "SensMe 分析完了：%d 曲"
+  },
+  "分析已取消，已完成的结果保留": {
+    "en": "Analysis cancelled; completed results kept",
+    "ja": "分析をキャンセルしました。完了した結果は保持します"
+  },
+  "分析中断，已完成的结果保留": {
+    "en": "Analysis interrupted; completed results kept",
+    "ja": "分析が中断されました。完了した結果は保持します"
+  },
+  "正在检测 Gracenote…": {
+    "en": "Checking Gracenote…",
+    "ja": "Gracenote を確認中…"
+  },
+  "正在查询 Gracenote…": {
+    "en": "Searching Gracenote…",
+    "ja": "Gracenote を検索中…"
+  },
+  "Gracenote 返回 %d 个候选，请核对版本后采用": {
+    "en": "Gracenote returned %d candidates. Check the edition before applying.",
+    "ja": "Gracenote 候補 %d 件。版を確認して採用してください。"
+  },
+  "查询已取消": {
+    "en": "Search cancelled",
+    "ja": "検索をキャンセルしました"
+  },
+  "Gracenote 查询未完成": {
+    "en": "Gracenote search did not complete",
+    "ja": "Gracenote 検索が完了しませんでした"
+  },
+  "已保存补全结果；传输时写入副本": {
+    "en": "Metadata saved; transfer writes it to a copy",
+    "ja": "補完結果を保存しました。転送時にコピーへ書き込みます"
+  },
+  "选择发行版": {
+    "en": "Select release",
+    "ja": "リリースを選択"
+  },
+  "采用的标签字段": {
+    "en": "Tags to apply",
+    "ja": "適用するタグ"
+  },
+  "全选字段": {
+    "en": "Select all tags",
+    "ja": "すべてのタグを選択"
+  },
+  "取消选择字段": {
+    "en": "Deselect tags",
+    "ja": "タグの選択を解除"
+  },
+  "未勾选的字段和未返回的信息保留当前值。": {
+    "en": "Unchecked and unavailable fields keep their current values.",
+    "ja": "未選択または取得できない項目は現在の値を保持します。"
+  },
+  "采用所选标签与封面": {
+    "en": "Apply selected tags and cover",
+    "ja": "選択したタグと画像を適用"
+  },
+  "选择本地曲目后重新查询，才能采用到曲库。": {
+    "en": "Select a local track and search again to apply these results.",
+    "ja": "ローカル曲を選び直して検索すると適用できます。"
+  },
+  "封面尺寸": {
+    "en": "Cover size",
+    "ja": "画像サイズ"
+  },
+  "预览封面": {
+    "en": "Preview cover",
+    "ja": "画像をプレビュー"
+  },
+  "封面预览": {
+    "en": "Cover preview",
+    "ja": "画像プレビュー"
+  },
+  "采用这张封面": {
+    "en": "Use this cover",
+    "ja": "この画像を使用"
+  },
+  "此发行版没有返回封面，保留现有封面。": {
+    "en": "No cover returned for this release; keep the current cover.",
+    "ja": "このリリースの画像がないため、現在の画像を保持します。"
+  },
+  "取消勾选可保留原封面。采用后先更新本机显示，传输时写入副本。": {
+    "en": "Uncheck to keep the current cover. Applying updates the local display and embeds the cover into transfer copies.",
+    "ja": "選択を外すと元の画像を保持します。適用後はローカル表示を更新し、転送コピーに埋め込みます。"
+  },
+  "按需下载预览，不会自动替换现有封面。": {
+    "en": "Download previews on demand. The current cover is kept until you apply a selection.",
+    "ja": "プレビューは必要に応じて取得します。適用するまで現在の画像を保持します。"
+  },
+  "正在获取完整专辑信息…": {
+    "en": "Loading full album metadata…",
+    "ja": "アルバム詳細を取得中…"
+  },
+  "完整信息已载入，请勾选要采用的字段与封面": {
+    "en": "Full metadata loaded. Select tags and a cover to apply.",
+    "ja": "詳細を取得しました。適用するタグと画像を選択してください。"
+  },
+  "正在下载封面预览…": {
+    "en": "Downloading cover preview…",
+    "ja": "画像を取得中…"
+  },
+  "封面已载入，采用前可取消勾选": {
+    "en": "Cover loaded. Uncheck it to keep the current cover.",
+    "ja": "画像を取得しました。選択を外すと現在の画像を保持します。"
+  },
+  "封面下载已取消": {
+    "en": "Cover download cancelled",
+    "ja": "画像の取得をキャンセルしました"
+  },
+  "封面下载未完成": {
+    "en": "Cover download failed",
+    "ja": "画像を取得できませんでした"
+  },
+  "完整信息查询未完成": {
+    "en": "Album details lookup failed",
+    "ja": "アルバム詳細を取得できませんでした"
+  },
+  "已保存所选标签与封面；传输时写入副本": {
+    "en": "Selected tags and cover saved; transfer copies will include them",
+    "ja": "選択したタグと画像を保存し、転送コピーに埋め込みます"
+  },
+  "结果保存在本机。所选标签与封面更新曲库显示；传到 Walkman 时写入 MP3/FLAC 副本，原文件保留。": {
+    "en": "Results stay on this Mac. Selected tags and covers update the library and MP3/FLAC transfer copies; original files are kept.",
+    "ja": "結果はこのMacに保存します。選択したタグと画像をライブラリとMP3/FLAC転送コピーに反映し、元ファイルは保持します。"
+  },
+  "专辑艺人": {
+    "en": "Album artist",
+    "ja": "アルバムアーティスト"
+  },
+  "总曲数": {
+    "en": "Total tracks",
+    "ja": "総曲数"
+  },
+  "总碟数": {
+    "en": "Total discs",
+    "ja": "総ディスク数"
+  },
+  "发行年份": {
+    "en": "Release year",
+    "ja": "発売年"
+  },
+  "原始年份": {
+    "en": "Original year",
+    "ja": "初出年"
+  },
+  "唱片公司": {
+    "en": "Record label",
+    "ja": "レーベル"
+  },
+  "作曲": {
+    "en": "Composer",
+    "ja": "作曲"
+  },
+  "作词": {
+    "en": "Lyricist",
+    "ja": "作詞"
+  },
+  "指挥": {
+    "en": "Conductor",
+    "ja": "指揮"
+  },
+  "版权": {
+    "en": "Copyright",
+    "ja": "著作権"
+  },
+  "条形码": {
+    "en": "Barcode",
+    "ja": "バーコード"
+  },
+  "发行编号": {
+    "en": "Catalog number",
+    "ja": "カタログ番号"
+  },
+  "合辑": {
+    "en": "Compilation",
+    "ja": "コンピレーション"
+  },
+  "艺人来源地": {
+    "en": "Artist origin",
+    "ja": "アーティストの出身地"
+  },
+  "艺人活跃年代": {
+    "en": "Artist era",
+    "ja": "活動年代"
+  },
+  "艺人类型": {
+    "en": "Artist type",
+    "ja": "アーティスト種別"
   }
 }
