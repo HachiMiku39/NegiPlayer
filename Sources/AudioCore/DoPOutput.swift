@@ -33,6 +33,7 @@ public final class DoPOutput {
     private var producerError: String?
     private var io: AudioDeviceIOProcID?
     private var ioStarted=false
+    private var streamPrimed=false
     private var closed=false
     private var ownsHog=false
     private var mixingChanged=false
@@ -173,6 +174,22 @@ public final class DoPOutput {
         guard !closed else { throw Self.error("DoP 输出已关闭，请重新载入曲目") }
         if let failure { throw Self.error(failure) }
         if !ioStarted {
+            if !streamPrimed {
+                // WM1A can report the requested integer format before the first
+                // USB stream is usable. Prime with DoP silence, then restart the
+                // IOProc just as a successful seek does, without consuming music.
+                negi_dop_pause(state,1)
+                let result=AudioDeviceStart(deviceID,io)
+                guard result==noErr else { throw Self.error("DoP 设备预热失败",result) }; ioStarted=true
+                Thread.sleep(forTimeInterval:0.3)
+                let stopped=AudioDeviceStop(deviceID,io)
+                guard stopped==noErr else { throw Self.error("DoP 设备预热停止失败",stopped) }; ioStarted=false
+                Thread.sleep(forTimeInterval:0.05)
+                if let failure { throw Self.error(failure) }
+                guard negi_dop_callbacks(state)>0 else { throw Self.error("DoP 预热未收到设备回调") }
+                negi_dop_reset_phase(state)
+                streamPrimed=true
+            }
             let result=AudioDeviceStart(deviceID,io)
             guard result==noErr else { throw Self.error("DoP 设备启动失败",result) }; ioStarted=true
         }

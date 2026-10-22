@@ -85,4 +85,18 @@ final class DSDTests: XCTestCase {
         _=render(3); XCTAssertEqual(negi_dop_underruns(s),1); XCTAssertEqual(negi_dop_played(s),4)
         negi_dop_reset(s); write([1,2,3,4]); XCTAssertEqual(render(1),[2,1,5,4,3,5])
     }
+    func testSilencePrimingAndRestartPreserveEveryMusicFrame() throws {
+        let state=try XCTUnwrap(negi_dop_create(4)); defer { negi_dop_destroy(state) }
+        let music:[UInt8]=[0x12,0x34,0x56,0x78,0x9A,0xBC,0xDE,0xF0]
+        music.withUnsafeBufferPointer { XCTAssertEqual(negi_dop_write(state,$0.baseAddress,2),2) }
+        var silence=[UInt8](repeating:0,count:18)
+        silence.withUnsafeMutableBufferPointer { negi_dop_render(state,$0.baseAddress,3) }
+        XCTAssertEqual(silence,[0x69,0x69,5,0x69,0x69,5,0x69,0x69,0xFA,0x69,0x69,0xFA,0x69,0x69,5,0x69,0x69,5])
+        XCTAssertEqual(negi_dop_played(state),0); XCTAssertEqual(negi_dop_space(state),2)
+        negi_dop_reset_phase(state); negi_dop_pause(state,0)
+        var output=[UInt8](repeating:0,count:12)
+        output.withUnsafeMutableBufferPointer { negi_dop_render(state,$0.baseAddress,2) }
+        XCTAssertEqual(output,[0x34,0x12,5,0x78,0x56,5,0xBC,0x9A,0xFA,0xF0,0xDE,0xFA])
+        XCTAssertEqual(negi_dop_played(state),2); XCTAssertEqual(negi_dop_underruns(state),0)
+    }
 }

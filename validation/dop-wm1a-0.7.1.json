@@ -1,0 +1,74 @@
+{
+  "date": "2026-10-22",
+  "applicationVersion": "0.7.1",
+  "build": 10,
+  "distribution": "macOS 0.7.1; validation performed locally",
+  "binarySHA256": "af0fb7226419767f59b5ade5d5faf3c31989ad4130864ac086a94e086acc5bdf",
+  "device": "Sony WM1A USB DAC",
+  "automaticDACLockReadback": false,
+  "receiverEvidence": "user observations of device screen and headphones",
+  "observations": [
+    {
+      "test": "first DSD128 play after app relaunch, no manual seek",
+      "deviceDisplay": "DSD 5.6 MHz",
+      "audio": "normal"
+    },
+    {
+      "test": "first DSD64 play from installed local app, no manual seek",
+      "deviceDisplay": "DSD 2.8 MHz",
+      "audio": "normal"
+    },
+    {
+      "test": "DSD64 pause and resume",
+      "audio": "normal"
+    },
+    {
+      "test": "DSD64 to DSD128 switch",
+      "deviceDisplay": "DSD 5.6 MHz",
+      "audio": "normal"
+    }
+  ],
+  "startupChange": {
+    "initialValidDoPSilenceSeconds": 0.3,
+    "stopToRestartSeconds": 0.05,
+    "markerPhaseReset": "IOProc stopped; music queue preserved",
+    "musicConsumedDuringPriming": false,
+    "separateRendererProcess": false
+  },
+  "finalHostReadback": {
+    "actualRate": 352800,
+    "alive": 1,
+    "bufferFrames": 512,
+    "name": "WALKMAN",
+    "nominalRate": 352800,
+    "runningSomewhere": 1,
+    "streams": [
+      {
+        "physical": {
+          "bits": 24,
+          "bytesPerFrame": 6,
+          "channels": 2,
+          "flags": 76,
+          "sampleRate": 352800
+        },
+        "virtual": {
+          "bits": 24,
+          "bytesPerFrame": 6,
+          "channels": 2,
+          "flags": 76,
+          "sampleRate": 352800
+        }
+      }
+    ]
+  },
+  "regressionTests": {
+    "total": 74,
+    "passed": 67,
+    "optionalSkipped": 7,
+    "failed": 0
+  },
+  "limits": [
+    "DAC lock is confirmed manually, not queried by software",
+    "Other DACs, DFF on hardware and prolonged listening are not covered"
+  ]
+}

@@ -1,6 +1,8 @@
 # NegiPlayer
 
-macOS 本地音乐播放器与歌词工作室，开发预览 0.7.0。提供 Negi（Miku 青绿与少量粉色）、日间、夜间三套主题及中文／日文／英文界面，macOS 27 使用原生 SwiftUI Liquid Glass；减少透明度时使用实色背景。最低部署目标 macOS 14，当前验证架构为 Apple Silicon / arm64。
+macOS 本地音乐播放器与歌词工作室，开发预览 0.7.1。提供 Negi（Miku 青绿与少量粉色）、日间、夜间三套主题及中文／日文／英文界面，macOS 27 使用原生 SwiftUI Liquid Glass；减少透明度时使用实色背景。最低部署目标 macOS 14，当前验证架构为 Apple Silicon / arm64。
+
+0.7.1 修复 WM1A USB DAC 首次播放 DSD 时进度正常但无声、机身不显示格式的问题。载入 DoP 后自动发送短暂 DSD 静音并重启 USB 流，不消费歌曲开头的数据，无需手动拖动进度条。WM1A 实测首次播放 DSD64／128、暂停恢复及两者切换均正常；详情见 [DOP.md](DOP.md)。
 
 0.5 已增加原生 Windows 与 Android 端：Mac、Windows 都能管理只读曲库并互相作为播放端；iOS、Android 只读浏览，并在本机处理音频、EQ 与输出。四端共用 LAN v1、封面、LRC、Negi／日间／夜间主题及中／日／英语言目录。Windows 使用 WASAPI，Android 使用 AudioTrack。构建与连接说明见 [cross/README.md](cross/README.md)，Roon 功能参照见 [ROON_REFERENCE.md](ROON_REFERENCE.md)。原始 DSD／DoP 已在 macOS 首次接通；DST、更多设备、同步多房间与正式发布验收仍见 [ROADMAP.md](ROADMAP.md)。
 
@@ -78,7 +80,7 @@ Mac 的「iOS 连接」页面可手动开启服务、生成配对码、查看终
 | SQLite | WAL、原子扫描提交、草稿与修订、完整性检查、Online Backup 一致备份 |
 | 歌词 | 精确到纳秒，0 与未打点分开，100 分钟以上，正负 offset，UTF-16 与完整字素簇边界 |
 
-macOS DoP128 已用真实 DSF 音乐连接 WM1A USB DAC 验证：主机物理／客户端格式均为 24 位、352.8 kHz、非混音整数，用户确认 WM1A 显示 DSD 5.6 MHz 且声音正常。暂停、定位与恢复通过；纯数据测试覆盖 DoP64／128 所用的封装及文件读取。DoP64 实体接收端、更多 DAC、长时间播放、PCM bit-perfect 和实体 iOS USB 仍待验收。详见 [DOP.md](DOP.md)。
+macOS DoP64／128 已用真实 DSF 音乐连接 WM1A USB DAC 验证：主机物理／客户端均为 24 位、176.4／352.8 kHz、非混音整数，用户确认 WM1A 分别显示 DSD 2.8／5.6 MHz 且声音正常。0.7.1 的首次播放、暂停恢复及 DSD64／128 切换通过；纯数据测试还覆盖预热时歌曲数据保持完整。更多 DAC、DFF 真机音乐、长时间播放、PCM bit-perfect 和实体 iOS USB 仍待验收。详见 [DOP.md](DOP.md)。
 
 AVFoundation 的标签读取覆盖随容器而异，当前不是完整 mp3tag 替代品。原生多值字段全覆盖、批量标签编辑、播放列表、自动监听、无缝播放、库切换与恢复向导仍待完成。
 

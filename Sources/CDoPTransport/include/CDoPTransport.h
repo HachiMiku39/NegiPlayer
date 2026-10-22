@@ -10,6 +10,8 @@ uint32_t negi_dop_space(NegiDoP *s);
 uint32_t negi_dop_write(NegiDoP *s, const uint8_t *data, uint32_t frames);
 void negi_dop_pause(NegiDoP *s, int paused);
 void negi_dop_eof(NegiDoP *s);
+// Reset marker phase with the IOProc stopped; queued music remains intact.
+void negi_dop_reset_phase(NegiDoP *s);
 // Call reset only when the IOProc and producer are both stopped.
 void negi_dop_reset(NegiDoP *s);
 uint64_t negi_dop_played(NegiDoP *s);

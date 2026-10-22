@@ -38,6 +38,8 @@ uint32_t negi_dop_write(NegiDoP *s, const uint8_t *data, uint32_t frames) {
 }
 void negi_dop_pause(NegiDoP *s, int paused) { atomic_store(&s->paused, paused); }
 void negi_dop_eof(NegiDoP *s) { atomic_store_explicit(&s->eof, 1, memory_order_release); }
+// Only call after AudioDeviceStop, while the callback is no longer running.
+void negi_dop_reset_phase(NegiDoP *s) { s->marker=5; }
 void negi_dop_reset(NegiDoP *s) {
     atomic_store(&s->read,0); atomic_store(&s->write,0); atomic_store(&s->played,0);
     atomic_store(&s->eof,0); s->marker=5;
