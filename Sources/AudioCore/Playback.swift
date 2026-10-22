@@ -65,6 +65,9 @@ import MediaIO
     private var anchor = PlaybackAnchor(mediaSeconds: 0, eventUptime: 0, running: false)
     private var lastDeviceCheck = 0.0
     private var expectedRateChange: (device: UInt32, rate: Double, deadline: Double)?
+    private var pcmConfigurationPending = false
+    private var pcmRestartPending = false
+    private var lastConfigurationChange = 0.0
     public init(preferences: PlaybackPreferences = .init()) {
         let s = preferences.sanitized()
         volumeLimit = s.volumeLimit; volume = s.volume; loudnessMode = s.loudnessMode
@@ -139,11 +142,11 @@ import MediaIO
         guard !media.isDiscImage else { throw NSError(domain: "Playback", code: 5, userInfo: [NSLocalizedDescriptionKey: media.issue ?? "镜像播放尚未接通"]) }
         if media.isDSD { try loadDoP(media,url:url,autoplay:autoplay); return }
         let audio = try AVAudioFile(forReading: url)
-        closeDoP()
         generation += 1; player.stop(); engine.stop(); freeze(at: 0)
         let version = generation
         preparingOutput = true
         defer { if generation == version { preparingOutput = false } }
+        closeDoP()
         file = nil; current = media; baseFrame = 0; position = 0; outputRate = 0
         applyLoudness()
         duration = Double(audio.length)/audio.processingFormat.sampleRate
@@ -166,6 +169,8 @@ import MediaIO
                 sampleRateStatus = "设备不支持源采样率，保留当前格式并进行采样率转换"
             } else if abs((AudioDevices.nominalRate(device.id) ?? 0)-rate) > 1 {
                 status = "静音切换采样率…"
+                pcmConfigurationPending = true
+                pcmRestartPending = device.isUSB
                 expectedRateChange = (device.id, rate, ProcessInfo.processInfo.systemUptime+4)
                 try AudioDevices.requestRate(rate,device:device)
                 var confirmed = false
@@ -180,15 +185,65 @@ import MediaIO
                 sampleRateStatus = "已跟随源采样率，设备回读确认"
             } else { sampleRateStatus = "已跟随源采样率，设备回读确认" }
         }
+        if pcmConfigurationPending {
+            status = "正在恢复 PCM 输出…"
+            try await settlePCMConfiguration(version: version)
+            pcmConfigurationPending = false
+        }
         guard generation == version else { throw CancellationError() }
-        engine.reset(); file = audio
-        configureGraph(audio.processingFormat); schedule(from: 0); refreshDevices()
+        engine.reset(); configureGraph(audio.processingFormat)
+        if pcmRestartPending {
+            // WM1A may accept PCM formats but not receive the first USB stream
+            // after DoP. Restart with no scheduled music, then begin at frame 0.
+            try await primePCMOutput(version: version)
+            pcmRestartPending = false
+        }
+        guard generation == version else { throw CancellationError() }
+        file = audio; schedule(from: 0); refreshDevices()
         preparingOutput = false
         if autoplay { try start() } else { freeze(at: 0); status = "已载入" }
         onTrackChanged?(media)
     }
-    private func closeDoP() { if dop != nil { dop?.close(); outputRate=0 }; dop=nil; isDoP=false; dopDrainedAt=nil }
-    public func stop() { player.stop(); engine.stop(); closeDoP(); file=nil; freeze(at:position); status="已停止" }
+    private func closeDoP() { if dop != nil { pcmConfigurationPending=true; pcmRestartPending=true; dop?.close(); outputRate=0 }; dop=nil; isDoP=false; dopDrainedAt=nil }
+    public func stop() { generation+=1; preparingOutput=false; player.stop(); engine.stop(); closeDoP(); file=nil; freeze(at:position); status="已停止" }
+    private func primePCMOutput(version: Int) async throws {
+        do {
+            try engine.start()
+            try await Task.sleep(nanoseconds: 300_000_000)
+            guard generation == version else { throw CancellationError() }
+            engine.stop()
+            try await Task.sleep(nanoseconds: 50_000_000)
+            try await settlePCMConfiguration(version: version)
+        } catch {
+            if generation == version { engine.stop() }
+            throw error
+        }
+    }
+    private func settlePCMConfiguration(version: Int) async throws {
+        // Releasing DoP changes the HAL rate and stream formats asynchronously.
+        // Drain those engine notifications while playback is still suspended.
+        let deadline = ProcessInfo.processInfo.systemUptime + 3
+        var stableSince = ProcessInfo.processInfo.systemUptime
+        var previousDevice: UInt32?, previousRate = 0.0
+        var previousChannels: AVAudioChannelCount = 0
+        while true {
+            try await Task.sleep(nanoseconds: 50_000_000)
+            guard generation == version else { throw CancellationError() }
+            let now = ProcessInfo.processInfo.systemUptime
+            let device = AudioDevices.current(engine.outputNode.audioUnit)
+            let format = engine.outputNode.outputFormat(forBus: 0)
+            if device != previousDevice || format.sampleRate != previousRate || format.channelCount != previousChannels {
+                stableSince = now
+                previousDevice = device; previousRate = format.sampleRate; previousChannels = format.channelCount
+            }
+            if let device, let rate = AudioDevices.nominalRate(device),
+               format.channelCount > 0, rate > 0, abs(format.sampleRate-rate) < 1,
+               now-max(stableSince,lastConfigurationChange) >= 0.25 { return }
+            guard now < deadline else {
+                throw NSError(domain: "Playback", code: 10, userInfo: [NSLocalizedDescriptionKey: "PCM 设备格式尚未稳定，请重新选择输出设备并载入曲目"])
+            }
+        }
+    }
     private func loadDoP(_ media: MediaFile, url: URL, autoplay: Bool) throws {
         refreshDevices()
         guard let uid=preferredDeviceUID, let device=devices.first(where:{$0.uid==uid}), device.isUSB else {
@@ -309,6 +364,8 @@ import MediaIO
         var device = id
         let statusCode = AudioUnitSetProperty(unit, kAudioOutputUnitProperty_CurrentDevice, kAudioUnitScope_Global, 0, &device, UInt32(MemoryLayout<UInt32>.size))
         guard statusCode == noErr, AudioDevices.current(unit) == id else { throw NSError(domain: "Playback", code: Int(statusCode), userInfo: [NSLocalizedDescriptionKey: "设备切换未通过回读确认"]) }
+        pcmConfigurationPending = true
+        pcmRestartPending = devices.first(where: { $0.id == id })?.isUSB == true
         actualDeviceID = id; outputRate = engine.outputNode.outputFormat(forBus: 0).sampleRate
         preferredDeviceUID = devices.first(where: { $0.id == id })?.uid; persistSettings()
         status = "设备已切换，播放已暂停"
@@ -345,10 +402,12 @@ import MediaIO
     public var onNext: ((MediaFile) -> Void)?
     public func advance() { if let next = nextItem { onNext?(next) } }
     private func handleConfigurationChange() {
+        lastConfigurationChange = ProcessInfo.processInfo.systemUptime
         if preparingOutput { return }
         if isDoP || current?.isDSD == true { return }
         if let expected = expectedRateChange,
            ProcessInfo.processInfo.systemUptime < expected.deadline,
+           engine.isRunning,
            AudioDevices.current(engine.outputNode.audioUnit) == expected.device,
            let rate = AudioDevices.nominalRate(expected.device), abs(rate-expected.rate) < 1,
            abs(engine.outputNode.outputFormat(forBus:0).sampleRate-expected.rate) < 1 {

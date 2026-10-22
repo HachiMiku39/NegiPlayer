@@ -1,0 +1,47 @@
+{
+  "version": "0.7.2",
+  "build": 12,
+  "date": "2026-10-22",
+  "binary_sha256": "6854175953edec9fdf00a9da0465d2e1457779f38fa8297c1e3e81811ffcd13e",
+  "issue": "DSD to PCM transition: delayed audio configuration notification stopped playback; after that race was fixed, WM1A still showed no PCM format and remained silent.",
+  "fix": [
+    "Wait for device and output node sample rates to agree with 250 ms of stable format/configuration state (3 s deadline).",
+    "Start USB PCM with no scheduled music for 300 ms, stop for 50 ms, wait for format stability, then schedule music from frame 0 and restart.",
+    "Stopping during configuration or silent startup cancels deferred playback."
+  ],
+  "full_regression": {
+    "total": 75,
+    "passed": 68,
+    "optional_integrations_skipped": 7,
+    "failed": 0
+  },
+  "hardware_automation": {
+    "device": "Sony WM1A USB DAC",
+    "fixtures": "Generated silent WAV and DSF; source music not edited",
+    "checks": [
+      "Initial PCM rendering clock advances",
+      "PCM to DSD64 to PCM at 44.1 kHz",
+      "PCM to DSD128 to PCM following source at 48 kHz",
+      "DoP callback received without format fault",
+      "DoP exclusive ownership released before PCM",
+      "PCM pause/resume",
+      "Stop during format wait cancels load",
+      "Stop during silent startup cancels load"
+    ]
+  },
+  "gui_receiver_confirmation": {
+    "manual_PCM_output_restart": "User confirmed PCM display and normal sound recovered after stopping/restarting PCM.",
+    "final_automatic_DSD128_to_PCM": "User confirmed PCM 48 kHz displayed directly with normal sound, without manually reselecting output device."
+  },
+  "signing": {
+    "type": "ad-hoc",
+    "notarized": false,
+    "signature_verified_after_zip_extraction": true
+  },
+  "app_zip": {
+    "name": "NegiPlayer-0.7.2-macOS-arm64.zip",
+    "size": 3293792,
+    "sha256": "f6e6ad292d689120108896cee633983dec049a1a219fc415577f6c90d83de499"
+  },
+  "distribution": "macOS 0.7.2; validation performed locally"
+}
