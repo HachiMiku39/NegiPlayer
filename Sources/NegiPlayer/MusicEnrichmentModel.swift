@@ -48,6 +48,8 @@ struct SensMeTrackFailure: Codable, Sendable {
     private var coverTask: Task<EnrichmentArtwork, Error>?
     var selectedCandidate: GracenoteCandidate? { candidates.first { $0.id == selectedCandidateID } }
     let directory: URL
+    private var recordsDirectory: URL { directory.appendingPathComponent("Records").resolvingSymlinksInPath() }
+    private var failuresDirectory: URL { directory.appendingPathComponent("SensMeFailures").resolvingSymlinksInPath() }
     private var scopes: [(URL, Bool)] = []
     private var analysisTask: Task<Void, Error>?
     private var analysisSummary = SensMeBatchSummary()
@@ -63,13 +65,13 @@ struct SensMeTrackFailure: Codable, Sendable {
         let saved = UserDefaults.standard.string(forKey: "music-engine-directory")
         engineDirectory = saved.map { URL(fileURLWithPath: $0) } ?? Bundle.main.bundleURL.deletingLastPathComponent().appendingPathComponent("NegiPlayer-Engines")
         do {
-            try FileManager.default.createDirectory(at: directory.appendingPathComponent("Records"), withIntermediateDirectories: true)
-            for file in try FileManager.default.contentsOfDirectory(at: directory.appendingPathComponent("Records"), includingPropertiesForKeys: nil) where file.pathExtension == "json" {
+            try FileManager.default.createDirectory(at: recordsDirectory, withIntermediateDirectories: true)
+            for file in try FileManager.default.contentsOfDirectory(at: recordsDirectory, includingPropertiesForKeys: nil) where file.pathExtension == "json" && !file.lastPathComponent.hasPrefix("._") {
                 if let value = try? JSONDecoder().decode(EnrichedTrack.self, from: Data(contentsOf: file)) { records[value.mediaID] = value }
             }
-            let failures = directory.appendingPathComponent("SensMeFailures")
+            let failures = failuresDirectory
             try FileManager.default.createDirectory(at: failures, withIntermediateDirectories: true)
-            for file in try FileManager.default.contentsOfDirectory(at: failures, includingPropertiesForKeys: nil) where file.pathExtension == "json" {
+            for file in try FileManager.default.contentsOfDirectory(at: failures, includingPropertiesForKeys: nil) where file.pathExtension == "json" && !file.lastPathComponent.hasPrefix("._") {
                 if let value = try? JSONDecoder().decode(SensMeTrackFailure.self, from: Data(contentsOf: file)) { analysisFailures[value.mediaID] = value }
             }
         } catch { self.error = error.localizedDescription }
@@ -114,7 +116,7 @@ struct SensMeTrackFailure: Codable, Sendable {
     }
     private func save(_ record: EnrichedTrack) throws {
         let key = SHA256.hash(data: Data(record.mediaID.utf8)).map { String(format: "%02x", $0) }.joined()
-        try JSONEncoder().encode(record).write(to: directory.appendingPathComponent("Records/" + key + ".json"), options: .atomic)
+        try JSONEncoder().encode(record).write(to: recordsDirectory.appendingPathComponent(key + ".json"), options: .atomic)
         records[record.mediaID] = record
     }
     func analyze(_ inputs: [(MediaFile, URL)]) {
@@ -143,7 +145,7 @@ struct SensMeTrackFailure: Codable, Sendable {
     }
     private func checkpointAnalysis(_ outcome: SensMeBatchOutcome, media: MediaFile, total: Int) throws {
         let key = SHA256.hash(data: Data(outcome.id.utf8)).map { String(format: "%02x", $0) }.joined()
-        let failureURL = directory.appendingPathComponent("SensMeFailures/" + key + ".json")
+        let failureURL = failuresDirectory.appendingPathComponent(key + ".json")
         switch outcome.value {
         case .analyzed(let result):
             try storeAnalysis(result, media: media, source: outcome.source)

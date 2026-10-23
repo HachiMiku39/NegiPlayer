@@ -10,7 +10,7 @@ do {
             let sourceSHA256: String
             let sensme: CachedSensMe?
         }
-        let directory = URL(fileURLWithPath: CommandLine.arguments[2], isDirectory: true)
+        let directory = URL(fileURLWithPath: CommandLine.arguments[2], isDirectory: true).resolvingSymlinksInPath()
         var checked = 0, noTempo = 0
         for file in try FileManager.default.contentsOfDirectory(at: directory, includingPropertiesForKeys: nil)
             where file.pathExtension == "json" && !file.lastPathComponent.hasPrefix(".") {
