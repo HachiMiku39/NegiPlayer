@@ -1,4 +1,12 @@
 {
+  "SensMe 结果缺少分析分块": {
+    "en": "The SensMe result contains no analysis chunk",
+    "ja": "SensMe の解析チャンクがありません"
+  },
+  "音频没有有效 PCM 帧": {
+    "en": "The audio contains no valid PCM frames",
+    "ja": "有効な PCM フレームがありません"
+  },
   "主题": {
     "en": "Theme",
     "ja": "テーマ"
@@ -2292,5 +2300,73 @@
   "艺人类型": {
     "en": "Artist type",
     "ja": "アーティスト種別"
+  },
+  "SensMe 原生引擎可用": {
+    "en": "Native SensMe engine ready",
+    "ja": "ネイティブ SensMe エンジン準備完了"
+  },
+  "SensMe 在本机原生分析，无需外部引擎；音频独立转换为 44.1 kHz / 16-bit 双声道，不经过播放 EQ。": {
+    "en": "SensMe analyzes locally with its built-in native engine. Audio is converted separately to 44.1 kHz / 16-bit stereo, bypassing playback EQ.",
+    "ja": "SensMe は内蔵ネイティブエンジンでローカル解析します。音声は再生 EQ を通さず、独立して 44.1 kHz / 16-bit ステレオに変換されます。"
+  },
+  "Gracenote SDK 设置": {
+    "en": "Gracenote SDK Settings",
+    "ja": "Gracenote SDK 設定"
+  },
+  "SensMe 使用内置原生分析器。此文件夹仅供可选的 Gracenote SDK 及其外部运行环境使用，不会自动开启网络查询。": {
+    "en": "SensMe uses the built-in native analyzer. This folder is only for the optional Gracenote SDK and its external runtime. Online queries never start automatically.",
+    "ja": "SensMe は内蔵ネイティブ解析器を使用します。このフォルダは任意の Gracenote SDK と外部実行環境用です。ネット検索は自動で開始されません。"
+  },
+  "请配置 Gracenote SDK 及其外部运行环境": {
+    "en": "Configure the Gracenote SDK and its external runtime.",
+    "ja": "Gracenote SDK と外部実行環境を設定してください。"
+  },
+  "无法创建原生 SensMe 分析器": {
+    "en": "Could not create the native SensMe analyzer.",
+    "ja": "ネイティブ SensMe 解析器を作成できません。"
+  },
+  "原生 SensMe 音频处理失败": {
+    "en": "Native SensMe audio processing failed.",
+    "ja": "ネイティブ SensMe の音声処理に失敗しました。"
+  },
+  "原生 SensMe 分析未能生成结果": {
+    "en": "Native SensMe analysis could not produce a result.",
+    "ja": "ネイティブ SensMe 解析で結果を生成できませんでした。"
+  },
+  "SensMe 已完成 %d/%d · 新分析 %d · 已验证 %d · 失败 %d": {
+    "en": "SensMe %d/%d · Analyzed %d · Verified %d · Failed %d",
+    "ja": "SensMe %d/%d · 新規 %d · 検証済み %d · 失敗 %d"
+  },
+  "分析失败：%@": {
+    "en": "Analysis failed: %@",
+    "ja": "解析失敗：%@"
+  },
+  "DSD 等系统不支持的格式需要本机 FFmpeg。失败曲目会保留原因，可重新选择后重试。": {
+    "en": "Formats such as DSD need a local FFmpeg decoder when unsupported by the system. Failure details are kept; select those tracks again to retry.",
+    "ja": "DSD などシステム非対応の形式にはローカルの FFmpeg が必要です。失敗の理由は保存され、曲を再選択して再試行できます。"
+  },
+  "此音频需要本机 FFmpeg 解码器": {
+    "en": "This audio requires a local FFmpeg decoder.",
+    "ja": "この音声にはローカルの FFmpeg デコーダーが必要です。"
+  },
+  "无法读取音频解码管道": {
+    "en": "Could not read the audio decoder stream.",
+    "ja": "音声デコーダーのストリームを読み取れません。"
+  },
+  "音频解码响应超时": {
+    "en": "The audio decoder timed out.",
+    "ja": "音声デコーダーがタイムアウトしました。"
+  },
+  "音频解码未产生完整的 PCM 帧": {
+    "en": "The audio decoder returned an incomplete PCM frame.",
+    "ja": "音声デコーダーが不完全な PCM フレームを返しました。"
+  },
+  "SensMe 任务配置无效": {
+    "en": "Invalid SensMe task configuration.",
+    "ja": "SensMe タスクの設定が無効です。"
+  },
+  "本地优先 · 开发预览 0.8.0": {
+    "en": "Local first · Preview 0.8.0",
+    "ja": "ローカル優先 · プレビュー 0.8.0"
   }
 }

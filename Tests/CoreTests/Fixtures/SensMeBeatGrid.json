@@ -1,0 +1,82 @@
+{
+  "schemaVersion": 1,
+  "input": "self-generated compressed tones and onset/statistics inputs",
+  "cases": [
+    {
+      "kind": "triad",
+      "frames": 12416,
+      "periodBits": 1129212587,
+      "phaseBits": 1123134123,
+      "preliminaryCount": 60,
+      "count": 59,
+      "downbeatOffset": 1,
+      "scoreBits": [
+        1142929153,
+        1143669500,
+        1143449234,
+        1142426999
+      ],
+      "alignedPhaseBits": 1134796800,
+      "gridSHA256": "5198abe58e6854b465e3344c097f2c7090a6e9fc59fb9d7aaaae8420a33aef1f",
+      "observationPreservedFullResult": true,
+      "nativeExact": true
+    },
+    {
+      "kind": "random",
+      "frames": 12416,
+      "periodBits": 1131725488,
+      "phaseBits": 1130511696,
+      "preliminaryCount": 50,
+      "count": 49,
+      "downbeatOffset": 1,
+      "scoreBits": [
+        1142637946,
+        1142797296,
+        1142419815,
+        1142775306
+      ],
+      "alignedPhaseBits": 1139507200,
+      "gridSHA256": "42d4bb35c8c11dd83c11925047c3e2898de431e76f542bb3f5892cb1fadcae84",
+      "observationPreservedFullResult": true,
+      "nativeExact": true
+    },
+    {
+      "kind": "zero",
+      "frames": 12416,
+      "periodBits": 1115684864,
+      "phaseBits": 0,
+      "preliminaryCount": 195,
+      "count": 194,
+      "downbeatOffset": 1,
+      "scoreBits": [
+        1157714314,
+        1157981190,
+        1157714314,
+        1157714314
+      ],
+      "alignedPhaseBits": 1115684864,
+      "gridSHA256": "fe06ada12d6abc1bb448db18a7f2f9cdb5c4b964ac2d3daa6e66223409fda60d",
+      "observationPreservedFullResult": true,
+      "nativeExact": true
+    },
+    {
+      "kind": "single",
+      "frames": 12416,
+      "periodBits": 1132652668,
+      "phaseBits": 1116471296,
+      "preliminaryCount": 48,
+      "count": 46,
+      "downbeatOffset": 2,
+      "scoreBits": [
+        1139285276,
+        1140225166,
+        1142653287,
+        1142236405
+      ],
+      "alignedPhaseBits": 1142188156,
+      "gridSHA256": "10ad29a2340d393a46c732e32bec7392dbd679b8977d7d1002abd3d437e2d434",
+      "observationPreservedFullResult": true,
+      "nativeExact": true
+    }
+  ]
+}

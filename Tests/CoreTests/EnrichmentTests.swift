@@ -12,6 +12,30 @@ final class EnrichmentTests: XCTestCase {
         folder = FileManager.default.temporaryDirectory.appendingPathComponent("NegiEnrichment-" + UUID().uuidString)
         try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
     }
+    func testSensMeWithoutTempoStillCachesAndTransfersAnalysis() throws {
+        let noTempo = chunk("STBF", Data(repeating: 0, count: 36)) + chunk("STMM", Data([1,2,3,4]))
+        let result = try CachedSensMe(sourceSHA256: "source", engineVersion: "test", blob: noTempo)
+        XCTAssertNil(result.summary.bpm)
+        XCTAssertEqual(try JSONDecoder().decode(CachedSensMe.self, from: JSONEncoder().encode(result)).blob, noTempo)
+        let source = folder.appendingPathComponent("no-tempo.mp3"), target = folder.appendingPathComponent("copy-no-tempo.mp3")
+        _ = try mp3(source)
+        let original = try Data(contentsOf: source)
+        try TaggedMusicCopy.write(source: source, destination: target, enrichment: .init(sourceSHA256: SourceDigest.sha256(source), sensme: noTempo))
+        XCTAssertNotNil(try Data(contentsOf: target).range(of: noTempo))
+        XCTAssertEqual(try Data(contentsOf: source), original)
+    }
+    func testShortNonemptyAudioReachesTheSonyAnalysisBoundaryUnchanged() throws {
+        let pcm = Data(repeating: 0, count: 44100 * 4 * 4)
+        let fmt = Data([1,0,2,0]) + le(44100) + le(176400) + Data([4,0,16,0])
+        let body = Data("WAVEfmt ".utf8) + le(16) + fmt + Data("data".utf8) + le(pcm.count) + pcm
+        let source = folder.appendingPathComponent("four-seconds.wav")
+        let original = Data("RIFF".utf8) + le(body.count) + body
+        try original.write(to: source)
+        let output = folder.appendingPathComponent("short.s16le")
+        XCTAssertEqual(try SensMePCM.decode(source: source, destination: output), 176400)
+        XCTAssertEqual(try Data(contentsOf: source), original)
+        XCTAssertEqual(try Data(contentsOf: output).count, pcm.count)
+    }
     override func tearDownWithError() throws { try FileManager.default.removeItem(at: folder) }
     private func be(_ n: Int, count: Int = 4) -> Data { Data((0..<count).reversed().map { UInt8(truncatingIfNeeded: n >> ($0 * 8)) }) }
     private func le(_ n: Int) -> Data { Data((0..<4).map { UInt8(truncatingIfNeeded: n >> ($0 * 8)) }) }
@@ -196,11 +220,11 @@ final class EnrichmentTests: XCTestCase {
     }
     private func configuredRuntime() throws -> EnrichmentRuntime {
         let env = ProcessInfo.processInfo.environment
-        guard let path = env["NEGI_TEST_ENGINE_HOME"], let helpers = env["NEGI_TEST_ENGINE_HELPERS"] else { throw XCTSkip("Optional real Sony/Gracenote engine verification") }
+        guard let path = env["NEGI_TEST_ENGINE_HOME"], let helpers = env["NEGI_TEST_ENGINE_HELPERS"] else { throw XCTSkip("Optional real Gracenote SDK verification") }
         return .init(directory: URL(fileURLWithPath: path), prefix: env["NEGI_TEST_ENGINE_PREFIX"].map { URL(fileURLWithPath: $0) } ?? folder.appendingPathComponent("WinePrefix"), helpers: URL(fileURLWithPath: helpers))
     }
-    func testRealSensMeNativeDecodeAndSonyDLL() throws {
-        let runtime = try configuredRuntime(), rate = 48000, seconds = 40
+    func testNativeSensMeStreamsGeneratedWAVWithoutExternalRuntime() throws {
+        let rate = 48000, seconds = 40
         var pcm = Data(capacity: rate * seconds * 2)
         for i in 0..<rate*seconds {
             let t = Double(i) / Double(rate), phase = t.truncatingRemainder(dividingBy: 0.5)
@@ -211,10 +235,11 @@ final class EnrichmentTests: XCTestCase {
         let body = Data("WAVEfmt ".utf8) + le(16) + fmt + Data("data".utf8) + le(pcm.count) + pcm
         let source = folder.appendingPathComponent("rhythm.wav"); try (Data("RIFF".utf8) + le(body.count) + body).write(to: source)
         let before = try SourceDigest.sha256(source)
-        let result = try SensMeEngine.analyze(source: source, runtime: runtime, workingDirectory: folder.appendingPathComponent("Jobs"))
+        let result = try SensMeEngine.analyze(source: source)
         XCTAssertEqual(result.summary.bpm ?? 0, 120, accuracy: 1); XCTAssertEqual(result.sourceSHA256, before)
-        XCTAssertEqual(try SourceDigest.sha256(source), before); XCTAssertTrue(result.engineVersion.contains("640"))
-        print("REAL Sony SensMe: native 48k mono decode -> 44.1k stereo, BPM \(result.summary.bpm ?? 0), \(result.summary.bytes) SMFMF bytes")
+        XCTAssertEqual(try SourceDigest.sha256(source), before); XCTAssertEqual(result.engineVersion, SensMeEngine.version)
+        XCTAssertFalse(FileManager.default.fileExists(atPath: folder.appendingPathComponent("Jobs").path))
+        print("Native SensMe: generated 48k mono WAV -> streamed 44.1k stereo, BPM \(result.summary.bpm ?? 0), \(result.summary.bytes) SMFMF bytes; no external runtime or PCM file")
     }
     func testRealGracenoteMediaGoAuthorizationAndPublicQuery() throws {
         let runtime = try configuredRuntime()

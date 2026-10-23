@@ -1,0 +1,4 @@
+module CDoPTransport {
+    header "CDoPTransport.h"
+    export *
+}

@@ -1,0 +1,4 @@
+module CSensMeCore {
+    header "NegiSensMeCore.h"
+    export *
+}

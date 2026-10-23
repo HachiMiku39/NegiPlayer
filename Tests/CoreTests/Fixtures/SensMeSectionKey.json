@@ -1,0 +1,439 @@
+{
+  "schemaVersion": 1,
+  "dllSHA256": "884ecce288bcaa4e9c94f49f514fb00cee2ba2f5bac8fcb9ef63690e4e529a04",
+  "input": "self-generated tonal classes and section labels",
+  "cases": [
+    {
+      "kind": "zero",
+      "sectionKind": "one",
+      "count": 1,
+      "SHA256": "80d2d6ca9c7eca770e728f4a481c16522d11cb1674ac6550665f4102c98628c0"
+    },
+    {
+      "kind": "zero",
+      "sectionKind": "one",
+      "count": 17,
+      "SHA256": "0f81c30fd574e4f04e8869492495eaba7c3ba8aabb8dbe0ff5d9fd7098910c2e"
+    },
+    {
+      "kind": "zero",
+      "sectionKind": "one",
+      "count": 960,
+      "SHA256": "e96a81f95d9d430de8181aad3e21fb6499e5efc97415b88b2b6a0a3825ca0eef"
+    },
+    {
+      "kind": "zero",
+      "sectionKind": "every7",
+      "count": 1,
+      "SHA256": "80d2d6ca9c7eca770e728f4a481c16522d11cb1674ac6550665f4102c98628c0"
+    },
+    {
+      "kind": "zero",
+      "sectionKind": "every7",
+      "count": 17,
+      "SHA256": "0f81c30fd574e4f04e8869492495eaba7c3ba8aabb8dbe0ff5d9fd7098910c2e"
+    },
+    {
+      "kind": "zero",
+      "sectionKind": "every7",
+      "count": 960,
+      "SHA256": "e96a81f95d9d430de8181aad3e21fb6499e5efc97415b88b2b6a0a3825ca0eef"
+    },
+    {
+      "kind": "zero",
+      "sectionKind": "alternating",
+      "count": 1,
+      "SHA256": "80d2d6ca9c7eca770e728f4a481c16522d11cb1674ac6550665f4102c98628c0"
+    },
+    {
+      "kind": "zero",
+      "sectionKind": "alternating",
+      "count": 17,
+      "SHA256": "0f81c30fd574e4f04e8869492495eaba7c3ba8aabb8dbe0ff5d9fd7098910c2e"
+    },
+    {
+      "kind": "zero",
+      "sectionKind": "alternating",
+      "count": 960,
+      "SHA256": "e96a81f95d9d430de8181aad3e21fb6499e5efc97415b88b2b6a0a3825ca0eef"
+    },
+    {
+      "kind": "zero",
+      "sectionKind": "reused",
+      "count": 1,
+      "SHA256": "80d2d6ca9c7eca770e728f4a481c16522d11cb1674ac6550665f4102c98628c0"
+    },
+    {
+      "kind": "zero",
+      "sectionKind": "reused",
+      "count": 17,
+      "SHA256": "0f81c30fd574e4f04e8869492495eaba7c3ba8aabb8dbe0ff5d9fd7098910c2e"
+    },
+    {
+      "kind": "zero",
+      "sectionKind": "reused",
+      "count": 960,
+      "SHA256": "e96a81f95d9d430de8181aad3e21fb6499e5efc97415b88b2b6a0a3825ca0eef"
+    },
+    {
+      "kind": "minor",
+      "sectionKind": "one",
+      "count": 1,
+      "SHA256": "80d2d6ca9c7eca770e728f4a481c16522d11cb1674ac6550665f4102c98628c0"
+    },
+    {
+      "kind": "minor",
+      "sectionKind": "one",
+      "count": 17,
+      "SHA256": "0f81c30fd574e4f04e8869492495eaba7c3ba8aabb8dbe0ff5d9fd7098910c2e"
+    },
+    {
+      "kind": "minor",
+      "sectionKind": "one",
+      "count": 960,
+      "SHA256": "e96a81f95d9d430de8181aad3e21fb6499e5efc97415b88b2b6a0a3825ca0eef"
+    },
+    {
+      "kind": "minor",
+      "sectionKind": "every7",
+      "count": 1,
+      "SHA256": "80d2d6ca9c7eca770e728f4a481c16522d11cb1674ac6550665f4102c98628c0"
+    },
+    {
+      "kind": "minor",
+      "sectionKind": "every7",
+      "count": 17,
+      "SHA256": "0f81c30fd574e4f04e8869492495eaba7c3ba8aabb8dbe0ff5d9fd7098910c2e"
+    },
+    {
+      "kind": "minor",
+      "sectionKind": "every7",
+      "count": 960,
+      "SHA256": "e96a81f95d9d430de8181aad3e21fb6499e5efc97415b88b2b6a0a3825ca0eef"
+    },
+    {
+      "kind": "minor",
+      "sectionKind": "alternating",
+      "count": 1,
+      "SHA256": "80d2d6ca9c7eca770e728f4a481c16522d11cb1674ac6550665f4102c98628c0"
+    },
+    {
+      "kind": "minor",
+      "sectionKind": "alternating",
+      "count": 17,
+      "SHA256": "0f81c30fd574e4f04e8869492495eaba7c3ba8aabb8dbe0ff5d9fd7098910c2e"
+    },
+    {
+      "kind": "minor",
+      "sectionKind": "alternating",
+      "count": 960,
+      "SHA256": "e96a81f95d9d430de8181aad3e21fb6499e5efc97415b88b2b6a0a3825ca0eef"
+    },
+    {
+      "kind": "minor",
+      "sectionKind": "reused",
+      "count": 1,
+      "SHA256": "80d2d6ca9c7eca770e728f4a481c16522d11cb1674ac6550665f4102c98628c0"
+    },
+    {
+      "kind": "minor",
+      "sectionKind": "reused",
+      "count": 17,
+      "SHA256": "0f81c30fd574e4f04e8869492495eaba7c3ba8aabb8dbe0ff5d9fd7098910c2e"
+    },
+    {
+      "kind": "minor",
+      "sectionKind": "reused",
+      "count": 960,
+      "SHA256": "e96a81f95d9d430de8181aad3e21fb6499e5efc97415b88b2b6a0a3825ca0eef"
+    },
+    {
+      "kind": "ramp",
+      "sectionKind": "one",
+      "count": 1,
+      "SHA256": "80d2d6ca9c7eca770e728f4a481c16522d11cb1674ac6550665f4102c98628c0"
+    },
+    {
+      "kind": "ramp",
+      "sectionKind": "one",
+      "count": 17,
+      "SHA256": "74563d6722a43e727ec86372b7b5216a108a78c62fafe8927e39192a9b60ae96"
+    },
+    {
+      "kind": "ramp",
+      "sectionKind": "one",
+      "count": 960,
+      "SHA256": "ad0cad4cb2aaf9f55ea81899c7ccb9b234483cf44a9190d23a2caf6e429b83b2"
+    },
+    {
+      "kind": "ramp",
+      "sectionKind": "every7",
+      "count": 1,
+      "SHA256": "80d2d6ca9c7eca770e728f4a481c16522d11cb1674ac6550665f4102c98628c0"
+    },
+    {
+      "kind": "ramp",
+      "sectionKind": "every7",
+      "count": 17,
+      "SHA256": "7f477b80c1dfbff94ee9dbb80b3e5a9b32a6a7bb5b3e75760d41f0a058c481f9"
+    },
+    {
+      "kind": "ramp",
+      "sectionKind": "every7",
+      "count": 960,
+      "SHA256": "9ef15df3ab38c6dc64eb87bc205a03523996f6bd6d655f7470760098c1c6d27b"
+    },
+    {
+      "kind": "ramp",
+      "sectionKind": "alternating",
+      "count": 1,
+      "SHA256": "80d2d6ca9c7eca770e728f4a481c16522d11cb1674ac6550665f4102c98628c0"
+    },
+    {
+      "kind": "ramp",
+      "sectionKind": "alternating",
+      "count": 17,
+      "SHA256": "0f81c30fd574e4f04e8869492495eaba7c3ba8aabb8dbe0ff5d9fd7098910c2e"
+    },
+    {
+      "kind": "ramp",
+      "sectionKind": "alternating",
+      "count": 960,
+      "SHA256": "e96a81f95d9d430de8181aad3e21fb6499e5efc97415b88b2b6a0a3825ca0eef"
+    },
+    {
+      "kind": "ramp",
+      "sectionKind": "reused",
+      "count": 1,
+      "SHA256": "80d2d6ca9c7eca770e728f4a481c16522d11cb1674ac6550665f4102c98628c0"
+    },
+    {
+      "kind": "ramp",
+      "sectionKind": "reused",
+      "count": 17,
+      "SHA256": "37cbf15ca0ee46070f65d9ef53449d38094b037d2392755e746d8e376fd5a01c"
+    },
+    {
+      "kind": "ramp",
+      "sectionKind": "reused",
+      "count": 960,
+      "SHA256": "1288de3530671a89e86e9343201b3c39d7d52f9d714252ce57bf51b6e10d1886"
+    },
+    {
+      "kind": "random",
+      "sectionKind": "one",
+      "count": 1,
+      "SHA256": "80d2d6ca9c7eca770e728f4a481c16522d11cb1674ac6550665f4102c98628c0"
+    },
+    {
+      "kind": "random",
+      "sectionKind": "one",
+      "count": 17,
+      "SHA256": "d1271d6bb0eeccb56192d8d12beb445c019dde24b013714a2e244e4fb74b9461"
+    },
+    {
+      "kind": "random",
+      "sectionKind": "one",
+      "count": 960,
+      "SHA256": "b0d5fca10c5fd26c466ba469ffc30a51e76691686cee3b43e80f37b1178ac6b0"
+    },
+    {
+      "kind": "random",
+      "sectionKind": "every7",
+      "count": 1,
+      "SHA256": "80d2d6ca9c7eca770e728f4a481c16522d11cb1674ac6550665f4102c98628c0"
+    },
+    {
+      "kind": "random",
+      "sectionKind": "every7",
+      "count": 17,
+      "SHA256": "66a6d3bf5528af0170a7b1c7de5647b7fb2f2acd7f75df1e06d7588ca63fe180"
+    },
+    {
+      "kind": "random",
+      "sectionKind": "every7",
+      "count": 960,
+      "SHA256": "ea4c433382bdef030e61bb72efebeac96196d3cc567eeb91509cac98563349c9"
+    },
+    {
+      "kind": "random",
+      "sectionKind": "alternating",
+      "count": 1,
+      "SHA256": "80d2d6ca9c7eca770e728f4a481c16522d11cb1674ac6550665f4102c98628c0"
+    },
+    {
+      "kind": "random",
+      "sectionKind": "alternating",
+      "count": 17,
+      "SHA256": "0f81c30fd574e4f04e8869492495eaba7c3ba8aabb8dbe0ff5d9fd7098910c2e"
+    },
+    {
+      "kind": "random",
+      "sectionKind": "alternating",
+      "count": 960,
+      "SHA256": "e96a81f95d9d430de8181aad3e21fb6499e5efc97415b88b2b6a0a3825ca0eef"
+    },
+    {
+      "kind": "random",
+      "sectionKind": "reused",
+      "count": 1,
+      "SHA256": "80d2d6ca9c7eca770e728f4a481c16522d11cb1674ac6550665f4102c98628c0"
+    },
+    {
+      "kind": "random",
+      "sectionKind": "reused",
+      "count": 17,
+      "SHA256": "d7668e77fcc7a1650836fd52108f03f46ae10fb671a10d9de6a0f4ff1033d01d"
+    },
+    {
+      "kind": "random",
+      "sectionKind": "reused",
+      "count": 960,
+      "SHA256": "a5985ec9d8e51fada26590ca1f277d8a3a4900d9aa1d7fd55fdd84e0ebe36877"
+    },
+    {
+      "kind": "triad",
+      "sectionKind": "one",
+      "count": 1,
+      "SHA256": "80d2d6ca9c7eca770e728f4a481c16522d11cb1674ac6550665f4102c98628c0"
+    },
+    {
+      "kind": "triad",
+      "sectionKind": "one",
+      "count": 17,
+      "SHA256": "9a682536b43f1adea69c6d8b3dfc144404dbbe8e4672a9052d2c3e9d35cdfb64"
+    },
+    {
+      "kind": "triad",
+      "sectionKind": "one",
+      "count": 960,
+      "SHA256": "66a21d882e4c0e01b8c1162313ea25e385bb1c34a06d5878de46c3d6f7f7f1cf"
+    },
+    {
+      "kind": "triad",
+      "sectionKind": "every7",
+      "count": 1,
+      "SHA256": "80d2d6ca9c7eca770e728f4a481c16522d11cb1674ac6550665f4102c98628c0"
+    },
+    {
+      "kind": "triad",
+      "sectionKind": "every7",
+      "count": 17,
+      "SHA256": "480e71758c282ea0da60538caa772ad459386e202fdc96da61ad6b7384080a2c"
+    },
+    {
+      "kind": "triad",
+      "sectionKind": "every7",
+      "count": 960,
+      "SHA256": "b4960598638e430da2f420299a82a9d81b3a151b15ef2467fe157aca890f4933"
+    },
+    {
+      "kind": "triad",
+      "sectionKind": "alternating",
+      "count": 1,
+      "SHA256": "80d2d6ca9c7eca770e728f4a481c16522d11cb1674ac6550665f4102c98628c0"
+    },
+    {
+      "kind": "triad",
+      "sectionKind": "alternating",
+      "count": 17,
+      "SHA256": "0f81c30fd574e4f04e8869492495eaba7c3ba8aabb8dbe0ff5d9fd7098910c2e"
+    },
+    {
+      "kind": "triad",
+      "sectionKind": "alternating",
+      "count": 960,
+      "SHA256": "e96a81f95d9d430de8181aad3e21fb6499e5efc97415b88b2b6a0a3825ca0eef"
+    },
+    {
+      "kind": "triad",
+      "sectionKind": "reused",
+      "count": 1,
+      "SHA256": "80d2d6ca9c7eca770e728f4a481c16522d11cb1674ac6550665f4102c98628c0"
+    },
+    {
+      "kind": "triad",
+      "sectionKind": "reused",
+      "count": 17,
+      "SHA256": "212343459cf2785e1a804454368edd831d69bbc121cb37aebbfd51487d756365"
+    },
+    {
+      "kind": "triad",
+      "sectionKind": "reused",
+      "count": 960,
+      "SHA256": "104b8483ba75ad41e530b26332f20931c756845477c67985f73fbf06981e59e2"
+    },
+    {
+      "kind": "cycle",
+      "sectionKind": "one",
+      "count": 1,
+      "SHA256": "80d2d6ca9c7eca770e728f4a481c16522d11cb1674ac6550665f4102c98628c0"
+    },
+    {
+      "kind": "cycle",
+      "sectionKind": "one",
+      "count": 17,
+      "SHA256": "93df7df7163763c70e2b20204a7c908847740e9be12649017323889eb27e1a5a"
+    },
+    {
+      "kind": "cycle",
+      "sectionKind": "one",
+      "count": 960,
+      "SHA256": "a1ef271a34b5518ec55439efee5fa646bb353fd714a58f090489a5e97c7d37ed"
+    },
+    {
+      "kind": "cycle",
+      "sectionKind": "every7",
+      "count": 1,
+      "SHA256": "80d2d6ca9c7eca770e728f4a481c16522d11cb1674ac6550665f4102c98628c0"
+    },
+    {
+      "kind": "cycle",
+      "sectionKind": "every7",
+      "count": 17,
+      "SHA256": "0f81c30fd574e4f04e8869492495eaba7c3ba8aabb8dbe0ff5d9fd7098910c2e"
+    },
+    {
+      "kind": "cycle",
+      "sectionKind": "every7",
+      "count": 960,
+      "SHA256": "e96a81f95d9d430de8181aad3e21fb6499e5efc97415b88b2b6a0a3825ca0eef"
+    },
+    {
+      "kind": "cycle",
+      "sectionKind": "alternating",
+      "count": 1,
+      "SHA256": "80d2d6ca9c7eca770e728f4a481c16522d11cb1674ac6550665f4102c98628c0"
+    },
+    {
+      "kind": "cycle",
+      "sectionKind": "alternating",
+      "count": 17,
+      "SHA256": "0f81c30fd574e4f04e8869492495eaba7c3ba8aabb8dbe0ff5d9fd7098910c2e"
+    },
+    {
+      "kind": "cycle",
+      "sectionKind": "alternating",
+      "count": 960,
+      "SHA256": "e96a81f95d9d430de8181aad3e21fb6499e5efc97415b88b2b6a0a3825ca0eef"
+    },
+    {
+      "kind": "cycle",
+      "sectionKind": "reused",
+      "count": 1,
+      "SHA256": "80d2d6ca9c7eca770e728f4a481c16522d11cb1674ac6550665f4102c98628c0"
+    },
+    {
+      "kind": "cycle",
+      "sectionKind": "reused",
+      "count": 17,
+      "SHA256": "01b5840991af46e1731ae63552321a62e7d876b33df08b0289956a4a61296aaf"
+    },
+    {
+      "kind": "cycle",
+      "sectionKind": "reused",
+      "count": 960,
+      "SHA256": "1a5404f6d8e479f4f9ddb4d5ddb6e68bd7f5ead70eb533eb5f3d18bec241ccaa"
+    }
+  ]
+}

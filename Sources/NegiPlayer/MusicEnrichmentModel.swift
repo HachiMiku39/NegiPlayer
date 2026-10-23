@@ -11,13 +11,22 @@ struct EnrichedTrack: Codable, Sendable {
     var sourcePath: String
     var sourceSHA256: String
     var sensme: CachedSensMe?
+    var sensmeHistory: [CachedSensMe]?
     var candidates: [GracenoteCandidate] = []
     var approvedMetadata: MetadataPatch?
     var approvedArtwork: String?
 }
 
+struct SensMeTrackFailure: Codable, Sendable {
+    let mediaID: String
+    let sourcePath: String
+    let message: String
+    let failedAt: Date
+}
+
 @MainActor final class MusicEnrichmentModel: ObservableObject {
     @Published private(set) var records: [String: EnrichedTrack] = [:]
+    @Published private(set) var analysisFailures: [String: SensMeTrackFailure] = [:]
     @Published private(set) var engineDirectory: URL
     @Published private(set) var busy = false
     @Published private(set) var status = ""
@@ -39,22 +48,31 @@ struct EnrichedTrack: Codable, Sendable {
     private var coverTask: Task<EnrichmentArtwork, Error>?
     var selectedCandidate: GracenoteCandidate? { candidates.first { $0.id == selectedCandidateID } }
     let directory: URL
+    private var recordsDirectory: URL { directory.appendingPathComponent("Records").resolvingSymlinksInPath() }
+    private var failuresDirectory: URL { directory.appendingPathComponent("SensMeFailures").resolvingSymlinksInPath() }
     private var scopes: [(URL, Bool)] = []
     private var analysisTask: Task<Void, Error>?
+    private var analysisSummary = SensMeBatchSummary()
     private var queryTask: Task<(GracenoteResponse, String), Error>?
     var runtime: EnrichmentRuntime {
         .init(directory: engineDirectory, prefix: directory.appendingPathComponent("WinePrefix"), helpers: Bundle.main.resourceURL!.appendingPathComponent("Enrichment"))
     }
-    var sensmeReady: Bool { runtime.sensmeReady }
+    var sensmeReady: Bool { SensMeEngine.isAvailable }
+    var gracenoteReady: Bool { runtime.gracenoteReady }
     var credentials: URL { directory.appendingPathComponent("Gracenote/credentials.json") }
     init(directory: URL) {
         self.directory = directory
         let saved = UserDefaults.standard.string(forKey: "music-engine-directory")
         engineDirectory = saved.map { URL(fileURLWithPath: $0) } ?? Bundle.main.bundleURL.deletingLastPathComponent().appendingPathComponent("NegiPlayer-Engines")
         do {
-            try FileManager.default.createDirectory(at: directory.appendingPathComponent("Records"), withIntermediateDirectories: true)
-            for file in try FileManager.default.contentsOfDirectory(at: directory.appendingPathComponent("Records"), includingPropertiesForKeys: nil) where file.pathExtension == "json" {
+            try FileManager.default.createDirectory(at: recordsDirectory, withIntermediateDirectories: true)
+            for file in try FileManager.default.contentsOfDirectory(at: recordsDirectory, includingPropertiesForKeys: nil) where file.pathExtension == "json" && !file.lastPathComponent.hasPrefix("._") {
                 if let value = try? JSONDecoder().decode(EnrichedTrack.self, from: Data(contentsOf: file)) { records[value.mediaID] = value }
+            }
+            let failures = failuresDirectory
+            try FileManager.default.createDirectory(at: failures, withIntermediateDirectories: true)
+            for file in try FileManager.default.contentsOfDirectory(at: failures, includingPropertiesForKeys: nil) where file.pathExtension == "json" && !file.lastPathComponent.hasPrefix("._") {
+                if let value = try? JSONDecoder().decode(SensMeTrackFailure.self, from: Data(contentsOf: file)) { analysisFailures[value.mediaID] = value }
             }
         } catch { self.error = error.localizedDescription }
         credentialsReady = FileManager.default.fileExists(atPath: credentials.path)
@@ -98,32 +116,64 @@ struct EnrichedTrack: Codable, Sendable {
     }
     private func save(_ record: EnrichedTrack) throws {
         let key = SHA256.hash(data: Data(record.mediaID.utf8)).map { String(format: "%02x", $0) }.joined()
-        try JSONEncoder().encode(record).write(to: directory.appendingPathComponent("Records/" + key + ".json"), options: .atomic)
+        try JSONEncoder().encode(record).write(to: recordsDirectory.appendingPathComponent(key + ".json"), options: .atomic)
         records[record.mediaID] = record
     }
     func analyze(_ inputs: [(MediaFile, URL)]) {
         guard !busy, !inputs.isEmpty else { return }
         busy = true; status = "正在准备 SensMe 分析…"
-        let runtime = runtime, working = directory.appendingPathComponent("Jobs")
+        analysisSummary = SensMeBatchSummary()
+        let media = Dictionary(inputs.map { ($0.0.id, $0.0) }, uniquingKeysWith: { first, _ in first })
+        let jobs = inputs.map { input in
+            let record = records[input.0.id]
+            return SensMeBatchInput(id: input.0.id, source: input.1,
+                cached: record?.sourcePath == input.1.path ? record?.sensme : nil)
+        }
         let work = Task.detached(priority: .utility) { [self] in
-            for (index, input) in inputs.enumerated() {
-                try Task.checkCancellation()
-                await updateStatus(LF("正在分析 %d/%d：%@", index+1, inputs.count, input.0.title))
-                let result = try SensMeEngine.analyze(source: input.1, runtime: runtime, workingDirectory: working)
-                try await storeAnalysis(result, media: input.0, source: input.1)
+            _ = try await SensMeBatchAnalyzer.run(jobs) { outcome in
+                guard let item = media[outcome.id] else { throw EnrichmentError("SensMe 任务配置无效") }
+                try await self.checkpointAnalysis(outcome, media: item, total: jobs.count)
             }
         }
         analysisTask = work
         Task {
-            do { try await work.value; status = String(format: L("SensMe 分析完成：%d 首"), inputs.count) }
+            do { try await work.value; updateAnalysisStatus(total: jobs.count) }
             catch is CancellationError { status = "分析已取消，已完成的结果保留" }
             catch { self.error = error.localizedDescription; status = "分析中断，已完成的结果保留" }
             analysisTask = nil; busy = false
         }
     }
-    private func updateStatus(_ text: String) { status = text }
+    private func checkpointAnalysis(_ outcome: SensMeBatchOutcome, media: MediaFile, total: Int) throws {
+        let key = SHA256.hash(data: Data(outcome.id.utf8)).map { String(format: "%02x", $0) }.joined()
+        let failureURL = failuresDirectory.appendingPathComponent(key + ".json")
+        switch outcome.value {
+        case .analyzed(let result):
+            try storeAnalysis(result, media: media, source: outcome.source)
+            if FileManager.default.fileExists(atPath: failureURL.path) { try FileManager.default.removeItem(at: failureURL) }
+            analysisFailures[outcome.id] = nil; analysisSummary.analyzed += 1
+        case .cached:
+            if FileManager.default.fileExists(atPath: failureURL.path) { try FileManager.default.removeItem(at: failureURL) }
+            analysisFailures[outcome.id] = nil; analysisSummary.cached += 1
+        case .failed(let message):
+            let failure = SensMeTrackFailure(mediaID: outcome.id, sourcePath: outcome.source.path, message: message, failedAt: Date())
+            try JSONEncoder().encode(failure).write(to: failureURL, options: .atomic)
+            analysisFailures[outcome.id] = failure; analysisSummary.failed += 1
+        }
+        updateAnalysisStatus(total: total)
+    }
+    private func updateAnalysisStatus(total: Int) {
+        status = LF("SensMe 已完成 %d/%d · 新分析 %d · 已验证 %d · 失败 %d",
+                    analysisSummary.completed, total, analysisSummary.analyzed, analysisSummary.cached, analysisSummary.failed)
+    }
     private func storeAnalysis(_ value: CachedSensMe, media: MediaFile, source: URL) throws {
         var record = records[media.id] ?? EnrichedTrack(mediaID: media.id, sourcePath: source.path, sourceSHA256: value.sourceSHA256)
+        if let previous = record.sensme, previous.engineVersion != value.engineVersion || previous.sourceSHA256 != value.sourceSHA256 || previous.blob != value.blob {
+            var history = record.sensmeHistory ?? []
+            if !history.contains(where: { $0.engineVersion == previous.engineVersion && $0.sourceSHA256 == previous.sourceSHA256 && $0.blob == previous.blob }) {
+                history.append(previous)
+            }
+            record.sensmeHistory = history
+        }
         if record.sourceSHA256 != value.sourceSHA256 { record.candidates = []; record.approvedMetadata = nil; record.approvedArtwork = nil }
         record.sourceSHA256 = value.sourceSHA256; record.sourcePath = source.path; record.sensme = value
         try save(record)

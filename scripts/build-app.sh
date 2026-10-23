@@ -19,6 +19,9 @@ cp "$LMP_PROJECT/Resources/Info.plist" "$LMP_APP/Contents/Info.plist"
 if [[ -n "${NEGI_BUNDLE_ID:-}" ]]; then /usr/libexec/PlistBuddy -c "Set :CFBundleIdentifier $NEGI_BUNDLE_ID" "$LMP_APP/Contents/Info.plist"; fi
 cp "$LMP_PROJECT/Resources/PlayerStrings.json" "$LMP_APP/Contents/Resources/PlayerStrings.json"
 if [[ -d "$LMP_PROJECT/Resources/Enrichment" ]]; then ditto --norsrc --noextattr "$LMP_PROJECT/Resources/Enrichment" "$LMP_APP/Contents/Resources/Enrichment"; fi
+# The original-engine adapter is a research oracle; native SensMe never ships
+# or executes it. The optional Gracenote helper remains separate.
+rm -f "$LMP_APP/Contents/Resources/Enrichment/sensme_analyze_windows.py"
 for LMP_LOCALIZATION in "$LMP_PROJECT"/Resources/*.lproj; do ditto --norsrc --noextattr "$LMP_LOCALIZATION" "$LMP_APP/Contents/Resources/${LMP_LOCALIZATION:t}"; done
 if [[ -f "$LMP_PROJECT/Resources/AppIcon.icns" ]]; then cp "$LMP_PROJECT/Resources/AppIcon.icns" "$LMP_APP/Contents/Resources/AppIcon.icns"; fi
 rm -f "$LMP_APP/Contents/Resources/VerificationRequest.json"
@@ -29,6 +32,8 @@ with open(sys.argv[1], 'w') as f:
     json.dump(dict(fixtures=os.environ['NEGI_VERIFICATION_FIXTURES'], report=os.environ['NEGI_VERIFICATION_REPORT'], dataDirectory=os.environ['LMP_DATA_DIR'], realSamples=os.environ.get('NEGI_REAL_SAMPLES'), realReport=os.environ.get('NEGI_REAL_REPORT')),f)
 PY
 fi
+# exFAT stores metadata as physical AppleDouble files; omit them from generated bundles.
+find "$LMP_APP" -type f -name '._*' -delete
 # iCloud/Finder metadata can prevent ad-hoc signing. Strip only these metadata attributes on our generated bundle.
 xattr -dr com.apple.FinderInfo "$LMP_APP" 2>/dev/null || true
 xattr -dr com.apple.ResourceFork "$LMP_APP" 2>/dev/null || true

@@ -93,7 +93,7 @@ struct ContentView: View {
             } }.scrollIndicators(.hidden)
             VStack(alignment: .leading, spacing: 8) {
                 Text(String(format:L("%d 首曲目"),model.musicFileCount)).font(.callout)
-                Text(L("本地优先 · 开发预览 0.7.2")).font(.caption).foregroundStyle(.secondary)
+                Text(L("本地优先 · 开发预览 0.8.0")).font(.caption).foregroundStyle(.secondary)
             }.padding(20)
         }.negiGlass(22).padding(12)
     }

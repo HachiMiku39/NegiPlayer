@@ -1,6 +1,8 @@
 # NegiPlayer
 
-macOS 本地音乐播放器与歌词工作室，开发预览 0.7.2。提供 Negi（Miku 青绿与少量粉色）、日间、夜间三套主题及中文／日文／英文界面，macOS 27 使用原生 SwiftUI Liquid Glass；减少透明度时使用实色背景。最低部署目标 macOS 14，当前验证架构为 Apple Silicon / arm64。
+当前工作区已接通原生 SensMe：完整 PCM → 默认 SMFMF 核心、短曲与结束调度、应用流式入口及多格式断点队列均已实现，无需 SensMe 的 Wine／虚拟机／Sony DLL。23 组完整生成输入、三首真实曲目的 PCM 全流程和 20 首多格式源文件样本与原版一致。原生全库任务已完成 13,839 首分析、保留 11 项输入失败，结果已导入应用并通过正式 Swift 校验，断点恢复未重复计算。已安装版本通过原生界面加载和缓存复用检查。原版末端描述器越界采用明确零尾部，验证范围和差异分类均单独记录。进度见 [NATIVE_SENSME.md](NATIVE_SENSME.md)。
+
+macOS 本地音乐播放器与歌词工作室，开发预览 0.8.0。提供 Negi（Miku 青绿与少量粉色）、日间、夜间三套主题及中文／日文／英文界面，macOS 27 使用原生 SwiftUI Liquid Glass；减少透明度时使用实色背景。最低部署目标 macOS 14，当前验证架构为 Apple Silicon / arm64。
 
 0.7.2 修复从 DSD 切回 PCM 后被延迟的音频配置通知停止，以及主机进度正常但 WM1A 没有 PCM 格式与声音的问题。恢复设备格式后等待配置稳定，再用静音启动并重启 USB PCM 流，最后从歌曲开头播放；切换期间按下停止会取消待启动的播放。WALKMAN 静音文件集成回归覆盖 DSD64／128 与 PCM 双向切换、暂停恢复、保持设备采样率和跟随源采样率。
 
@@ -8,9 +10,11 @@ macOS 本地音乐播放器与歌词工作室，开发预览 0.7.2。提供 Negi
 
 0.5 已增加原生 Windows 与 Android 端：Mac、Windows 都能管理只读曲库并互相作为播放端；iOS、Android 只读浏览，并在本机处理音频、EQ 与输出。四端共用 LAN v1、封面、LRC、Negi／日间／夜间主题及中／日／英语言目录。Windows 使用 WASAPI，Android 使用 AudioTrack。构建与连接说明见 [cross/README.md](cross/README.md)，Roon 功能参照见 [ROON_REFERENCE.md](ROON_REFERENCE.md)。原始 DSD／DoP 已在 macOS 首次接通；DST、更多设备、同步多房间与正式发布验收仍见 [ROADMAP.md](ROADMAP.md)。
 
-## SensMe 与 Gracenote（macOS 0.6.1）
+## SensMe 与 Gracenote（macOS 0.8.0）
 
-侧栏「SensMe 与补全」可搜索曲库、多选曲目并运行 Sony 原版 `MMLib11.dll`。音频经独立 AVAudioFile / AVAudioConverter 通路转换为 44.1 kHz、16-bit 双声道 PCM，不经过播放 EQ、音量或 ReplayGain。完整 SMFMF 分析数据与 BPM 保存在本机缓存，支持取消并保留已完成曲目。至少需要约 10 秒音频；DSD 等系统无法解码的格式会报错。
+本机全曲库、断点恢复及多核 CPU 加速工具见 [SensMe 批处理](SENSME_BATCH.md)。该工具与应用缓存兼容，源音乐及曲库数据库保持只读。
+
+侧栏「SensMe 与补全」可搜索曲库、多选曲目并运行内置原生分析器。音频经独立 AVAudioFile / AVAudioConverter 通路流式转换为 44.1 kHz、16-bit 双声道 PCM，不经过播放 EQ、音量或 ReplayGain，不生成整曲临时 PCM 文件；收集到原版最大分析窗口后结束解码。完整 SMFMF 与可确定的 BPM 保存在本机缓存，支持取消并保留已完成曲目。短曲／静音诊断不显示中间计算得到的 BPM；源音频不补零或循环。新缓存标识为 `NegiSensMe 1.6.1-native.2`，替换当前记录时保留旧结果历史。应用内多选队列默认 8 路，逐曲保存失败并继续，取消保留已完成的检查点。已完成缓存复用前校验完整源摘要与 SMFMF 摘要；DSD、多声道及系统解码失败的文件使用本机可选 FFmpeg 流式后备。FFmpeg 不随应用打包，可从标准 Homebrew 路径或应用 Tools 目录发现。
 
 Gracenote 通过用户提供的 Media Go 3.2 Build 191 的原 SDK 和应用授权进行文字查询。可选择本地曲目或直接输入标题、艺人及可选专辑；只提交这些文字，不上传音频。候选按发行版本列出。点击「选择发行版」加载该版本的完整信息，再逐项勾选标题、艺人、专辑艺人、年份、曲号／总曲数、碟号／总碟数、流派、唱片公司、语言、合辑及服务返回的其他字段。作曲、作词、指挥、ISRC、条形码、发行编号等仅在服务提供时显示；未返回的信息不推测。未勾选的字段保留当前值。
 
@@ -20,7 +24,7 @@ Gracenote 通过用户提供的 Media Go 3.2 Build 191 的原 SDK 和应用授�
 
 在「Walkman 传输」保留「携带 SensMe 与补全标签（MP3/FLAC）」时，已分析／已采用的曲目会先在本机生成带标签副本，再复制到选定 `MUSIC` 目录。MP3 使用 ID3 GEOB `USR_SMFMF`，FLAC 使用 APPLICATION `SMFM`；补全字段写入副本的 ID3 / Vorbis 标签；所选封面写入 MP3 APIC 或 FLAC PICTURE，并替换副本的正面封面，保留其他封面。源 SHA-256 必须与分析记录一致，并验证副本音频载荷不变。其他容器仍复制原文件；特殊 ID3 标志及损坏标签会拒绝改写副本，可以关闭该选项传输原文件。未分析、未采用的曲目不改标签。
 
-本机引擎位于应用旁的 `NegiPlayer-Engines`，包含便携 Wine、32 位 Python、Sony 分析 DLL、Gracenote SDK 和用户提供的 MediaGo.exe。移动应用后，可在「引擎设置…」重新选择此文件夹。首次启动兼容环境可能需要约 1–3 分钟；后续使用本机独立 WinePrefix。Media Go 授权和注册用户数据只保存在 `~/Library/Application Support/NegiPlayer/Enrichment/Gracenote`，不写入应用包或源码包。此版本只自动识别已核对 SHA-256 的 MediaGo.exe。
+SensMe 不需要选择外部引擎文件夹。可选的 Gracenote 功能仍使用用户本机的 SDK、MediaGo.exe 和独立外部运行环境，可在「引擎设置…」选择 `NegiPlayer-Engines`。这些组件不会作为应用依赖打包。Media Go 授权和注册用户数据只保存在 `~/Library/Application Support/NegiPlayer/Enrichment/Gracenote`，不写入应用包或源码包。此版本只自动识别已核对 SHA-256 的 MediaGo.exe。
 
 实际完成 Sony DLL 分析、Gracenote 在线查询、MP3/FLAC 标签回读与音频完整性测试；断开 USB 后 Walkman 对新增 SensMe 数据的曲库重建及频道播放仍需设备端验收。引擎来源见 [THIRD_PARTY.md](THIRD_PARTY.md)。本轮只更新 macOS，其他端保持 0.5.0。
 

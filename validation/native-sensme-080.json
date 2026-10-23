@@ -1,0 +1,102 @@
+{
+  "schemaVersion": 1,
+  "version": "0.8.0",
+  "engineVersion": "NegiSensMe 1.6.1-native.2",
+  "host": {
+    "chip": "Apple M3 Max",
+    "cpuCores": 16,
+    "performanceCores": 12,
+    "efficiencyCores": 4,
+    "memoryGB": 64
+  },
+  "library": {
+    "indexedTracks": 13850,
+    "analyzed": 13839,
+    "failed": 11,
+    "pending": 0,
+    "elapsedSeconds": 1128.6,
+    "workers": 8,
+    "sourceDigestDifferences": 0,
+    "sourceMusicWrites": false,
+    "wholeTrackPCMFiles": false,
+    "failureReasons": {
+      "missingSource": 5,
+      "unsupportedISOTrackExtraction": 2,
+      "AppleDoubleMetadata": 2,
+      "damagedFLAC": 1,
+      "WAVWithoutDataChunk": 1
+    }
+  },
+  "validation": {
+    "cachedResultsChecked": 13839,
+    "historyPreserved": 13839,
+    "importStale": 0,
+    "importFailed": 0,
+    "withoutTempo": 167,
+    "resume": {
+      "sourceDigestChecks": 13839,
+      "queued": 0,
+      "completedThisRun": 0,
+      "elapsedSeconds": 381.446
+    },
+    "reference": {
+      "historicalExact": 13786,
+      "freshUnmodifiedExact": 32,
+      "controlledZeroTailExact": 21,
+      "unaccountedDifferences": 0,
+      "controlledTailIsUnmodifiedOriginal": false
+    },
+    "applicationRealFormats": 28,
+    "debugReleaseResultsEqual": true,
+    "swiftReleaseTests": {
+      "total": 140,
+      "passed": 133,
+      "skipped": 7,
+      "failed": 0
+    },
+    "pythonNativeQueueTests": {
+      "total": 13,
+      "failed": 0
+    },
+    "uiCacheReuse": {
+      "completed": 1,
+      "analyzed": 0,
+      "verified": 1,
+      "failed": 0
+    }
+  },
+  "acceleration": {
+    "defaultWorkers": 8,
+    "releaseCore": "compiler auto-vectorized C",
+    "gpu": false,
+    "ane": false,
+    "realFormatQueueBenchmark": {
+      "tracks": 20,
+      "alternatingRounds": 3,
+      "workers4MedianSeconds": 7.494,
+      "workers8MedianSeconds": 5.019,
+      "throughputRatio": 1.493,
+      "includes": [
+        "decode",
+        "native analysis",
+        "full source hashes",
+        "checkpoints"
+      ],
+      "filesystemCache": "warm"
+    },
+    "purePCMBenchmark": {
+      "tracksPerRound": 8,
+      "secondsPerTrack": 310,
+      "rounds": 5,
+      "autoVectorC1WorkerSeconds": 2.41353,
+      "neon1WorkerSeconds": 2.520547,
+      "neon8WorkersSeconds": 0.382252,
+      "excludes": [
+        "decode",
+        "source hashes",
+        "storage",
+        "UI"
+      ]
+    }
+  }
+}
