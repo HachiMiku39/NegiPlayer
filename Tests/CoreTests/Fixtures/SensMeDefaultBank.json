@@ -1,0 +1,81 @@
+{
+  "schemaVersion": 1,
+  "input": "self-generated mono signed 16-bit samples",
+  "parametersSHA256": "957a0543754e03ea553c5f790dc8283263e69d7e131fb204c2d7735088b05932",
+  "partition": [
+    1,
+    3,
+    7,
+    13,
+    4096,
+    1,
+    5,
+    127
+  ],
+  "cases": [
+    {
+      "kind": "random",
+      "inputFrames": 262144,
+      "rawFrames": 754,
+      "startupFrames": 292,
+      "sha256": "e50fe33171e2ff42a8b8bf9f7d63f2452dba26223d4ef34aefdee05483e8fc2e",
+      "postStartupSHA256": "e5c62162cbeaa57666606da98669f8328e246f53daa7cfa000aeba4be1615372"
+    },
+    {
+      "kind": "impulse",
+      "inputFrames": 262144,
+      "rawFrames": 754,
+      "startupFrames": 292,
+      "sha256": "1772c079eb1e4f77f29b63d9f36fed2020017c9146e174f332ae28d10e9cc0f2",
+      "postStartupSHA256": "6ced7c0b522b5c0eb3a0205c654e60d67573c56f621f56689460785756039252"
+    },
+    {
+      "kind": "silence",
+      "inputFrames": 262144,
+      "rawFrames": 754,
+      "startupFrames": 292,
+      "sha256": "d4c5200692be83fb73fcb2b3ae0cde724c900b311c0c428f80892bbbc7507c8b",
+      "postStartupSHA256": "3517ca9634183cb9973ef44bed646c156956c08f9a3d139fe8eb804b0ffdc35b"
+    },
+    {
+      "kind": "limits",
+      "inputFrames": 262144,
+      "rawFrames": 754,
+      "startupFrames": 292,
+      "sha256": "6dfe1cea76dede79835c690c95c67030f61141c2d2ba1d1094f1cf182d55b25e",
+      "postStartupSHA256": "9fa8e909c9bc266c6a2019594c13a74901415e212e580ea9f33d25653ff07ae3"
+    },
+    {
+      "kind": "random",
+      "inputFrames": 4410000,
+      "rawFrames": 12708,
+      "startupFrames": 292,
+      "sha256": "72e3c77e26617f99aaa146ca0a492f1952f854f30c1bec7134d1d37a48fd6ce6",
+      "postStartupSHA256": "c1fadc144443706afac921ef3449a5ad7246f3d4653eb4bb627227e53f954b21"
+    },
+    {
+      "kind": "impulse",
+      "inputFrames": 4410000,
+      "rawFrames": 12708,
+      "startupFrames": 292,
+      "sha256": "52127e014ac992c3755406eedf25244bb63edb4d835b46a8012e74d553fa27fd",
+      "postStartupSHA256": "270fdddb6c1b2cf817b7c1f5d4e16e58cc33635faa928f72d2e415c0b0898b41"
+    },
+    {
+      "kind": "silence",
+      "inputFrames": 4410000,
+      "rawFrames": 12708,
+      "startupFrames": 292,
+      "sha256": "d12805627b8fe86a54b6bdec28b1ca4b092c18fdeabdae198a65e93bc3f43f98",
+      "postStartupSHA256": "1dd07390d290b4189d189fe8dac3c9b8122d6eb5fb5ce4b04f83ed1567b3c2ae"
+    },
+    {
+      "kind": "limits",
+      "inputFrames": 4410000,
+      "rawFrames": 12708,
+      "startupFrames": 292,
+      "sha256": "a50e46bf095d257fc84733f412a3883043462c67f60b1c5fcbceb5e6aa0c392b",
+      "postStartupSHA256": "faeae92bf4616f3ebea37cdc8c0ab228cd04bc7f8b4f1afd980e539c08771a86"
+    }
+  ]
+}

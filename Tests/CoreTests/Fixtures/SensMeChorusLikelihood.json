@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "analysisVersion": "1.6.1",
+  "input": "generated score values and 33 float32 steps around each underflow boundary",
+  "firstFallbackBits": [
+    1135954237,
+    3280479464
+  ],
+  "cases": 16450,
+  "outputSHA256": "da1904b5022ad69c2e969d227a5f19559f3ad99bc699febc42443e0bfc0df576"
+}

@@ -1,0 +1,133 @@
+{
+  "schemaVersion": 1,
+  "source": "Audited original helper, self-generated spectra and all 2047 original log-bin conversions",
+  "impulseProfilesSHA256": "f898417aa3c0f1768a94a5bad9e7ade4961b22be653c17b3fba8ccf15700f840",
+  "cases": [
+    {
+      "kind": "zero",
+      "segments": 1,
+      "profileSHA256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+      "spreadBits": 0
+    },
+    {
+      "kind": "zero",
+      "segments": 3,
+      "profileSHA256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+      "spreadBits": 0
+    },
+    {
+      "kind": "zero",
+      "segments": 10,
+      "profileSHA256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+      "spreadBits": 0
+    },
+    {
+      "kind": "constant",
+      "segments": 1,
+      "profileSHA256": "7d963699f186011c5ffa0fb5ae469f205cde0405b9c95a83a671b828243f3de4",
+      "spreadBits": 1043556706
+    },
+    {
+      "kind": "constant",
+      "segments": 3,
+      "profileSHA256": "81d678e9ebd44ba99d9c73bd074a86a401879337ec9dd6043f0926c2a11d39b6",
+      "spreadBits": 1043556706
+    },
+    {
+      "kind": "constant",
+      "segments": 10,
+      "profileSHA256": "88088ca73441060e29078bef133b45d69c381810df815498574d227a38ada55f",
+      "spreadBits": 1043556706
+    },
+    {
+      "kind": "random",
+      "segments": 1,
+      "profileSHA256": "51de09a4c445b13480042f828faa1cf95ffa8ec355e408285768ce66fc803bf9",
+      "spreadBits": 1043344014
+    },
+    {
+      "kind": "random",
+      "segments": 3,
+      "profileSHA256": "154c579afa988a241e63fae894cab8e7d158d2f6957478d0252ab359ae52cc09",
+      "spreadBits": 1043351675
+    },
+    {
+      "kind": "random",
+      "segments": 10,
+      "profileSHA256": "99500b058ef19b5d9cdcf36fbc6a14c010ef84f44392bfedad36274e18832b85",
+      "spreadBits": 1043529078
+    },
+    {
+      "kind": "sparse",
+      "segments": 1,
+      "profileSHA256": "0b594b36c5d4bef5d716567c8ddcf29289527fba4929009d8f3dc6e91e53fc55",
+      "spreadBits": 1040996331
+    },
+    {
+      "kind": "sparse",
+      "segments": 3,
+      "profileSHA256": "bfdd1a95edf557129067b9f9ea34c741841227b6574bc5341d7f7d80e72c3fb9",
+      "spreadBits": 1042944544
+    },
+    {
+      "kind": "sparse",
+      "segments": 10,
+      "profileSHA256": "801256082641f3717dcd16a6dfb4e2a496beab7f70598f1f2a3fcd1858d9f79b",
+      "spreadBits": 1042629543
+    },
+    {
+      "kind": "low",
+      "segments": 1,
+      "profileSHA256": "281e8a27bf4822c17abe31e561ac09bc52170bd3de93d5cb2b627938103399fd",
+      "spreadBits": 1031582444
+    },
+    {
+      "kind": "low",
+      "segments": 3,
+      "profileSHA256": "e05d9e1248fcf9f054d0c2070796515f278f2f6ef95bf96abb4c9d46eec1bad0",
+      "spreadBits": 1031189744
+    },
+    {
+      "kind": "low",
+      "segments": 10,
+      "profileSHA256": "f892903d0c0b1e542feaacbbf9d5637f827e9c950cb39c17d58220da5e18faf2",
+      "spreadBits": 1031811550
+    },
+    {
+      "kind": "high",
+      "segments": 1,
+      "profileSHA256": "552d7f4cad1e78a820244bee025e8c66cbd2dd3fd2cf00d2ae44a4484f385062",
+      "spreadBits": 982373189
+    },
+    {
+      "kind": "high",
+      "segments": 3,
+      "profileSHA256": "02f87bcd60623e08e4f26028d214e5476f48e69fd54cd70b6f03e9654604a3ad",
+      "spreadBits": 983334976
+    },
+    {
+      "kind": "high",
+      "segments": 10,
+      "profileSHA256": "283480499441433bcc421b5aa163ca15fc4091855cece6e5c881c29e575b49de",
+      "spreadBits": 983500413
+    },
+    {
+      "kind": "wide",
+      "segments": 1,
+      "profileSHA256": "ab3e34e7260d42efb7a9f8cee52f46fd778f25fbc1aae19579be807192060fea",
+      "spreadBits": 1043569575
+    },
+    {
+      "kind": "wide",
+      "segments": 3,
+      "profileSHA256": "a171bf0514ca7ccdfb0d0d9b2187c61561e472f729e14cc318f2b541b4fb04c3",
+      "spreadBits": 1042886337
+    },
+    {
+      "kind": "wide",
+      "segments": 10,
+      "profileSHA256": "258cf88e3fdc8eec72efdd9b5205f9b5a452a8750e8862b105360771f2aed66c",
+      "spreadBits": 1043059876
+    }
+  ]
+}

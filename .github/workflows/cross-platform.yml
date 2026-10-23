@@ -2,6 +2,7 @@ name: Cross-platform LAN build
 on:
   push:
     branches: [main, cross-platform-lan]
+  pull_request:
   workflow_dispatch:
 permissions:
   contents: read
@@ -134,19 +135,22 @@ jobs:
           swift build --disable-sandbox
           swift test --disable-sandbox
           PYTHONDONTWRITEBYTECODE=1 python3 scripts/test-gracenote-bridge.py
+          clang -dynamiclib -O3 -DNEGI_SENSME_SCALAR -I Sources/CSensMeCore/include Sources/CSensMeCore/*.c -o "$RUNNER_TEMP/libSensMeCore.dylib"
+          PYTHONDONTWRITEBYTECODE=1 python3 scripts/test-sensme-batch.py
+          NEGI_NATIVE_LIBRARY="$RUNNER_TEMP/libSensMeCore.dylib" PYTHONDONTWRITEBYTECODE=1 python3 scripts/test-sensme-native.py
           xcodebuild -project iOS/NegiPlayeriOS.xcodeproj -scheme NegiPlayeriOS -sdk iphonesimulator -destination 'generic/platform=iOS Simulator' -derivedDataPath /tmp/NegiPlayer-iOS CODE_SIGNING_ALLOWED=NO build
       - name: Bidirectional Swift and C# LAN interoperability
         run: bash cross/scripts/apple-interop.sh
       - name: Package updated Mac application
         run: |
           LMP_WORK_DIR=/tmp/NegiPlayer-release zsh scripts/build-app.sh
-          ditto -c -k --norsrc --noextattr --keepParent /tmp/NegiPlayer-release/app-stage/NegiPlayer.app ci-artifacts/NegiPlayer-0.7.0-macOS-arm64.zip
-          shasum -a 256 ci-artifacts/NegiPlayer-0.7.0-macOS-arm64.zip > ci-artifacts/Mac-SHA256SUMS.txt
+          ditto -c -k --norsrc --noextattr --keepParent /tmp/NegiPlayer-release/app-stage/NegiPlayer.app ci-artifacts/NegiPlayer-0.8.0-macOS-arm64.zip
+          shasum -a 256 ci-artifacts/NegiPlayer-0.8.0-macOS-arm64.zip > ci-artifacts/Mac-SHA256SUMS.txt
       - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
         with:
           name: NegiPlayer-macOS-arm64
           path: |
-            ci-artifacts/NegiPlayer-0.7.0-macOS-arm64.zip
+            ci-artifacts/NegiPlayer-0.8.0-macOS-arm64.zip
             ci-artifacts/Mac-SHA256SUMS.txt
           retention-days: 14
       - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f

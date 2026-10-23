@@ -1,13 +1,13 @@
 # 来源与许可清单
 
-NegiPlayer 0.6.1 macOS 工作版本 的项目源码采用 [MIT](LICENSE) 许可。系统框架和参考项目各自保持原许可；未将 NegiFlick 原始 JavaScript 或其他组件重新标为 MIT。
+NegiPlayer 0.8.0 macOS 工作版本 的项目源码采用 [MIT](LICENSE) 许可。系统框架和参考项目各自保持原许可；未将 NegiFlick 原始 JavaScript 或其他组件重新标为 MIT。
 
 | 项目 | 实际用途 | 分发与许可状态 |
 | --- | --- | --- |
 | Apple SDK / SwiftUI / AppKit / AVFoundation / Core Audio / AudioToolbox / CryptoKit / MediaPlayer | 系统界面、解码、输出、摘要 | 链接 macOS 系统框架；使用本机 Apple SDK，未复制 SDK 或系统框架 |
 | SQLite | 系统 `/usr/lib/libsqlite3.dylib` | [SQLite 公共领域说明](https://sqlite.org/copyright.html)；仅动态链接系统库 |
 | NegiFlick Studio | 歌词语义、Negi 工程格式和歌词测试参照；独立 Swift 实现 | 固定提交 `cf64f04900bf2429ee9a207b1bf7213feba6c2f9`；上游 README 明确尚未选择应用源码许可证，因此当前不把它视为 MIT 或无限制再分发授权 |
-| FFmpeg 9.0.1（本机 Homebrew） | 生成原创 WAV 的 MP3/FLAC/AAC/ALAC 测试样本 | 本机工具带 GPL 构建选项；播放器未链接、未打包 FFmpeg，也未复制其二进制库 |
+| FFmpeg 9.0.1（本机 Homebrew） | 生成测试样本；可选的本机流式分析后备解码 | 本机工具带 GPL 构建选项；播放器未链接、未打包 FFmpeg，也未复制其二进制库 |
 | Xcode / Swift / Python / codesign / ditto | 构建、测试、打包 | 开发工具，不作为应用运行时分发 |
 
 Negi 基线读取路径与 Git blob：
@@ -46,6 +46,8 @@ NegiPlayer 的 Swift 和 Python ctypes 桥接代码独立编写。源码包与�
 | Wine Devel | [Gcenx macOS Wine 11.18](https://github.com/Gcenx/macOS_Wine_builds/releases/tag/11.18)；下载归档 SHA-256 `aa0ea4c82e636ae7bca2076387cb0a5affa26509ad13f119ecd0d62bd7ba6f82` | 独立、可替换的便携运行时，未链接 NegiPlayer；Wine 为 LGPL-2.1-or-later，原项目及其依赖保持原许可 |
 | Python Win32 embeddable | [CPython 3.12.10 官方发行](https://www.python.org/downloads/release/python-31210/) | 独立、可替换的 Python；许可文本保留于引擎的 `python-win32/LICENSE.txt` |
 
-兼容环境未作为开源源码的一部分分发。公开分发前需要另行核对每个运行时及专有组件的分发条款；本机调用成功不等于获得通用 Gracenote 开发者许可。分析字段目前只解释 BPM 和分块结构，未复制 Sony 的频道分类界面或宣称重建其完整分类算法。
+兼容环境未作为开源源码的一部分分发。公开分发前需要另行核对每个运行时及专有组件的分发条款；本机调用成功不等于获得通用 Gracenote 开发者许可。应用界面目前只解释 BPM 和分块结构，未复制 Sony 的频道分类界面。
 
 0.6.1 使用同一原 SDK 的完整专辑查询和内容地址获取用户选择的封面。源码与应用包不附带 Gracenote 返回的专辑图片、语言表或查询缓存；图片只在用户请求预览后下载到本机，并在手动采用后用于曲库显示与传输副本。
+
+当前原生 SensMe 开发分支以独立 C 实现默认 1.6.1 的运算、恢复的数值参数和结果编码；应用源码中的 SensMe 分析不调用上述兼容环境或原 DLL。原 DLL 仅用于本机研究对照，不进入原生运行链。私人 Ghidra 工程、原始反编译输出、音乐及逐曲研究输入不纳入公开源码。可选 Gracenote 查询仍使用用户独立提供的原 SDK 和外部运行环境，与内置原生 SensMe 分离。原生进度和验证范围见 NATIVE_SENSME.md。

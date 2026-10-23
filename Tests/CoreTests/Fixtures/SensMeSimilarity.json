@@ -1,0 +1,216 @@
+{
+  "schemaVersion": 1,
+  "input": "self-generated compressed tones and beat timestamps",
+  "cases": [
+    {
+      "kind": "zero",
+      "count": 2,
+      "matrixSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "vectorsSHA256": "17b0761f87b081d5cf10757ccc89f12be355c70e2e29df288b65b30710dcbcd1",
+      "unobservedVerified": true
+    },
+    {
+      "kind": "zero",
+      "count": 4,
+      "matrixSHA256": "ca2fd00fa001190744c15c317643ab092e7048ce086a243e2be9437c898de1bb",
+      "vectorsSHA256": "2ea9ab9198d1638007400cd2c3bef1cc745b864b76011a0e1bc52180ac6452d4",
+      "unobservedVerified": true
+    },
+    {
+      "kind": "zero",
+      "count": 18,
+      "matrixSHA256": "184ccd606e9af2ec9e3b1446bf058d9566a8f74bea1fa0a4091874327df92441",
+      "vectorsSHA256": "1fe2373734955e60c172999142934b52e69ba7ab9039b3c18ea54082ba32afcd",
+      "unobservedVerified": true
+    },
+    {
+      "kind": "zero",
+      "count": 72,
+      "matrixSHA256": "d2e5c71ef316a69337f5322e242c1b61509e8544dc0dbb98336bee00f5f670d7",
+      "vectorsSHA256": "7636c9f8da9a82f9a9fcd804a25795a9c900e1c7e19f7442a7b113c8ccd64eb2",
+      "unobservedVerified": true
+    },
+    {
+      "kind": "zero",
+      "count": 326,
+      "matrixSHA256": "6880049f2f250311a9812d06981c6a072626e4d21ec35fc95a424772197ee21d",
+      "vectorsSHA256": "0a2f26d2bd80c45e222f859da8c0255b4d3831464134da16c44064962068336c",
+      "unobservedVerified": true
+    },
+    {
+      "kind": "zero",
+      "count": 960,
+      "matrixSHA256": "dff8507df8d7b2364fb7bf98d250e0f7634477cbf20c4392c424a2f7728dde7a",
+      "vectorsSHA256": "46e2096b907947368d310929303a04005b39c4a278e3a7de2225c355b4522694",
+      "unobservedVerified": true
+    },
+    {
+      "kind": "constant",
+      "count": 2,
+      "matrixSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "vectorsSHA256": "0aa445708c28f021362c534b597d29b241518e47e168009775127f27c6128ea8",
+      "unobservedVerified": true
+    },
+    {
+      "kind": "constant",
+      "count": 4,
+      "matrixSHA256": "ca2fd00fa001190744c15c317643ab092e7048ce086a243e2be9437c898de1bb",
+      "vectorsSHA256": "0f3c3e4cf6986698c03d9efffb8069e1ba10822ed8116d221591f88704c45fe8",
+      "unobservedVerified": true
+    },
+    {
+      "kind": "constant",
+      "count": 18,
+      "matrixSHA256": "184ccd606e9af2ec9e3b1446bf058d9566a8f74bea1fa0a4091874327df92441",
+      "vectorsSHA256": "0621db0dce71f1e60a005262bcc8a1a85a74fba81a44c66dbf321b9194f383df",
+      "unobservedVerified": true
+    },
+    {
+      "kind": "constant",
+      "count": 72,
+      "matrixSHA256": "d2e5c71ef316a69337f5322e242c1b61509e8544dc0dbb98336bee00f5f670d7",
+      "vectorsSHA256": "331d7118a0a9ffcd88070c8b3f694fb9334d407b93a6f39683ad46f8f589effc",
+      "unobservedVerified": true
+    },
+    {
+      "kind": "constant",
+      "count": 326,
+      "matrixSHA256": "6880049f2f250311a9812d06981c6a072626e4d21ec35fc95a424772197ee21d",
+      "vectorsSHA256": "b0e546bb3d1c8b92469f7a51c3f42b6230fbe6a61067b4758fd91e55a8f60e6f",
+      "unobservedVerified": true
+    },
+    {
+      "kind": "constant",
+      "count": 960,
+      "matrixSHA256": "dff8507df8d7b2364fb7bf98d250e0f7634477cbf20c4392c424a2f7728dde7a",
+      "vectorsSHA256": "7bc058412b556c1d71ff93d79e17b34b8ec454b102fbfc8d9479125580b1bd23",
+      "unobservedVerified": true
+    },
+    {
+      "kind": "random",
+      "count": 2,
+      "matrixSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "vectorsSHA256": "0b3fa010f950797624852931de685b037f6ea9a3aabc947d2cbaee1dcf1b65e8",
+      "unobservedVerified": true
+    },
+    {
+      "kind": "random",
+      "count": 4,
+      "matrixSHA256": "ca2fd00fa001190744c15c317643ab092e7048ce086a243e2be9437c898de1bb",
+      "vectorsSHA256": "cbbc1dde9b9882303e653cc53fe5a68cc930b8dacf9467c72ce6517e0603cfd9",
+      "unobservedVerified": true
+    },
+    {
+      "kind": "random",
+      "count": 18,
+      "matrixSHA256": "184ccd606e9af2ec9e3b1446bf058d9566a8f74bea1fa0a4091874327df92441",
+      "vectorsSHA256": "3b09641070d8f69562613860d699299947da2346fc906d4dfb0b147e1aa17b0c",
+      "unobservedVerified": true
+    },
+    {
+      "kind": "random",
+      "count": 72,
+      "matrixSHA256": "efb152caeafcbc3a819f101193cf61f5b9dcdf049505c4619885b57474dd131f",
+      "vectorsSHA256": "e05de101ceae10e37c76042106541730503d0954eaee994189a7504174f9e935",
+      "unobservedVerified": true
+    },
+    {
+      "kind": "random",
+      "count": 326,
+      "matrixSHA256": "c4b94168ec698f27c78f20424ac5c68bc6b974b6f4e4135d3c265a3a8ce6bdac",
+      "vectorsSHA256": "22b44fb5fc9a8a09b48ef01f7ba674f1b6aa1fa38442aca694edba37514e9404",
+      "unobservedVerified": true
+    },
+    {
+      "kind": "random",
+      "count": 960,
+      "matrixSHA256": "1ba3f598c1076d9a0c676b93fccf584089d724e2b7f40f9e58d8e680ac6f3a3d",
+      "vectorsSHA256": "3a283708aeea3a9cf1d1e4b69ef33880b95f008ec9ab3cb91a06ef6bc35fea18",
+      "unobservedVerified": true
+    },
+    {
+      "kind": "triad",
+      "count": 2,
+      "matrixSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "vectorsSHA256": "7f42b760e260d093461c0b2bc07569914cc30c966e972a86c82e5802e820d450",
+      "unobservedVerified": true
+    },
+    {
+      "kind": "triad",
+      "count": 4,
+      "matrixSHA256": "ca2fd00fa001190744c15c317643ab092e7048ce086a243e2be9437c898de1bb",
+      "vectorsSHA256": "940f5e873f295f79e320ade1f9b48204688573a6d703beff61a787eee04ecec6",
+      "unobservedVerified": true
+    },
+    {
+      "kind": "triad",
+      "count": 18,
+      "matrixSHA256": "ce73e68ab6e1c6e54d1abc9f756219ae40d3b3ddcf89511711287fdf4acd5687",
+      "vectorsSHA256": "fe66a3bdc6f37ecae1f34e4c41b39c70943de2c21118869c256b656d0e306f9a",
+      "unobservedVerified": true
+    },
+    {
+      "kind": "triad",
+      "count": 72,
+      "matrixSHA256": "1f94891f0499b18474dbd8d1173fd07d74452425f579e2f92724e73a4b52b62a",
+      "vectorsSHA256": "88deb06fc33ef41bf00940403fd4659f1c41044f50beae3fea5cee9ea8fc4ca6",
+      "unobservedVerified": true
+    },
+    {
+      "kind": "triad",
+      "count": 326,
+      "matrixSHA256": "0b0a66a2f3fe2df39b2b05cb8af8337c2ccc6533ee2a51ed5fb0af0e77182a2e",
+      "vectorsSHA256": "7e8ae733a8eb1d01141c47f7145f265dc649e12cdb388818c782d15dfcbedd68",
+      "unobservedVerified": true
+    },
+    {
+      "kind": "triad",
+      "count": 960,
+      "matrixSHA256": "69ba97f38afaa322f8e273ac28e4bb788729a012df6f33a25a9c48ccd5a4fd43",
+      "vectorsSHA256": "5d2d04d22ccbd3247be1e7e910f17a7f9c1ad5ad2547cc95d09125685fe808f4",
+      "unobservedVerified": true
+    },
+    {
+      "kind": "near-flat",
+      "count": 2,
+      "matrixSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "vectorsSHA256": "a73fc83580bd002065b7886c6a2f485deb48158aaa33f5bbb260caeb4322a25b",
+      "unobservedVerified": true
+    },
+    {
+      "kind": "near-flat",
+      "count": 4,
+      "matrixSHA256": "ca2fd00fa001190744c15c317643ab092e7048ce086a243e2be9437c898de1bb",
+      "vectorsSHA256": "2d7cf7eb8a07f3fd673b0b16ca2cfc56736a51703498f6ff4aa5b92534b82f18",
+      "unobservedVerified": true
+    },
+    {
+      "kind": "near-flat",
+      "count": 18,
+      "matrixSHA256": "184ccd606e9af2ec9e3b1446bf058d9566a8f74bea1fa0a4091874327df92441",
+      "vectorsSHA256": "a7f819e51b143f203ade769acfde554e5482061062ed700eeb16de400c014d20",
+      "unobservedVerified": true
+    },
+    {
+      "kind": "near-flat",
+      "count": 72,
+      "matrixSHA256": "d2e5c71ef316a69337f5322e242c1b61509e8544dc0dbb98336bee00f5f670d7",
+      "vectorsSHA256": "bc44e9eadb29ec2f5d6581a226fba7ec73e9b4f10c2983db76746a235c3a8237",
+      "unobservedVerified": true
+    },
+    {
+      "kind": "near-flat",
+      "count": 326,
+      "matrixSHA256": "873dc94d955ddcf33bf1774809210554982a16b5757637fcfafd923e61119aa9",
+      "vectorsSHA256": "f1c5cd069dc0181b532184605f434a862829be61bbda0ea682a4a129b75f54e6",
+      "unobservedVerified": true
+    },
+    {
+      "kind": "near-flat",
+      "count": 960,
+      "matrixSHA256": "d83ede57e82d2d622ca9d0d0996ca93c6ef550974c28921b6928e58c31b2e22d",
+      "vectorsSHA256": "12dc7e306a9b6478e537a895da5ea370725953233b3c94f5ea22ba0b080cfdee",
+      "unobservedVerified": true
+    }
+  ]
+}

@@ -1,0 +1,342 @@
+{
+  "schemaVersion": 1,
+  "input": "self-generated symmetric peak-ridge matrices and beat numbers",
+  "cases": [
+    {
+      "kind": "diagonal",
+      "count": 48,
+      "phase": 0,
+      "sectionCount": 0,
+      "labelsSHA256": "8f62c344eff1568474fb693b8c18526629db443b9653a84264189c97693605de"
+    },
+    {
+      "kind": "diagonal",
+      "count": 48,
+      "phase": 2,
+      "sectionCount": 0,
+      "labelsSHA256": "8f62c344eff1568474fb693b8c18526629db443b9653a84264189c97693605de"
+    },
+    {
+      "kind": "diagonal",
+      "count": 144,
+      "phase": 0,
+      "sectionCount": 0,
+      "labelsSHA256": "a240facb7a0d5897b5826bfa52dee1963929a424e1e2d78dd2f72cd5a85cbcdf"
+    },
+    {
+      "kind": "diagonal",
+      "count": 144,
+      "phase": 2,
+      "sectionCount": 0,
+      "labelsSHA256": "a240facb7a0d5897b5826bfa52dee1963929a424e1e2d78dd2f72cd5a85cbcdf"
+    },
+    {
+      "kind": "diagonal",
+      "count": 480,
+      "phase": 0,
+      "sectionCount": 0,
+      "labelsSHA256": "a97445652c91c7b12838cdbe8545cdd1891a8eda7af5f1e8247c7592ae158401"
+    },
+    {
+      "kind": "diagonal",
+      "count": 480,
+      "phase": 2,
+      "sectionCount": 0,
+      "labelsSHA256": "a97445652c91c7b12838cdbe8545cdd1891a8eda7af5f1e8247c7592ae158401"
+    },
+    {
+      "kind": "diagonal",
+      "count": 960,
+      "phase": 0,
+      "sectionCount": 0,
+      "labelsSHA256": "877efe413fb39caaf868c25879411ca55649261dafde6ce5301bfe6ce713180b"
+    },
+    {
+      "kind": "diagonal",
+      "count": 960,
+      "phase": 2,
+      "sectionCount": 0,
+      "labelsSHA256": "877efe413fb39caaf868c25879411ca55649261dafde6ce5301bfe6ce713180b"
+    },
+    {
+      "kind": "plateau",
+      "count": 48,
+      "phase": 0,
+      "sectionCount": 0,
+      "labelsSHA256": "8f62c344eff1568474fb693b8c18526629db443b9653a84264189c97693605de"
+    },
+    {
+      "kind": "plateau",
+      "count": 48,
+      "phase": 2,
+      "sectionCount": 0,
+      "labelsSHA256": "8f62c344eff1568474fb693b8c18526629db443b9653a84264189c97693605de"
+    },
+    {
+      "kind": "plateau",
+      "count": 144,
+      "phase": 0,
+      "sectionCount": 0,
+      "labelsSHA256": "a240facb7a0d5897b5826bfa52dee1963929a424e1e2d78dd2f72cd5a85cbcdf"
+    },
+    {
+      "kind": "plateau",
+      "count": 144,
+      "phase": 2,
+      "sectionCount": 0,
+      "labelsSHA256": "a240facb7a0d5897b5826bfa52dee1963929a424e1e2d78dd2f72cd5a85cbcdf"
+    },
+    {
+      "kind": "plateau",
+      "count": 480,
+      "phase": 0,
+      "sectionCount": 0,
+      "labelsSHA256": "a97445652c91c7b12838cdbe8545cdd1891a8eda7af5f1e8247c7592ae158401"
+    },
+    {
+      "kind": "plateau",
+      "count": 480,
+      "phase": 2,
+      "sectionCount": 0,
+      "labelsSHA256": "a97445652c91c7b12838cdbe8545cdd1891a8eda7af5f1e8247c7592ae158401"
+    },
+    {
+      "kind": "plateau",
+      "count": 960,
+      "phase": 0,
+      "sectionCount": 0,
+      "labelsSHA256": "877efe413fb39caaf868c25879411ca55649261dafde6ce5301bfe6ce713180b"
+    },
+    {
+      "kind": "plateau",
+      "count": 960,
+      "phase": 2,
+      "sectionCount": 0,
+      "labelsSHA256": "877efe413fb39caaf868c25879411ca55649261dafde6ce5301bfe6ce713180b"
+    },
+    {
+      "kind": "periodic",
+      "count": 48,
+      "phase": 0,
+      "sectionCount": 0,
+      "labelsSHA256": "8f62c344eff1568474fb693b8c18526629db443b9653a84264189c97693605de"
+    },
+    {
+      "kind": "periodic",
+      "count": 48,
+      "phase": 2,
+      "sectionCount": 0,
+      "labelsSHA256": "8f62c344eff1568474fb693b8c18526629db443b9653a84264189c97693605de"
+    },
+    {
+      "kind": "periodic",
+      "count": 144,
+      "phase": 0,
+      "sectionCount": 1,
+      "labelsSHA256": "f9d3ec2afd5511d1fa977008226284f7a20a194a2adf9a3b4bcc4eb15778d7ff"
+    },
+    {
+      "kind": "periodic",
+      "count": 144,
+      "phase": 2,
+      "sectionCount": 1,
+      "labelsSHA256": "b9fddb6d69ab1d5ad31eecef0512c4facff8bc738b4e1c2577e207f92f1da24b"
+    },
+    {
+      "kind": "periodic",
+      "count": 480,
+      "phase": 0,
+      "sectionCount": 2,
+      "labelsSHA256": "91c3e1bb4c76ba4f624aba6aceb4cc3ba6fc790b413d36d86d3fed19fce4df43"
+    },
+    {
+      "kind": "periodic",
+      "count": 480,
+      "phase": 2,
+      "sectionCount": 2,
+      "labelsSHA256": "1a1a0f6b1671eb8bb16a5a65010a94a18104a9a0d622cb0bff311799edcc843e"
+    },
+    {
+      "kind": "periodic",
+      "count": 960,
+      "phase": 0,
+      "sectionCount": 1,
+      "labelsSHA256": "7c9aecfc04002824fdced65d87638ac55acfa7fd82d554c29e3f0d91130e432f"
+    },
+    {
+      "kind": "periodic",
+      "count": 960,
+      "phase": 2,
+      "sectionCount": 1,
+      "labelsSHA256": "19000dc04af8a6b47a0ed2edaaaa24bba7032da906cf31db80fdb22eb28012c6"
+    },
+    {
+      "kind": "three-types",
+      "count": 48,
+      "phase": 0,
+      "sectionCount": 0,
+      "labelsSHA256": "8f62c344eff1568474fb693b8c18526629db443b9653a84264189c97693605de"
+    },
+    {
+      "kind": "three-types",
+      "count": 48,
+      "phase": 2,
+      "sectionCount": 0,
+      "labelsSHA256": "8f62c344eff1568474fb693b8c18526629db443b9653a84264189c97693605de"
+    },
+    {
+      "kind": "three-types",
+      "count": 144,
+      "phase": 0,
+      "sectionCount": 0,
+      "labelsSHA256": "a240facb7a0d5897b5826bfa52dee1963929a424e1e2d78dd2f72cd5a85cbcdf"
+    },
+    {
+      "kind": "three-types",
+      "count": 144,
+      "phase": 2,
+      "sectionCount": 0,
+      "labelsSHA256": "a240facb7a0d5897b5826bfa52dee1963929a424e1e2d78dd2f72cd5a85cbcdf"
+    },
+    {
+      "kind": "three-types",
+      "count": 480,
+      "phase": 0,
+      "sectionCount": 2,
+      "labelsSHA256": "9d6ba87ab2aa7c5891b5caaa2b05f0811b8389e396ef115f54ab0af6160f6074"
+    },
+    {
+      "kind": "three-types",
+      "count": 480,
+      "phase": 2,
+      "sectionCount": 2,
+      "labelsSHA256": "b3fb373aa3125478e6f20a777772fa5a797bc65c476711b30e6e1422247a813f"
+    },
+    {
+      "kind": "three-types",
+      "count": 960,
+      "phase": 0,
+      "sectionCount": 1,
+      "labelsSHA256": "7c9aecfc04002824fdced65d87638ac55acfa7fd82d554c29e3f0d91130e432f"
+    },
+    {
+      "kind": "three-types",
+      "count": 960,
+      "phase": 2,
+      "sectionCount": 1,
+      "labelsSHA256": "19000dc04af8a6b47a0ed2edaaaa24bba7032da906cf31db80fdb22eb28012c6"
+    },
+    {
+      "kind": "dense",
+      "count": 48,
+      "phase": 0,
+      "sectionCount": 1,
+      "labelsSHA256": "10a72de1c1d980a8f383db0dee575c28fcb7d19d1d250a09f399bd3999fc7262"
+    },
+    {
+      "kind": "dense",
+      "count": 48,
+      "phase": 2,
+      "sectionCount": 1,
+      "labelsSHA256": "d59128d459340d0ea11cadc8f0a04e2ceb915a1380543905654ce4ea60a84ec9"
+    },
+    {
+      "kind": "dense",
+      "count": 144,
+      "phase": 0,
+      "sectionCount": 1,
+      "labelsSHA256": "f9d3ec2afd5511d1fa977008226284f7a20a194a2adf9a3b4bcc4eb15778d7ff"
+    },
+    {
+      "kind": "dense",
+      "count": 144,
+      "phase": 2,
+      "sectionCount": 1,
+      "labelsSHA256": "b9fddb6d69ab1d5ad31eecef0512c4facff8bc738b4e1c2577e207f92f1da24b"
+    },
+    {
+      "kind": "dense",
+      "count": 480,
+      "phase": 0,
+      "sectionCount": 2,
+      "labelsSHA256": "954189ab8c0824f65cee9b235702335072e2a2f2c90975718fb5678f6948cfec"
+    },
+    {
+      "kind": "dense",
+      "count": 480,
+      "phase": 2,
+      "sectionCount": 2,
+      "labelsSHA256": "5972c423cf9b1ac2e54cb6fdcbb053ff27bb1b4a1fa42fa4f2b495a2a80f6436"
+    },
+    {
+      "kind": "dense",
+      "count": 960,
+      "phase": 0,
+      "sectionCount": 3,
+      "labelsSHA256": "ed0ceb0a8d21bd566118d6e094777f4527f41916c32499ed0be2d11d42760974"
+    },
+    {
+      "kind": "dense",
+      "count": 960,
+      "phase": 2,
+      "sectionCount": 3,
+      "labelsSHA256": "7a07812f1abac05d89b41b080b0a2a7525a52c41bf4ca369efb1ef24313d05f5"
+    },
+    {
+      "kind": "random",
+      "count": 48,
+      "phase": 0,
+      "sectionCount": 0,
+      "labelsSHA256": "8f62c344eff1568474fb693b8c18526629db443b9653a84264189c97693605de"
+    },
+    {
+      "kind": "random",
+      "count": 48,
+      "phase": 2,
+      "sectionCount": 0,
+      "labelsSHA256": "8f62c344eff1568474fb693b8c18526629db443b9653a84264189c97693605de"
+    },
+    {
+      "kind": "random",
+      "count": 144,
+      "phase": 0,
+      "sectionCount": 0,
+      "labelsSHA256": "a240facb7a0d5897b5826bfa52dee1963929a424e1e2d78dd2f72cd5a85cbcdf"
+    },
+    {
+      "kind": "random",
+      "count": 144,
+      "phase": 2,
+      "sectionCount": 0,
+      "labelsSHA256": "a240facb7a0d5897b5826bfa52dee1963929a424e1e2d78dd2f72cd5a85cbcdf"
+    },
+    {
+      "kind": "random",
+      "count": 480,
+      "phase": 0,
+      "sectionCount": 0,
+      "labelsSHA256": "a97445652c91c7b12838cdbe8545cdd1891a8eda7af5f1e8247c7592ae158401"
+    },
+    {
+      "kind": "random",
+      "count": 480,
+      "phase": 2,
+      "sectionCount": 0,
+      "labelsSHA256": "a97445652c91c7b12838cdbe8545cdd1891a8eda7af5f1e8247c7592ae158401"
+    },
+    {
+      "kind": "random",
+      "count": 960,
+      "phase": 0,
+      "sectionCount": 0,
+      "labelsSHA256": "877efe413fb39caaf868c25879411ca55649261dafde6ce5301bfe6ce713180b"
+    },
+    {
+      "kind": "random",
+      "count": 960,
+      "phase": 2,
+      "sectionCount": 0,
+      "labelsSHA256": "877efe413fb39caaf868c25879411ca55649261dafde6ce5301bfe6ce713180b"
+    }
+  ]
+}

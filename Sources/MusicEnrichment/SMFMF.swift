@@ -27,7 +27,8 @@ public struct SMFMFSummary: Codable, Equatable, Sendable {
             }
             chunks.append(.init(name: name, bytes: Int(size))); at += 20 + Int(size)
         }
-        guard chunks.contains(where: { $0.name == "GBPM" }), chunks.contains(where: { $0.name == "STMM" }) else { throw EnrichmentError("SensMe 结果缺少节奏或分析分块") }
+        // Sony returns valid STMM analysis without GBPM when tempo cannot be established.
+        guard chunks.contains(where: { $0.name == "STMM" }) else { throw EnrichmentError("SensMe 结果缺少分析分块") }
         return .init(bpm: bpm, chunks: chunks, bytes: data.count)
     }
 }
@@ -46,9 +47,16 @@ public struct CachedSensMe: Codable, Sendable {
     public let engineVersion: String
     public let summary: SMFMFSummary
     public let blob: Data
+    public let blobSHA256: String?
     public let analyzedAt: Date
     public init(sourceSHA256: String, engineVersion: String, blob: Data) throws {
         self.sourceSHA256 = sourceSHA256; self.engineVersion = engineVersion
         self.summary = try SMFMFSummary.parse(blob); self.blob = blob; self.analyzedAt = Date()
+        self.blobSHA256 = Self.digest(blob)
     }
+    public var hasValidBlobChecksum: Bool {
+        guard let blobSHA256, Self.digest(blob) == blobSHA256 else { return false }
+        return (try? SMFMFSummary.parse(blob)) == summary
+    }
+    private static func digest(_ data: Data) -> String { SHA256.hash(data: data).map { String(format: "%02x", $0) }.joined() }
 }
