@@ -32,6 +32,8 @@ with open(sys.argv[1], 'w') as f:
     json.dump(dict(fixtures=os.environ['NEGI_VERIFICATION_FIXTURES'], report=os.environ['NEGI_VERIFICATION_REPORT'], dataDirectory=os.environ['LMP_DATA_DIR'], realSamples=os.environ.get('NEGI_REAL_SAMPLES'), realReport=os.environ.get('NEGI_REAL_REPORT')),f)
 PY
 fi
+# exFAT stores metadata as physical AppleDouble files; omit them from generated bundles.
+find "$LMP_APP" -type f -name '._*' -delete
 # iCloud/Finder metadata can prevent ad-hoc signing. Strip only these metadata attributes on our generated bundle.
 xattr -dr com.apple.FinderInfo "$LMP_APP" 2>/dev/null || true
 xattr -dr com.apple.ResourceFork "$LMP_APP" 2>/dev/null || true
