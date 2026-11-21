@@ -101,6 +101,8 @@ public sealed class LanHost : IAsyncDisposable
     private readonly IMediaLibrary library;
     private readonly X509Certificate2 certificate;
     private readonly SemaphoreSlim clients = new(24);
+    private readonly SemaphoreSlim pairingUpdates = new(1);
+    private volatile bool stopping;
     private readonly ConcurrentDictionary<long, TcpClient> active = new();
     private readonly ConcurrentDictionary<long, string> owners = new();
     private CancellationTokenSource? lifetime; private TcpListener? listener; private Task? accept;
@@ -112,12 +114,21 @@ public sealed class LanHost : IAsyncDisposable
     public PairingStore Pairings { get; } = new();
     public ConcurrentDictionary<string, DeviceState> Outputs { get; } = new();
     public Func<byte[], Task>? PersistPairings { get; set; }
-    public async Task RevokeAsync(string device, long exceptConnection = -1)
+    public Task RevokeAsync(string device, long exceptConnection = -1) => RevokeAsync(device, exceptConnection, CancellationToken.None);
+    private async Task RevokeAsync(string device, long exceptConnection, CancellationToken cancel)
     {
-        Pairings.Revoke(device); Outputs.TryRemove(device, out _);
-        foreach (var c in owners.Where(c => c.Value == device && c.Key != exceptConnection))
-            if (active.TryGetValue(c.Key, out var tcp)) tcp.Dispose();
-        if (PersistPairings != null) await PersistPairings(Pairings.Save());
+        await pairingUpdates.WaitAsync(cancel);
+        try
+        {
+            if (stopping) throw new InvalidOperationException("The LAN host is stopping.");
+            cancel.ThrowIfCancellationRequested();
+            Pairings.Revoke(device);
+            Outputs.TryRemove(device, out _);
+            foreach (var connection in owners.Where(c => c.Value == device && c.Key != exceptConnection))
+                if (active.TryGetValue(connection.Key, out var tcp)) tcp.Dispose();
+            if (PersistPairings is { } persist) await persist(Pairings.Save());
+        }
+        finally { pairingUpdates.Release(); }
     }
     public LanHost(IMediaLibrary library, X509Certificate2 certificate, string serverID, string name)
     {
@@ -140,6 +151,7 @@ public sealed class LanHost : IAsyncDisposable
         if (!loopbackOnly) listener.Server.DualMode = true;
         listener.Start(24);
         Port = ((IPEndPoint)listener.LocalEndpoint).Port;
+        stopping = false;
         accept = AcceptAsync(lifetime.Token);
     }
     private async Task AcceptAsync(CancellationToken cancel)
@@ -185,15 +197,31 @@ public sealed class LanHost : IAsyncDisposable
         if (path == "/v1/pair")
         {
             if (request.Method != "POST" || !request.Headers.GetValueOrDefault("Content-Type", "").StartsWith("application/json")) throw new HttpFailure(400);
-            var pair = Pairings.Pair(WireJson.Decode<PairRequest>(request.Body));
-            if (PersistPairings != null) await PersistPairings(Pairings.Save());
-            return Reply.Json(new PairResponse(pair.Token, ServerID));
+            var pairRequest = WireJson.Decode<PairRequest>(request.Body);
+            await pairingUpdates.WaitAsync(cancel);
+            try
+            {
+                cancel.ThrowIfCancellationRequested();
+                if (stopping) throw new HttpFailure(503);
+                var pair = Pairings.Pair(pairRequest);
+                try
+                {
+                    if (PersistPairings is { } persist) await persist(Pairings.Save());
+                }
+                catch
+                {
+                    Pairings.Revoke(pair.Device.Id);
+                    throw;
+                }
+                return Reply.Json(new PairResponse(pair.Token, ServerID));
+            }
+            finally { pairingUpdates.Release(); }
         }
         string device = Pairings.Authorize(request.Headers.GetValueOrDefault("Authorization")) ?? throw new HttpFailure(401);
         owners[connection] = device;
         if (path == "/v1/device" && request.Method == "DELETE")
         {
-            await RevokeAsync(device, connection); return new(204, "application/json", []);
+            await RevokeAsync(device, connection, cancel); return new(204, "application/json", []);
         }
         if (path == "/v1/device/state" && request.Method == "POST")
         {
@@ -243,9 +271,13 @@ public sealed class LanHost : IAsyncDisposable
     }
     public async ValueTask DisposeAsync()
     {
+        stopping = true;
         Pairings.Close(); lifetime?.Cancel(); listener?.Stop();
         foreach (var c in active.Values) c.Dispose();
         if (accept != null) await accept;
+        // A replacement host will restore the same settings key. Wait for its last write first.
+        await pairingUpdates.WaitAsync();
+        pairingUpdates.Release();
         lifetime?.Dispose(); lifetime = null; listener = null;
     }
     private sealed record Reply(int Status, string Type, byte[] Body, long? Length = null, Dictionary<string, string>? Headers = null)

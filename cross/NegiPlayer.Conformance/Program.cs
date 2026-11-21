@@ -83,6 +83,66 @@ await TestAsync("TLS pin, PCM, artwork/LRC, readonly and revoke", async () => {
     Require(host.Outputs.Values.Single().EqEnabled, "device state");
     await client.RevokeAsync(); await RejectAsync(async () => await client.JsonAsync<ServerInfo>("/v1/info"));
 });
+await TestAsync("serial pairing writes preserve revocation", async () =>
+{
+    using var cert = LanHost.NewCertificate();
+    await using var host = new LanHost(new FixtureLibrary(), cert, "pairing-host", "Fixture");
+    var existing = host.Pairings.Pair(new(host.Pairings.Renew(), "Existing device"));
+    var started = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
+    var finishFirstSave = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
+    int writes = 0;
+    byte[]? saved = null;
+    host.PersistPairings = async bytes =>
+    {
+        if (Interlocked.Increment(ref writes) == 1)
+        {
+            started.SetResult();
+            await finishFirstSave.Task;
+        }
+        saved = bytes;
+    };
+    host.Start(0, loopbackOnly: true);
+    using var client = new LanClient($"https://127.0.0.1:{host.Port}", host.Fingerprint);
+    var pair = client.PairAsync(host.Pairings.Renew(), "New device");
+    Task revoke;
+    try
+    {
+        await started.Task.WaitAsync(TimeSpan.FromSeconds(10));
+        revoke = host.RevokeAsync(existing.Device.Id);
+        Require(Volatile.Read(ref writes) == 1, "revocation persistence overlapped the first save");
+    }
+    finally { finishFirstSave.TrySetResult(); }
+    var credentials = await pair.WaitAsync(TimeSpan.FromSeconds(10));
+    await revoke.WaitAsync(TimeSpan.FromSeconds(10));
+    var restored = new PairingStore();
+    restored.Restore(saved!);
+    Require(restored.Snapshot().Length == 1 && restored.Authorize("Bearer " + credentials.Token) != null,
+        "the saved snapshot does not match the host after revocation");
+});
+await TestAsync("pause during stream-info lookup persists through buffering", async () =>
+{
+    using var cert = LanHost.NewCertificate();
+    var library = new DelayedStreamInfo();
+    await using var host = new LanHost(library, cert, "playback-host", "Fixture");
+    host.Start(0, loopbackOnly: true);
+    using var client = new LanClient($"https://127.0.0.1:{host.Port}", host.Fingerprint);
+    await client.PairAsync(host.Pairings.Renew(), "Test");
+    var sink = new RecordingSink();
+    await using var player = new StreamingPlayer(sink);
+    var track = library.Tracks(0, 1, "", null).Tracks.Single();
+    var load = player.LoadAsync(client, track);
+    try
+    {
+        await library.InfoRequested.Task.WaitAsync(TimeSpan.FromSeconds(10));
+        player.Pause();
+    }
+    finally { library.DeliverInfo.TrySetResult(); }
+    await load.WaitAsync(TimeSpan.FromSeconds(10));
+    await sink.BufferReceived.Task.WaitAsync(TimeSpan.FromSeconds(10));
+    Require(!player.Playing && !sink.Started, "audio started after a pause during loading");
+    player.Resume();
+    Require(player.Playing && sink.Started, "manual resume after buffering did not start audio");
+});
 await TestAsync("large TLS response and pagination", async () => {
     using var cert = LanHost.NewCertificate(); await using var host = new LanHost(new FixtureLibrary(14000), cert, "large-host", "Fixture"); host.Start(0);
     using var client = new LanClient($"https://127.0.0.1:{host.Port}", host.Fingerprint); await client.PairAsync(host.Pairings.Renew(), "Test");

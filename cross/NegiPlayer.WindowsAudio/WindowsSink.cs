@@ -21,12 +21,33 @@ public sealed class WindowsSink : IAudioSink, IMMNotificationClient
     public string OutputDescription => deviceName.Length == 0 ? "WASAPI shared" :
         $"{deviceName} · WASAPI shared · mix {mixRate} Hz";
     public double ClientRate => output?.OutputWaveFormat.SampleRate ?? 0;
-    public long PlayedFrames { get { lock (gate) { if (output == null || info == null) return 0;
-        if (removed) return lastPlayed;
-        try { lastPlayed = Math.Clamp((long)(output.GetPosition() * info.SampleRate / output.OutputWaveFormat.AverageBytesPerSecond), 0, submitted); }
-        catch (Exception e) when (e is System.Runtime.InteropServices.COMException or InvalidOperationException) { removed = true; OutputRemoved?.Invoke(); }
-        return lastPlayed; } } }
-    public long QueuedFrames { get { lock (gate) return Math.Max(0, submitted - PlayedFrames); } }
+    public long PlayedFrames => ReadFrames(queued: false);
+    public long QueuedFrames => ReadFrames(queued: true);
+    private long ReadFrames(bool queued)
+    {
+        bool notify = false;
+        long frames;
+        lock (gate)
+        {
+            if (output == null || info == null) return 0;
+            if (!removed)
+            {
+                try
+                {
+                    lastPlayed = Math.Clamp((long)(output.GetPosition() * info.SampleRate / output.OutputWaveFormat.AverageBytesPerSecond), 0, submitted);
+                }
+                catch (Exception e) when (e is System.Runtime.InteropServices.COMException or InvalidOperationException)
+                {
+                    removed = true;
+                    notify = true;
+                }
+            }
+            frames = queued ? Math.Max(0, submitted - lastPlayed) : lastPlayed;
+        }
+        // Listeners may pause the player, which acquires its transport lock before calling the sink.
+        if (notify) OutputRemoved?.Invoke();
+        return frames;
+    }
     public void Configure(StreamInfo format, string preferredOutput)
     {
         lock (gate)
@@ -39,7 +60,12 @@ public sealed class WindowsSink : IAudioSink, IMMNotificationClient
             output = new WasapiOut(device, AudioClientShareMode.Shared, true, 100);
             output.Init(new VolumeProvider(buffer, () => volume)); submitted = lastPlayed = 0;
             deviceName = device.FriendlyName; deviceID = device.ID; mixRate = device.AudioClient.MixFormat.SampleRate;
-            output.PlaybackStopped += (_, e) => { if (e.Exception != null) { removed = true; OutputRemoved?.Invoke(); } };
+            output.PlaybackStopped += (sender, e) =>
+            {
+                // WASAPI can invoke this on the worker joined by WasapiOut.Stop().
+                if (e.Exception != null)
+                    ThreadPool.QueueUserWorkItem(_ => MarkRemoved(() => ReferenceEquals(sender, output)));
+            };
         }
     }
     public Task WriteAsync(float[] samples, CancellationToken cancel)
@@ -53,8 +79,23 @@ public sealed class WindowsSink : IAudioSink, IMMNotificationClient
     public void Pause() { lock (gate) { try { output?.Pause(); } catch (System.Runtime.InteropServices.COMException) { removed = true; } } }
     public void Volume(double value) => volume = double.IsFinite(value) ? Math.Clamp(value, 0, 1) : 0;
     public void Dispose() { devices.UnregisterEndpointNotificationCallback(this); lock (gate) { output?.Dispose(); device?.Dispose(); devices.Dispose(); } }
-    public void OnDeviceStateChanged(string id, NativeDeviceState state) { if (id == deviceID && state != NativeDeviceState.Active) { removed = true; OutputRemoved?.Invoke(); } }
-    public void OnDeviceRemoved(string id) { if (id == deviceID) { removed = true; OutputRemoved?.Invoke(); } }
+    private void MarkRemoved(Func<bool> matchesCurrentOutput)
+    {
+        lock (gate)
+        {
+            if (removed || !matchesCurrentOutput()) return;
+            removed = true;
+        }
+        OutputRemoved?.Invoke();
+    }
+    public void OnDeviceStateChanged(string id, NativeDeviceState state)
+    {
+        if (state != NativeDeviceState.Active) OnDeviceRemoved(id);
+    }
+    public void OnDeviceRemoved(string id)
+    {
+        ThreadPool.QueueUserWorkItem(_ => MarkRemoved(() => id == deviceID));
+    }
     public void OnDefaultDeviceChanged(DataFlow flow, Role role, string id) { }
     public void OnDeviceAdded(string id) { }
     public void OnPropertyValueChanged(string id, PropertyKey key) { }

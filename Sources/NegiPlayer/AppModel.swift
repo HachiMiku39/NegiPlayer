@@ -28,7 +28,7 @@ import MusicEnrichment
     private var browseFiles: [MediaFile] = []
     private var changingBrowse = false
     private(set) var codecChoices: [String] = []
-    @Published var scanning = false
+    @Published private(set) var scanning = false
     @Published var scanMessage = ""
     @Published var notice = ""
     @Published var error: String?
@@ -60,7 +60,8 @@ import MusicEnrichment
     let database: LibraryDatabase?
     let databaseURL: URL
     private var access: [String: (URL, Bool)] = [:]
-    private var scanTask: Task<[MediaFile], Error>?
+    private var libraryRestoreTask: Task<Void, Never>?
+    private var scanTask: Task<Void, Never>?
     private var saveTask: Task<Void, Never>?
     private var draftLoadTask: Task<Void, Never>?
     private var undoStack: [LyricDocument] = []
@@ -140,13 +141,16 @@ import MusicEnrichment
                   !(NSApp.keyWindow?.firstResponder is NSTextField) else { return event }
             self.stamp(eventUptime: event.timestamp, advance: true); return nil
         }
-        Task { await restore() }
+        libraryRestoreTask = Task {
+            await restore()
+            libraryRestoreTask = nil
+        }
     }
     deinit {
         if let keyboardMonitor { NSEvent.removeMonitor(keyboardMonitor) }
         for (_, entry) in access where entry.1 { entry.0.stopAccessingSecurityScopedResource() }
     }
-    func restore() async {
+    private func restore() async {
         guard let database else { return }
         do {
             roots = try await database.roots()
@@ -178,47 +182,69 @@ import MusicEnrichment
         panel.allowsMultipleSelection = false; panel.prompt = L(rootID == nil ? "引用音乐文件夹" : "重新授权")
         panel.message = L("只读引用：音乐保留原位，不复制、不改写。索引与歌词草稿保存在本机。")
         guard panel.runModal() == .OK, let url = panel.url else { return }
-        do {
+        startScan {
             let bookmark = try url.bookmarkData(options: [.withSecurityScope, .securityScopeAllowOnlyReadAccess], includingResourceValuesForKeys: nil, relativeTo: nil)
-            let id = rootID ?? roots.first(where: { $0.path == url.path })?.id ?? UUID().uuidString
-            if let entry = access[id], entry.1 { entry.0.stopAccessingSecurityScopedResource() }
-            let started = url.startAccessingSecurityScopedResource()
-            access[id] = (url, started)
+            let id = rootID ?? self.roots.first(where: { $0.path == url.path })?.id ?? UUID().uuidString
             let root = LibraryRoot(id: id, path: url.path, bookmark: bookmark)
-            Task {
-                do {
-                    try await database.save(root: root); roots = try await database.roots()
-                    await scan(root, at: url)
-                } catch { self.error = error.localizedDescription }
-            }
-        } catch { self.error = error.localizedDescription }
+            try await database.save(root: root)
+            if let entry = self.access[id], entry.1 { entry.0.stopAccessingSecurityScopedResource() }
+            self.access[id] = (url, url.startAccessingSecurityScopedResource())
+            self.roots = try await database.roots()
+            try await self.scan(root, at: url)
+        }
     }
     func rescan() {
-        guard !scanning else { return }
-        Task {
-            for root in roots {
-                if let url = access[root.id]?.0 { await scan(root, at: url) }
+        startScan {
+            for root in self.roots {
+                try Task.checkCancellation()
+                if let url = self.access[root.id]?.0 { try await self.scan(root, at: url) }
             }
         }
     }
-    private func scan(_ root: LibraryRoot, at url: URL) async {
+    private func startScan(_ operation: @escaping @MainActor () async throws -> Void) {
+        guard !scanning, database != nil else { return }
+        scanning = true
+        scanMessage = "正在准备扫描…"
+        scanTask = Task {
+            defer { scanTask = nil; scanning = false }
+            await libraryRestoreTask?.value
+            do {
+                try Task.checkCancellation()
+                try await operation()
+            } catch is CancellationError {
+                notice = "扫描已取消，已有曲库保留"
+            } catch {
+                self.error = error.localizedDescription
+            }
+        }
+    }
+    private func scan(_ root: LibraryRoot, at url: URL) async throws {
         guard let database else { return }
-        scanning = true; scanMessage = "正在扫描 \(url.lastPathComponent)"; defer { scanning = false; scanTask = nil }
+        try Task.checkCancellation()
+        scanMessage = "正在扫描 \(url.lastPathComponent)"
         do {
             let previous = try await database.files(rootID: root.id, applyingOverrides: false)
-            let task = Task.detached(priority: .utility) { [self] in
+            try Task.checkCancellation()
+            let worker = Task.detached(priority: .utility) { [self] in
                 try await LibraryScanner.scan(root: root, url: url, previous: previous) { n, path in
+                    guard !Task.isCancelled else { return }
                     await reportScanProgress(n, path)
                 }
             }
-            scanTask = task
-            let result = try await task.value
+            let result = try await withTaskCancellationHandler {
+                try await worker.value
+            } onCancel: {
+                worker.cancel()
+            }
+            try Task.checkCancellation()
             try await database.commitScan(rootID: root.id, files: result)
             files = try await database.files(); artworkRevision += 1
             notice = "已扫描 \(result.filter { !$0.isDiscImage }.count) 个音乐文件、\(result.filter(\.isDiscImage).count) 个镜像"
             var updated = root; updated.status = "在线"; try await database.save(root: updated); roots = try await database.roots()
-        } catch is CancellationError { notice = "扫描已取消，已有曲库保留" }
-        catch {
+        } catch is CancellationError {
+            throw CancellationError()
+        } catch {
+            try Task.checkCancellation()
             if !FileManager.default.fileExists(atPath: url.path) {
                 try? await database.setOffline(rootID: root.id)
                 var offline = root; offline.status = "磁盘离线"; try? await database.save(root: offline)

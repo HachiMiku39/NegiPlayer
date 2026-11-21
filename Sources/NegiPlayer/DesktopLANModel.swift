@@ -40,6 +40,7 @@ private enum DesktopConnectionStore {
     var onPlay:(()->Void)?
     private var client:PinnedSession?, credentials:LANCredentials?
     private var assetTask:Task<Void,Never>?, queryTask:Task<Void,Never>?, heartbeat:Task<Void,Never>?
+    private var connectionAttempt: UUID?
     private var connectionGeneration=UUID(), browseGeneration=UUID()
     private var restored=false
     private let albumCovers=NSCache<NSString,NSImage>()
@@ -53,47 +54,104 @@ private enum DesktopConnectionStore {
     }
     init() { player.onEnded = { [weak self] in self?.next(1) } }
     func restore() async {
-        guard !restored else { return }; restored=true
-        do { if let saved=try DesktopConnectionStore.load() { try await connect(saved) } } catch { self.error=error.localizedDescription }
+        guard !restored, connectionAttempt == nil, client == nil else { return }
+        restored = true
+        let attempt = UUID()
+        connectionAttempt = attempt
+        defer { if connectionAttempt == attempt { connectionAttempt = nil } }
+        do {
+            if let saved = try DesktopConnectionStore.load() { try await connect(saved, attempt: attempt) }
+        } catch {
+            if !Task.isCancelled, connectionAttempt == attempt { self.error = error.localizedDescription }
+        }
     }
     func pair(address:String,fingerprint:String,code:String,confirmed:Bool) async {
         guard !loading, confirmed, code.count==8,code.allSatisfy({$0.isASCII && $0.isNumber}) else { return }
-        loading=true; defer { loading=false }
+        let attempt = UUID()
+        connectionAttempt = attempt
+        loading = true
+        defer {
+            if connectionAttempt == attempt {
+                connectionAttempt = nil
+                loading = false
+            }
+        }
         do {
             let base=try NegiLAN.baseURL(address), session=try PinnedSession(baseURL:base,fingerprint:fingerprint.lowercased())
             defer { session.session.invalidateAndCancel() }
             let pair=try await session.pair(code:code,name:(Host.current().localizedName ?? "macOS")+" · Playback")
+            try Task.checkCancellation()
+            guard connectionAttempt == attempt else { return }
             let saved=LANCredentials(baseURL:base,fingerprint:fingerprint.lowercased(),token:pair.token,serverID:pair.serverID)
-            try DesktopConnectionStore.save(saved); try await connect(saved)
-        } catch { self.error=error.localizedDescription }
+            try await connect(saved, attempt: attempt, save: true)
+        } catch {
+            if !Task.isCancelled, connectionAttempt == attempt { self.error = error.localizedDescription }
+        }
     }
-    private func connect(_ saved:LANCredentials) async throws {
-        let session=try PinnedSession(baseURL:saved.baseURL,fingerprint:saved.fingerprint)
-        do {
-            let info=try await session.json("/v1/info",as:ServerInfo.self,token:saved.token)
-            guard info.id==saved.serverID,info.protocolVersion==1 else { throw LANError.message("主机标识改变，请重新配对") }
-            connectionGeneration=UUID(); albumCovers.removeAllObjects(); assetTask?.cancel(); player.stop(); client?.session.invalidateAndCancel(); client=session; credentials=saved
-            hostName=info.name; connected=true; selectedAlbum=nil; query=""; try await refresh()
-            heartbeat?.cancel(); heartbeat=Task { [weak self] in while !Task.isCancelled { await self?.report(); do { try await Task.sleep(nanoseconds:10_000_000_000) } catch { break } } }
-        } catch { session.session.invalidateAndCancel(); throw error }
+    private func connect(_ saved: LANCredentials, attempt: UUID, save: Bool = false) async throws {
+        let session = try PinnedSession(baseURL: saved.baseURL, fingerprint: saved.fingerprint)
+        var installed = false
+        defer { if !installed { session.session.invalidateAndCancel() } }
+        let info = try await session.json("/v1/info", as: ServerInfo.self, token: saved.token)
+        try Task.checkCancellation()
+        guard connectionAttempt == attempt else { return }
+        guard info.id == saved.serverID, info.protocolVersion == NegiLAN.version else { throw LANError.message("主机标识改变，请重新配对") }
+        if save { try DesktopConnectionStore.save(saved) }
+        client?.session.invalidateAndCancel()
+        clearConnection()
+        client = session
+        credentials = saved
+        installed = true
+        hostName = info.name
+        connected = true
+        heartbeat = Task { [weak self] in
+            while !Task.isCancelled {
+                await self?.report()
+                do { try await Task.sleep(nanoseconds: 10_000_000_000) } catch { break }
+            }
+        }
+        try await refresh()
     }
     func refresh() async throws {
-        guard let client,let credentials else { return }; let id=connectionGeneration
-        let page=try await client.json("/v1/albums",as:AlbumPage.self,token:credentials.token)
-        guard id==connectionGeneration else { return }; albums=page.albums; await search()
+        guard let client, let credentials else { return }
+        let connection = connectionGeneration
+        do {
+            let page = try await client.json("/v1/albums", as: AlbumPage.self, token: credentials.token)
+            guard !Task.isCancelled, connection == connectionGeneration else { return }
+            albums = page.albums
+            await search()
+        } catch {
+            if !Task.isCancelled, connection == connectionGeneration { throw error }
+        }
     }
     func search() async {
-        guard let client,let credentials else { return }; browseGeneration=UUID(); let id=browseGeneration
-        loading=true; defer { if id==browseGeneration { loading=false } }
-        do { let page=try await client.json(trackPath(offset:0),as:TrackPage.self,token:credentials.token)
-            guard id==browseGeneration else { return }; tracks=page.tracks; total=page.total
-        } catch { if id==browseGeneration { self.error=error.localizedDescription } }
+        guard !Task.isCancelled, let client, let credentials else { return }
+        let id = UUID()
+        browseGeneration = id
+        let connection = connectionGeneration
+        loading = true
+        defer { if id == browseGeneration, connection == connectionGeneration { loading = false } }
+        do {
+            let page = try await client.json(trackPath(offset: 0), as: TrackPage.self, token: credentials.token)
+            guard !Task.isCancelled, id == browseGeneration, connection == connectionGeneration else { return }
+            tracks = page.tracks
+            total = page.total
+        } catch {
+            if !Task.isCancelled, id == browseGeneration, connection == connectionGeneration { self.error = error.localizedDescription }
+        }
     }
     func more() async {
-        guard !loading, tracks.count<total, let client,let credentials else { return }; let id=browseGeneration; loading=true; defer { loading=false }
-        do { let page=try await client.json(trackPath(offset:tracks.count),as:TrackPage.self,token:credentials.token)
-            guard id==browseGeneration else { return }; tracks+=page.tracks
-        } catch { self.error=error.localizedDescription }
+        guard !loading, tracks.count < total, let client, let credentials else { return }
+        let id = browseGeneration, connection = connectionGeneration
+        loading = true
+        defer { if id == browseGeneration, connection == connectionGeneration { loading = false } }
+        do {
+            let page = try await client.json(trackPath(offset: tracks.count), as: TrackPage.self, token: credentials.token)
+            guard !Task.isCancelled, id == browseGeneration, connection == connectionGeneration else { return }
+            tracks += page.tracks
+        } catch {
+            if !Task.isCancelled, id == browseGeneration, connection == connectionGeneration { self.error = error.localizedDescription }
+        }
     }
     private func trackPath(offset:Int) -> String {
         var c=URLComponents(); c.path="/v1/tracks"; c.queryItems=[.init(name:"limit",value:"200"),.init(name:"offset",value:String(offset)),.init(name:"q",value:String(query.prefix(200)))]
@@ -113,10 +171,35 @@ private enum DesktopConnectionStore {
     }
     func next(_ step:Int) { let queue=tracks.filter(\.playable); guard let id=player.track?.id,let index=queue.firstIndex(where:{$0.id==id}),queue.indices.contains(index+step) else { return }; play(queue[index+step]) }
     func disconnect() async {
-        if let client,let credentials { _=try? await client.request("/v1/device",method:"DELETE",token:credentials.token) }
-        do { try DesktopConnectionStore.remove() } catch { self.error=error.localizedDescription; return }
-        connectionGeneration=UUID(); browseGeneration=UUID(); albumCovers.removeAllObjects(); player.stop(); queryTask?.cancel(); assetTask?.cancel(); heartbeat?.cancel()
-        client?.session.invalidateAndCancel(); client=nil; credentials=nil; connected=false; albums=[]; tracks=[]; cover=nil; lyrics=[]
+        do { try DesktopConnectionStore.remove() } catch { self.error = error.localizedDescription; return }
+        let previousClient = client, previousCredentials = credentials
+        connectionAttempt = nil
+        clearConnection()
+        if let previousClient, let previousCredentials {
+            defer { previousClient.session.invalidateAndCancel() }
+            _ = try? await previousClient.request("/v1/device", method: "DELETE", token: previousCredentials.token)
+        }
+    }
+    private func clearConnection() {
+        connectionGeneration = UUID()
+        browseGeneration = UUID()
+        albumCovers.removeAllObjects()
+        player.stop()
+        queryTask?.cancel()
+        assetTask?.cancel()
+        heartbeat?.cancel()
+        client = nil
+        credentials = nil
+        connected = false
+        loading = false
+        hostName = ""
+        selectedAlbum = nil
+        query = ""
+        albums = []
+        tracks = []
+        total = 0
+        cover = nil
+        lyrics = []
     }
     private func report() async {
         guard let client,let credentials else { return }

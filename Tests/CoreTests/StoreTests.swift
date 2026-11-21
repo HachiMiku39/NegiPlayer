@@ -32,6 +32,27 @@ final class StoreTests: XCTestCase {
         try await db.commitScan(rootID: root.id, files: [f])
         let again = try await db.files(); XCTAssertEqual(again[0].id, f.id); XCTAssertTrue(again[0].available)
     }
+    func testCancelledScanResultCannotChangeAvailability() async throws {
+        let folder = try temporary(); defer { try? FileManager.default.removeItem(at: folder) }
+        let db = try LibraryDatabase(url: folder.appendingPathComponent("Library.sqlite"))
+        let root = LibraryRoot(path: folder.path, bookmark: Data())
+        try await db.save(root: root)
+        let existing = MediaFile(rootID: root.id, relativePath: "Existing.flac", title: "Existing")
+        try await db.commitScan(rootID: root.id, files: [existing])
+
+        let cancelled = Task {
+            withUnsafeCurrentTask { $0?.cancel() }
+            try await db.commitScan(rootID: root.id, files: [])
+        }
+        do {
+            try await cancelled.value
+            XCTFail("A cancelled result must not mark existing tracks missing")
+        } catch is CancellationError {}
+
+        let files = try await db.files(rootID: root.id)
+        XCTAssertEqual(files.map(\.id), [existing.id])
+        XCTAssertEqual(files.first?.available, true)
+    }
     func testActualWAVIncrementalScanAndCancellation() async throws {
         let folder = try temporary(); defer { try? FileManager.default.removeItem(at: folder) }
         let url = folder.appendingPathComponent("真实 WAV.wav")

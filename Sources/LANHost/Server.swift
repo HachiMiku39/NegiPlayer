@@ -6,6 +6,7 @@ import LyricCore
 import LANCore
 
 public struct LANHostState: Sendable {
+    public var starting = false
     public var running=false; public var port:UInt16=0; public var fingerprint=""; public var code=""; public var message="服务已关闭"
     public var devices:[PairedDevice]=[]; public var outputs:[String:MobileDeviceState]=[:]
     public init() {}
@@ -21,7 +22,12 @@ private struct Reply {
 }
 public actor LANServer {
     private let directory:URL; private let pairing:PairingStore; private let queue=DispatchQueue(label:"NegiPlayer.LAN")
-    private var listener:NWListener?; private var identity:LANIdentity?; private var entries:[String:CatalogEntry]=[:]
+    private var listener: NWListener?
+    private var listenerGeneration: UUID?
+    private var stopping = false
+    private var identity: LANIdentity?
+    private var identityTask: Task<LANIdentity, Error>?
+    private var entries:[String:CatalogEntry]=[:]
     private var artwork:ArtworkRepository; private var revision=UUID().uuidString
     private var sortedTracks:[RemoteTrack]=[]
     private var connections:[UUID:NWConnection]=[:]; private var connectionDevices:[UUID:String]=[:]
@@ -31,38 +37,105 @@ public actor LANServer {
         pairing=try PairingStore(url:directory.appendingPathComponent("paired-devices.json"))
     }
     public func update(_ values:[CatalogEntry]) { entries=Dictionary(values.map{($0.media.id,$0)},uniquingKeysWith:{ first,_ in first }); sortedTracks=entries.values.map(\.remote).sorted { ($0.album,$0.discNumber,$0.trackNumber,$0.title,$0.id)<($1.album,$1.discNumber,$1.trackNumber,$1.title,$1.id) }; revision=UUID().uuidString }
-    public func snapshot() async -> LANHostState { state.devices=await pairing.list(); state.code=await pairing.currentCode(); return state }
+    public func snapshot() async -> LANHostState {
+        let generation = listenerGeneration
+        let devices = await pairing.list()
+        let code = await pairing.currentCode()
+        var snapshot = state
+        snapshot.devices = devices
+        snapshot.code = generation == listenerGeneration && snapshot.running ? code : ""
+        return snapshot
+    }
     public func start(port:UInt16=40439,advertise:Bool=true) async throws {
-        guard listener==nil else { return }
-        let directory=self.directory
-        let id=try await Task.detached(priority:.utility) { try LANIdentity.load(directory:directory) }.value
-        identity=id
+        guard !stopping, listenerGeneration == nil else { return }
+        let generation = UUID()
+        listenerGeneration = generation
+        state.starting = true
+        state.message = "正在启动 HTTPS 服务…"
+        defer {
+            if listenerGeneration == generation, listener == nil {
+                listenerGeneration = nil
+                state = LANHostState()
+            }
+        }
+        let id = try await loadIdentity()
+        try Task.checkCancellation()
+        guard listenerGeneration == generation else { return }
         let tls=NWProtocolTLS.Options(); sec_protocol_options_set_local_identity(tls.securityProtocolOptions,sec_identity_create(id.identity)!)
         sec_protocol_options_set_min_tls_protocol_version(tls.securityProtocolOptions,.TLSv12)
         let parameters=NWParameters(tls:tls); parameters.prohibitedInterfaceTypes=[.cellular]; parameters.includePeerToPeer=false
         let nw=try NWListener(using:parameters,on:port==0 ? .any : NWEndpoint.Port(rawValue:port)!)
         if advertise { nw.service = .init(name:name,type:NegiLAN.serviceType,domain:"local.",txtRecord:NetService.data(fromTXTRecord:["fp":Data(id.fingerprint.utf8),"id":Data(id.serverID.utf8),"v":Data("1".utf8)])) }
-        listener=nw; state.fingerprint=id.fingerprint; state.message="正在启动 HTTPS 服务…"
-        nw.stateUpdateHandler={ [weak self] s in Task { await self?.listenerState(s,port:nw.port?.rawValue ?? 0) } }
-        nw.newConnectionHandler={ [weak self] c in Task { await self?.accept(c) } }; nw.start(queue:queue)
+        listener = nw
+        state.fingerprint = id.fingerprint
+        nw.stateUpdateHandler = { [weak self, weak nw] event in
+            let port = nw?.port?.rawValue ?? 0
+            Task { await self?.listenerState(event, port: port, generation: generation) }
+        }
+        nw.newConnectionHandler = { [weak self] connection in
+            Task {
+                guard let self else { connection.cancel(); return }
+                await self.accept(connection, generation: generation)
+            }
+        }
+        nw.start(queue: queue)
     }
-    private func listenerState(_ s:NWListener.State,port:UInt16) {
-        switch s { case .ready: state.running=true; state.port=port; state.message="Mac 提供只读曲库与 PCM 流，音频由 iOS 处理"
-        case .failed: state.running=false; state.message="服务启动失败，请检查系统局域网权限和防火墙"; listener?.cancel(); listener=nil
-        case .cancelled: state.running=false
-        default: break }
+    private func loadIdentity() async throws -> LANIdentity {
+        if let identity { return identity }
+        if let identityTask { return try await identityTask.value }
+        let directory = self.directory
+        let work = Task.detached(priority: .utility) { try LANIdentity.load(directory: directory) }
+        identityTask = work
+        defer { identityTask = nil }
+        let result = try await work.value
+        identity = result
+        return result
+    }
+    private func listenerState(_ event: NWListener.State, port: UInt16, generation: UUID) {
+        guard generation == listenerGeneration else { return }
+        switch event {
+        case .ready:
+            state.starting = false
+            state.running = true
+            state.port = port
+            state.message = "Mac 提供只读曲库与 PCM 流，音频由 iOS 处理"
+        case .failed:
+            clearListener()
+            state.message = "服务启动失败，请检查系统局域网权限和防火墙"
+        case .cancelled:
+            clearListener()
+        default:
+            break
+        }
+    }
+    private func clearListener() {
+        listenerGeneration = nil
+        listener?.cancel()
+        listener = nil
+        for connection in connections.values { connection.cancel() }
+        connections.removeAll()
+        connectionDevices.removeAll()
+        state = LANHostState()
     }
     public func stop() async {
-        listener?.cancel(); listener=nil; for c in connections.values { c.cancel() }; connections.removeAll(); connectionDevices.removeAll()
-        await pairing.closePairing(); state=LANHostState()
+        guard !stopping else { return }
+        stopping = true
+        clearListener()
+        await pairing.closePairing()
+        stopping = false
     }
-    public func renewCode() async throws -> String { guard state.running else { throw LANError.message("请先开启局域网服务") }; state.code=try await pairing.renew(); return state.code }
+    public func renewCode() async throws -> String {
+        guard state.running, let generation = listenerGeneration else { throw LANError.message("请先开启局域网服务") }
+        let code = try await pairing.renew()
+        guard generation == listenerGeneration else { throw CancellationError() }
+        return code
+    }
     public func revoke(_ id:String) async throws {
         try await pairing.revoke(id); state.outputs.removeValue(forKey:id)
         for (key,device) in connectionDevices where device==id { connections[key]?.cancel() }
     }
-    private func accept(_ c:NWConnection) {
-        guard connections.count<24, case .hostPort(let host,_) = c.endpoint, NegiLAN.localAddress(String(describing:host)) else { c.cancel(); return }
+    private func accept(_ c:NWConnection, generation: UUID) {
+        guard generation == listenerGeneration, connections.count<24, case .hostPort(let host,_) = c.endpoint, NegiLAN.localAddress(String(describing:host)) else { c.cancel(); return }
         let key=UUID(); connections[key]=c; c.start(queue:queue)
         Task {
             let timeout=Task { try? await Task.sleep(nanoseconds:25_000_000_000); if !Task.isCancelled { c.cancel() } }
@@ -74,6 +147,7 @@ public actor LANServer {
                     guard data.count<=36864 else { throw LANError.status(413) }; request=try HTTPRequest.parse(data)
                 }
                 let r=request!; let response=try await route(r,key:key)
+                guard connections[key] != nil else { return }
                 try await send(c,response.bytes(head:r.method=="HEAD"))
                 // A send completion means the stack accepted the bytes, not that the peer received them.
                 // The final message closes our write side; keep the connection until the peer closes
@@ -98,6 +172,7 @@ public actor LANServer {
     }
     private func json<T:Encodable>(_ value:T) throws -> Reply { .init(body:try JSONEncoder().encode(value)) }
     private func route(_ r:HTTPRequest,key:UUID) async throws -> Reply {
+        guard connections[key] != nil else { throw CancellationError() }
         guard let components=r.components else { throw LANError.status(400) }
         let path=components.path
         if path=="/v1/pair" {
@@ -106,6 +181,7 @@ public actor LANServer {
             return try json(PairResponse(token:token,serverID:identity.serverID))
         }
         guard let device=await pairing.authorize(r.headers["authorization"]) else { throw LANError.status(401) }
+        guard connections[key] != nil else { throw CancellationError() }
         connectionDevices[key]=device
         if path=="/v1/device",r.method=="DELETE" {
             try await pairing.revoke(device); state.outputs.removeValue(forKey:device)

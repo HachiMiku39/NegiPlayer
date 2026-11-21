@@ -11,7 +11,8 @@ import LANCore
     @Published var track:RemoteTrack?
     @Published var position=0.0
     @Published var duration=0.0
-    @Published var playing=false
+    // While buffering, represents the user's intent to play once audio is ready.
+    @Published private(set) var playing=false
     @Published var buffering=false
     @Published var output="尚未启用音频"
     @Published var outputRate=0.0
@@ -32,7 +33,8 @@ import LANCore
     private var token=""
     private var timer:Timer?
     private var observers:[NSObjectProtocol]=[]
-    private var configuredRoute=""
+    private var configuredRoute: String?
+    private var requestedUSBOutput: String?
     private var remoteTargets:[(MPRemoteCommand,Any)]=[]
     init() {
         if let data=UserDefaults.standard.data(forKey:"listening-settings"), let p=try? JSONDecoder().decode(PlaybackPreferences.self,from:data) { preferences=p.sanitized() }
@@ -57,12 +59,21 @@ import LANCore
     }
     func load(_ track:RemoteTrack,client:PinnedSession,token:String) {
         stop(); self.track=track; self.client=client; self.token=token; duration=track.duration; error=nil; buffering=true
+        updateRoute()
+        requestPlayback()
+        updateNowPlaying()
         let id=generation
         streamTask=Task {
             do {
                 let format=try await client.json("/v1/tracks/\(track.id)/stream-info",as:StreamInfo.self,token:token); try format.validate()
                 try Task.checkCancellation(); guard generation==id else { return }; info=format; duration=Double(format.frames)/format.sampleRate
-                try configure(format); playing=true; begin(at:0)
+                guard playing, checkRequestedOutput() else {
+                    buffering=false
+                    updateNowPlaying()
+                    return
+                }
+                try configure(format)
+                begin(at:0)
             } catch is CancellationError {} catch { if generation==id { fail(error) } }
         }
     }
@@ -71,6 +82,7 @@ import LANCore
         try session.setCategory(.playback,mode:.default,options:[])
         try session.setPreferredSampleRate(preferredRate>0 ? preferredRate : info.sampleRate)
         try session.setActive(true)
+        configuredRoute=nil
         engine.stop(); node.stop(); engine=AVAudioEngine(); node=AVAudioPlayerNode(); eq=AVAudioUnitEQ(numberOfBands:10); level=PCMLevelControl()
         guard let format=AVAudioFormat(commonFormat:.pcmFormatFloat32,sampleRate:info.sampleRate,channels:AVAudioChannelCount(info.channels),interleaved:false) else { throw LANError.message("无法创建 iOS 音频格式") }
         engine.attach(node); engine.attach(eq)
@@ -114,9 +126,20 @@ import LANCore
                     if node.isPlaying, let clock=clockFrame(), clock>=scheduledEnd, scheduledEnd>startFrame { node.stop(); startFrame=next }
                     next+=frames; scheduledEnd=next; let last=next==info.frames
                     node.scheduleBuffer(buffer,completionCallbackType:.dataPlayedBack) { [weak self] _ in
-                        if last { Task { @MainActor in guard let self, self.generation==id else { return }; self.position=self.duration; self.playing=false; self.buffering=false; self.updateNowPlaying(); self.onProgress?(self.position,false); self.onEnded?() } }
+                        guard last else { return }
+                        Task { @MainActor in
+                            guard let self, self.generation==id else { return }
+                            let shouldAdvance = self.playing && self.checkRequestedOutput()
+                            self.position=self.duration
+                            self.playing=false
+                            self.buffering=false
+                            self.updateNowPlaying()
+                            self.onProgress?(self.position,false)
+                            if shouldAdvance { self.onEnded?() }
+                        }
                     }
-                    buffering=false; if playing && !node.isPlaying { node.play() }
+                    buffering=false
+                    if playing, !node.isPlaying, checkRequestedOutput() { node.play() }
                 }
             } catch is CancellationError {} catch { if generation==id { fail(error) } }
         }
@@ -128,14 +151,45 @@ import LANCore
         if let info, playing { position=min(duration,Double(playedFrame())/info.sampleRate); if playedFrame()>=scheduledEnd, scheduledEnd<info.frames { buffering=true } }
         onProgress?(position,playing && !buffering); updateNowPlaying()
     }
-    func pause() { if info != nil { position=Double(playedFrame())/info!.sampleRate }; node.pause(); playing=false; updateNowPlaying(); onProgress?(position,false) }
+    func pause() {
+        if let info, configuredRoute != nil {
+            position=Double(playedFrame())/info.sampleRate
+            node.pause()
+        }
+        playing=false
+        updateNowPlaying()
+        onProgress?(position,false)
+    }
     func resume() {
-        guard info != nil else { return }; if position>=duration { playing=true; begin(at:0); return }
-        do { try AVAudioSession.sharedInstance().setActive(true); if !engine.isRunning { try engine.start() }; playing=true; node.play(); updateNowPlaying() } catch { fail(error) }
+        guard let info else {
+            if track != nil, buffering { requestPlayback() }
+            return
+        }
+        let at = position >= duration ? 0 : position
+        requestPlayback()
+        do {
+            if configuredRoute != routeSignature() {
+                try configure(info)
+                begin(at:at)
+            } else if position >= duration {
+                begin(at:0)
+            } else {
+                try AVAudioSession.sharedInstance().setActive(true)
+                if !engine.isRunning { try engine.start() }
+                if checkRequestedOutput() { node.play() }
+                updateNowPlaying()
+            }
+        } catch { fail(error) }
     }
     func toggle() { playing ? pause() : resume() }
-    func seek(_ value:Double) { guard value.isFinite, info != nil else { return }; begin(at:min(max(0,value),max(0,duration-0.01))); onProgress?(position,false) }
-    func stop() { generation=UUID(); streamTask?.cancel(); streamTask=nil; node.stop(); engine.stop(); playing=false; buffering=false; info=nil; track=nil; position=0; duration=0; MPNowPlayingInfoCenter.default().nowPlayingInfo=nil }
+    func seek(_ value:Double) {
+        guard value.isFinite, info != nil else { return }
+        let at = min(max(0,value),max(0,duration-0.01))
+        if configuredRoute == nil { position=at; updateNowPlaying() }
+        else { begin(at:at) }
+        onProgress?(position,false)
+    }
+    func stop() { generation=UUID(); streamTask?.cancel(); streamTask=nil; node.stop(); engine.stop(); playing=false; buffering=false; info=nil; track=nil; configuredRoute=nil; requestedUSBOutput=nil; position=0; duration=0; MPNowPlayingInfoCenter.default().nowPlayingInfo=nil }
     private func fail(_ error:Error) { pause(); buffering=false; self.error=error.localizedDescription; streamTask?.cancel() }
     func updateRoute() {
         let session=AVAudioSession.sharedInstance(); output=session.currentRoute.outputs.map(\.portName).joined(separator:" · "); outputRate=session.sampleRate; isUSB=session.currentRoute.outputs.contains{$0.portType == .usbAudio}
@@ -143,19 +197,41 @@ import LANCore
     private func routeSignature() -> String {
         let s=AVAudioSession.sharedInstance(); return s.currentRoute.outputs.map{$0.uid}.joined(separator:"|")+"@"+String(s.sampleRate)
     }
+    private var currentUSBOutput: String? {
+        AVAudioSession.sharedInstance().currentRoute.outputs.first { $0.portType == .usbAudio }?.uid
+    }
+    private func requestPlayback() {
+        requestedUSBOutput=currentUSBOutput
+        playing=true
+    }
+    private func checkRequestedOutput() -> Bool {
+        guard let requestedUSBOutput, requestedUSBOutput != currentUSBOutput else { return true }
+        updateRoute()
+        pauseAfterOutputLoss(wasUSB:true)
+        return false
+    }
+    private func pauseAfterOutputLoss(wasUSB: Bool) {
+        pause()
+        if wasUSB { error="USB 音频设备已断开，已暂停以避免转到扬声器" }
+    }
     private func routeChanged(_ notification:Notification) {
         let wasUSB=isUSB, wasPlaying=playing; let at=position; updateRoute()
         let reason=notification.userInfo?[AVAudioSessionRouteChangeReasonKey] as? UInt
-        if reason==AVAudioSession.RouteChangeReason.oldDeviceUnavailable.rawValue { pause(); if wasUSB { error="USB 音频设备已断开，已暂停以避免转到扬声器" }; return }
-        guard let info, routeSignature() != configuredRoute else { return }
+        if reason==AVAudioSession.RouteChangeReason.oldDeviceUnavailable.rawValue { pauseAfterOutputLoss(wasUSB:wasUSB); return }
+        guard let info, let configuredRoute, routeSignature() != configuredRoute else { return }
+        if wasPlaying, !checkRequestedOutput() { return }
         do { try configure(info); playing=wasPlaying; begin(at:at) } catch { fail(error) }
     }
     func changePreferredRate(_ value:Double) {
         preferredRate=value; UserDefaults.standard.set(value,forKey:"preferred-output-rate")
-        guard let info else { return }; let at=position, wasPlaying=playing
+        guard let info, configuredRoute != nil else { return }; let at=position, wasPlaying=playing
         do { try configure(info); playing=wasPlaying; begin(at:at) } catch { fail(error) }
     }
-    private func resetAfterMediaService() { let at=position; guard let info else { return }; do { try configure(info); playing=false; begin(at:at) } catch { fail(error) } }
+    private func resetAfterMediaService() {
+        guard let info, configuredRoute != nil else { pause(); return }
+        let at=position
+        do { try configure(info); playing=false; begin(at:at) } catch { fail(error) }
+    }
     private func savePreferences() { if let data=try? JSONEncoder().encode(preferences.sanitized()) { UserDefaults.standard.set(data,forKey:"listening-settings") } }
     private func updateNowPlaying() {
         guard let track else { return }; var data:[String:Any]=[MPMediaItemPropertyTitle:track.title,MPMediaItemPropertyArtist:track.artist,MPMediaItemPropertyAlbumTitle:track.album,MPMediaItemPropertyPlaybackDuration:duration,MPNowPlayingInfoPropertyElapsedPlaybackTime:position,MPNowPlayingInfoPropertyPlaybackRate:playing && !buffering ? 1.0 : 0.0]

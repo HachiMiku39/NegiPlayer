@@ -36,6 +36,7 @@ public sealed class AppModel : INotifyPropertyChanged
     public WindowsLibrary Library { get; } = new();
     public LanHost? Host { get; private set; }
     private LanHost? localHost;
+    private bool hostTransition;
     public string HostCode { get; private set; } = "";
     public string HostAddress { get; private set; } = "";
     public List<string> Roots { get; } = [];
@@ -183,21 +184,40 @@ public sealed class AppModel : INotifyPropertyChanged
     }
     public async Task ToggleHostAsync()
     {
-        if (Host != null) { await Host.DisposeAsync(); Host = null; HostCode = ""; Notify(); return; }
-        await EnsureIdentityAsync(); await Library.ScanAsync(Roots);
-        string id = Preferences.Get("host-id", Guid.NewGuid().ToString("N")); Preferences.Set("host-id", id);
-        var host = new LanHost(Library, identity!, id, DeviceInfo.Name + " · NegiPlayer");
-        string? pairs = await SecureStorage.GetAsync("host-pairs"); if (pairs != null) host.Pairings.Restore(Convert.FromBase64String(pairs));
-        host.PersistPairings = bytes => SecureStorage.SetAsync("host-pairs", Convert.ToBase64String(bytes));
-        host.Start(); Host = host;
-        string address = System.Net.Dns.GetHostAddresses(System.Net.Dns.GetHostName()).FirstOrDefault(p =>
-            p.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork && LanProtocol.LocalAddress(p) && !System.Net.IPAddress.IsLoopback(p))?.ToString() ?? "127.0.0.1";
-        HostAddress = $"https://{address}:{host.Port}"; HostCode = host.Pairings.Renew(); Notify();
+        if (hostTransition) return;
+        hostTransition = true;
+        try
+        {
+            if (Host is { } current)
+            {
+                await current.DisposeAsync();
+                Host = null;
+                HostCode = "";
+                HostAddress = "";
+                return;
+            }
+            await EnsureIdentityAsync(); await Library.ScanAsync(Roots);
+            string id = Preferences.Get("host-id", Guid.NewGuid().ToString("N")); Preferences.Set("host-id", id);
+            var host = new LanHost(Library, identity!, id, DeviceInfo.Name + " · NegiPlayer");
+            string? pairs = await SecureStorage.GetAsync("host-pairs"); if (pairs != null) host.Pairings.Restore(Convert.FromBase64String(pairs));
+            host.PersistPairings = bytes => SecureStorage.SetAsync("host-pairs", Convert.ToBase64String(bytes));
+            host.Start(); Host = host;
+            string address = System.Net.Dns.GetHostAddresses(System.Net.Dns.GetHostName()).FirstOrDefault(p =>
+                p.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork && LanProtocol.LocalAddress(p) && !System.Net.IPAddress.IsLoopback(p))?.ToString() ?? "127.0.0.1";
+            HostAddress = $"https://{address}:{host.Port}"; HostCode = host.Pairings.Renew();
+        }
+        finally
+        {
+            hostTransition = false;
+            Notify();
+        }
     }
-    public void RenewCode() { if (Host != null) HostCode = Host.Pairings.Renew(); Notify(); }
+    public void RenewCode() { if (!hostTransition && Host is { } host) HostCode = host.Pairings.Renew(); Notify(); }
     public async Task RevokeDeviceAsync(string id)
     {
-        if (Host == null) return; await Host.RevokeAsync(id); Notify();
+        if (hostTransition || Host is not { } host) return;
+        await host.RevokeAsync(id);
+        Notify();
     }
 #endif
     private void Notify([CallerMemberName] string? property = null) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(null));

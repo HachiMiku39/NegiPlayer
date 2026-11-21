@@ -21,6 +21,8 @@ public sealed class StreamingPlayer : IAsyncDisposable
 {
     private readonly IAudioSink sink; private readonly PcmDsp dsp = new();
     private readonly SemaphoreSlim mutations = new(1);
+    private readonly object transport = new();
+    private long pauseVersion;
     private CancellationTokenSource? streamCancel; private Task? pump;
     private LanClient? client; private StreamInfo? info; private long startFrame;
     private volatile bool playing;
@@ -28,8 +30,18 @@ public sealed class StreamingPlayer : IAsyncDisposable
     public bool Playing => playing;
     public bool Buffering { get; private set; }
     public string? Error { get; private set; }
-    public double Duration => info is null ? 0 : info.Frames / info.SampleRate;
-    public double Position => info is null ? 0 : Math.Min(Duration, (startFrame + sink.PlayedFrames) / info.SampleRate);
+    public double Duration => info is { } format ? format.Frames / format.SampleRate : 0;
+    public double Position
+    {
+        get
+        {
+            lock (transport)
+            {
+                if (info is not { } format) return 0;
+                return Math.Min(format.Frames, startFrame + sink.PlayedFrames) / format.SampleRate;
+            }
+        }
+    }
     public string Output => sink.OutputDescription;
     public double ClientRate => sink.ClientRate;
     public double SourceRate => info?.SampleRate ?? 0;
@@ -40,45 +52,84 @@ public sealed class StreamingPlayer : IAsyncDisposable
     public StreamingPlayer(IAudioSink sink)
     {
         this.sink = sink;
-        sink.OutputRemoved += () => { Pause(); Error = "Audio output disconnected; select an output before resuming."; Changed?.Invoke(); };
+        sink.OutputRemoved += HandleOutputRemoval;
     }
     public void Apply(ListeningSettings raw)
     {
-        Settings = raw.Sanitized(); sink.Volume(Settings.Volume);
-        if (info != null) dsp.Configure(info, Settings);
+        lock (transport)
+        {
+            Settings = raw.Sanitized();
+            sink.Volume(Settings.Volume);
+            if (info is { } format) dsp.Configure(format, Settings);
+        }
         Changed?.Invoke();
     }
     public async Task LoadAsync(LanClient session, RemoteTrack track)
     {
         if (!track.Playable || !LanProtocol.ValidID(track.Id)) throw new InvalidDataException("Track cannot be played by this endpoint.");
+        long autoplay;
+        lock (transport) autoplay = pauseVersion;
         await mutations.WaitAsync();
         try
         {
-            await CancelPumpAsync(); sink.Pause(); info = null; Track = track; client = session;
-            Error = null; Buffering = true; playing = false;
-            var format = await session.JsonAsync<StreamInfo>($"/v1/tracks/{track.Id}/stream-info"); format.Validate();
-            info = format; await BeginAsync(0, true);
+            await CancelPumpAsync();
+            lock (transport)
+            {
+                sink.Pause();
+                info = null;
+                Track = track;
+                client = session;
+                Error = null;
+                Buffering = true;
+                playing = autoplay == pauseVersion;
+            }
+            Changed?.Invoke();
+            var format = await session.JsonAsync<StreamInfo>($"/v1/tracks/{track.Id}/stream-info");
+            format.Validate();
+            Begin(format, 0);
         }
-        catch { Buffering = false; playing = false; throw; }
+        catch
+        {
+            lock (transport) { Buffering = false; playing = false; }
+            throw;
+        }
         finally { mutations.Release(); Changed?.Invoke(); }
     }
     public async Task SeekAsync(double seconds)
     {
-        if (info == null || !double.IsFinite(seconds)) return;
+        if (!double.IsFinite(seconds)) return;
         await mutations.WaitAsync();
-        try { await CancelPumpAsync(); await BeginAsync(seconds, playing); }
+        try
+        {
+            if (info is not { } format) return;
+            await CancelPumpAsync();
+            Begin(format, seconds);
+        }
         finally { mutations.Release(); Changed?.Invoke(); }
     }
     public async Task ChangeOutputAsync(string id)
     {
-        double at = Position; Pause(); Settings.OutputID = id; await SeekAsync(at);
+        double at = Position;
+        Pause();
+        lock (transport) Settings = Settings with { OutputID = id };
+        await SeekAsync(at);
     }
-    private Task BeginAsync(double seconds, bool run)
+    private void Begin(StreamInfo format, double seconds)
     {
-        var format = info!; startFrame = Math.Clamp((long)(Math.Max(0, seconds) * format.SampleRate), 0, format.Frames - 1);
-        sink.Configure(format, Settings.OutputID); dsp.Configure(format, Settings); sink.Volume(Settings.Volume);
-        playing = run; Buffering = true; streamCancel = new();
-        var cancel = streamCancel.Token; var session = client!; var track = Track!; long first = startFrame;
+        long first;
+        lock (transport)
+        {
+            sink.Configure(format, Settings.OutputID);
+            dsp.Configure(format, Settings);
+            sink.Volume(Settings.Volume);
+            info = format;
+            first = startFrame = Math.Clamp((long)(Math.Max(0, seconds) * format.SampleRate), 0, format.Frames - 1);
+            Buffering = true;
+        }
+        streamCancel = new();
+        var cancel = streamCancel.Token;
+        var session = client!;
+        var track = Track!;
         pump = Task.Run(async () =>
         {
             long next = first;
@@ -92,32 +143,95 @@ public sealed class StreamingPlayer : IAsyncDisposable
                         await Task.Delay(50, cancel);
                     var range = new ByteRange(next * format.BytesPerFrame, frames * format.BytesPerFrame);
                     byte[] bytes = await session.RangeAsync(track.Id, format, range, cancel);
-                    var samples = Pcm.Decode(bytes, format.Channels); dsp.Process(samples, format.Channels);
-                    if (playing) sink.Play();
-                    await sink.WriteAsync(samples, cancel); next += frames; Buffering = false;
-                    if (playing) sink.Play(); Changed?.Invoke();
+                    var samples = Pcm.Decode(bytes, format.Channels);
+                    dsp.Process(samples, format.Channels);
+                    PlayIfRequested(cancel);
+                    await sink.WriteAsync(samples, cancel);
+                    next += frames;
+                    Buffering = false;
+                    PlayIfRequested(cancel);
+                    Changed?.Invoke();
                 }
                 while (sink.QueuedFrames > 0) await Task.Delay(100, cancel);
-                playing = false; sink.Pause(); Buffering = false; Changed?.Invoke(); Ended?.Invoke();
+                bool endedWhilePlaying;
+                lock (transport)
+                {
+                    cancel.ThrowIfCancellationRequested();
+                    endedWhilePlaying = playing;
+                    playing = false;
+                    sink.Pause();
+                    Buffering = false;
+                }
+                Changed?.Invoke();
+                if (endedWhilePlaying) Ended?.Invoke();
             }
             catch (OperationCanceledException) { }
-            catch (Exception e) { playing = false; sink.Pause(); Buffering = false; Error = e.Message; Changed?.Invoke(); }
+            catch (Exception e)
+            {
+                lock (transport)
+                {
+                    playing = false;
+                    sink.Pause();
+                    Buffering = false;
+                    Error = e.Message;
+                }
+                Changed?.Invoke();
+            }
         }, cancel);
-        return Task.CompletedTask;
     }
-    public void Pause() { playing = false; sink.Pause(); Changed?.Invoke(); }
-    public void Resume()
+    private void PlayIfRequested(CancellationToken cancel)
     {
-        if (info == null) return;
-        if (Position >= Duration - 0.001) { playing = true; _ = RestartAsync(); return; }
-        sink.Play(); playing = true; Changed?.Invoke();
+        lock (transport)
+        {
+            cancel.ThrowIfCancellationRequested();
+            if (playing) sink.Play();
+        }
+    }
+    private void PauseOutput()
+    {
+        pauseVersion++;
+        playing = false;
+        sink.Pause();
+    }
+    private void HandleOutputRemoval()
+    {
+        lock (transport)
+        {
+            PauseOutput();
+            Error = "Audio output disconnected; select an output before resuming.";
+        }
+        Changed?.Invoke();
+    }
+    public void Pause() => SetPlayback(false);
+    public void Resume() => SetPlayback(true);
+    public void Toggle() => SetPlayback(null);
+    private void SetPlayback(bool? requested)
+    {
+        bool restart = false;
+        lock (transport)
+        {
+            if (!(requested ?? !playing)) PauseOutput();
+            else if (info != null)
+            {
+                restart = Position >= Duration - 0.001;
+                if (!restart) sink.Play();
+                playing = true;
+            }
+            else if (Buffering) playing = true;
+            else return;
+        }
+        if (restart) _ = RestartAsync();
+        else Changed?.Invoke();
     }
     private async Task RestartAsync()
     {
         try { await SeekAsync(0); }
-        catch (Exception e) { playing = false; Error = e.Message; Changed?.Invoke(); }
+        catch (Exception e)
+        {
+            lock (transport) { playing = false; Error = e.Message; }
+            Changed?.Invoke();
+        }
     }
-    public void Toggle() { if (playing) Pause(); else Resume(); }
     private async Task CancelPumpAsync()
     {
         streamCancel?.Cancel(); if (pump != null) { try { await pump; } catch (OperationCanceledException) { } }
@@ -125,9 +239,27 @@ public sealed class StreamingPlayer : IAsyncDisposable
     }
     public async Task StopAsync()
     {
+        lock (transport) PauseOutput();
         await mutations.WaitAsync();
-        try { await CancelPumpAsync(); sink.Pause(); playing = false; Buffering = false; Track = null; info = null; }
+        try
+        {
+            await CancelPumpAsync();
+            lock (transport)
+            {
+                playing = false;
+                sink.Pause();
+                Buffering = false;
+                Track = null;
+                info = null;
+            }
+        }
         finally { mutations.Release(); Changed?.Invoke(); }
     }
-    public async ValueTask DisposeAsync() { await StopAsync(); sink.Dispose(); mutations.Dispose(); }
+    public async ValueTask DisposeAsync()
+    {
+        await StopAsync();
+        sink.OutputRemoved -= HandleOutputRemoval;
+        sink.Dispose();
+        mutations.Dispose();
+    }
 }
