@@ -17,9 +17,10 @@ import MediaIO
     func toggle() {
         guard !busy, let server else { return }; busy=true
         Task {
-            do { if state.running { await server.stop() } else { try await server.start() } }
+            do { if state.running || state.starting { await server.stop() } else { try await server.start() } }
             catch { self.error=error.localizedDescription }
-            busy=false; await refresh()
+            await refresh()
+            busy = false
         }
     }
     func newCode() { Task { do { _=try await server?.renewCode(); await refresh() } catch { self.error=error.localizedDescription } } }
@@ -42,7 +43,7 @@ struct LANConnectionView: View {
                         Text(L(host.state.message)).foregroundStyle(.secondary)
                     }
                     Spacer()
-                    Button(L(host.state.running ? "关闭服务" : "开启局域网服务")) { host.toggle() }.disabled(host.busy || host.server==nil)
+                    Button(L((host.state.running || host.state.starting) ? "关闭服务" : "开启局域网服务")) { host.toggle() }.disabled(host.busy || host.server==nil)
                 }
                 Text(L("Mac 管理文件和索引，只提供音频流、封面、LRC 与同名本地 MV。已配对的播放终端只读浏览曲库，在本机处理 EQ 与音频输出。Mac 的音量、EQ 和输出设备不会作用于 LAN 音频流。"))
                     .foregroundStyle(.secondary)

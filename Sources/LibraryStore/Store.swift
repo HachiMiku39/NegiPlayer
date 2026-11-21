@@ -85,11 +85,13 @@ public actor LibraryDatabase {
     }
     /// A completed enumeration is required; partial/cancelled scans never mark files missing.
     public func commitScan(rootID: String, files: [MediaFile]) throws {
+        try Task.checkCancellation()
         try execute("BEGIN IMMEDIATE")
         do {
             try execute("UPDATE media_files SET available=0 WHERE root_id=?", [rootID])
             let stored = Dictionary(uniqueKeysWithValues: try self.files(rootID: rootID, applyingOverrides: false).map { ($0.id, $0) })
             for item in files {
+                try Task.checkCancellation()
                 var f = item
                 if f.audioIdentity == nil, let existing = stored[f.id], existing.size == f.size, existing.modified == f.modified {
                     f.audioIdentity = existing.audioIdentity
@@ -107,6 +109,7 @@ public actor LibraryDatabase {
                 }
                 try execute("INSERT INTO tag_snapshots VALUES(?,?) ON CONFLICT(media_id) DO UPDATE SET document=excluded.document", [f.id, try json(f.tags)])
             }
+            try Task.checkCancellation()
             try execute("COMMIT")
         } catch { try? execute("ROLLBACK"); throw error }
     }
